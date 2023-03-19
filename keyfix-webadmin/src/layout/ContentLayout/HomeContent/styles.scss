@@ -1,0 +1,96 @@
+
+.Content-body {
+  position: relative;
+  display: flex;
+  &Left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 30px;
+    margin-right: 172px;
+  }
+  &_avatar {
+    position: relative;
+  }
+  &_nameuser {
+    margin-top: 24px;
+    p {
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 24px;
+      color: #f5f5ff;
+    }
+  }
+
+  &Right {
+    width: 572px;
+
+    .Form-UserInfo_Top {
+      display: flex;
+      input {
+        width: 274px;
+      }
+    }
+    .Users-Profile_FormLeft {
+      margin-right: 24px;
+    }
+
+    label {
+      font-family: "Montserrat";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: #ffffff !important;
+    }
+    input {
+      height: 48px;
+      border-radius: 8px;
+      font-size: 18px;
+      color: white;
+      background-color: #2b2b3f;
+      border: 1px solid #727288;
+    }
+  }
+  .ant-picker {
+    width: 274px;
+    height: 48px;
+    background-color: #2b2b3f;
+    border: 1px solid #727288;
+    input {
+      height: 48px;
+      border-radius: 8px;
+      font-size: 18px;
+      color: white;
+     
+    }
+    .ant-picker-suffix {
+        color: #FF7506 !important;
+        svg{
+            width: 24px;
+        }
+    }
+  }
+}
+.btn-group{
+  margin-top: 112px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:where(.css-dev-only-do-not-override-1cr6b6).ant-input-disabled,
+:where(.css-dev-only-do-not-override-1cr6b6).ant-input[disabled] {
+  color: white;
+  background-color: #3e3e50;
+  border-color: #d9d9d9;
+  
+}
+
+.Icon-Camera {
+  position: absolute;
+  bottom: 0px;
+  right: 35px;
+}

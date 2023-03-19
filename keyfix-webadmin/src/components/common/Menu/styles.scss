@@ -1,0 +1,67 @@
+.logo {
+  margin-top: 40px;
+  margin-bottom: 110px;
+}
+.ant-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #020220;
+    width: 170px ;
+    height: 1080px;
+  }
+  aside.ant-layout-sider.ant-layout-sider-dark {
+    flex: 0 0 170px !important;
+    min-width: 170px !important;
+    width: 170px !important;
+  }
+ul.ant-menu.ant-menu-root.ant-menu-vertical.ant-menu-light.css-dev-only-do-not-override-1cr6b6 {
+  .ant-menu-submenu-title,
+  li.ant-menu-item.ant-menu-item-only-child {
+    height: 72px !important;
+  }
+
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    span {
+      color: white;
+      line-height: 17px;
+    }
+    img {
+      margin-top: 10px;
+    }
+  }
+  li.ant-menu-submenu.ant-menu-submenu-vertical.ant-menu-submenu-selected,
+  li.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child {
+    background-color: transparent;
+    border-left: 6px solid #ff7506;
+    border-radius: 0;
+
+    .menu-item {
+      span {
+        color: #ff7506;
+        line-height: 17px;
+      }
+    }
+  }
+}
+:where(.css-dev-only-do-not-override-1cr6b6).ant-menu-light.ant-menu-submenu
+  > .ant-menu {
+  background-color: #020220;
+  color: white;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 0px 8px 8px 0px;
+
+
+}
+:where(.css-dev-only-do-not-override-1cr6b6).ant-menu-light .ant-menu-item:hover:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected), :where(.css-dev-only-do-not-override-1cr6b6).ant-menu-light .ant-menu-submenu-title:hover:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected) {
+    color: #ff7506;
+}

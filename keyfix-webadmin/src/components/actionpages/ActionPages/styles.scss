@@ -1,0 +1,49 @@
+.Action-Page {
+  position: absolute;
+
+  background: #2f2f41;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  top: 0;
+  &-item {
+    width: 110px;
+
+    cursor: pointer;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 10px;
+    &_img {
+      width: 52px;
+      height: 52px;
+
+      background: rgba(114, 114, 136, 0.5);
+      border-radius: 67px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &_title {
+      margin-top: 10px;
+      p {
+        font-family: "Montserrat";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+        color: #ffffff;
+        opacity: 0.7;
+        letter-spacing: 0.005em;
+        width: 78px;
+        height: 36px;
+        text-align: center;
+      }
+    }
+  }
+}

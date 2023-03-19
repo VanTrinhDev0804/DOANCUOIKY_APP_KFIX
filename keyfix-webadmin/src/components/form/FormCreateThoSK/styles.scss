@@ -1,0 +1,111 @@
+.ThoSK-Profile{
+    display: flex;
+    width: 1534px;
+    align-items: center;
+    justify-content: center;
+    &_Form{
+      margin-left: 20px;
+        display: flex;
+      &Left{
+        margin-right: 48px;
+      }
+    }
+    .ant-select-dropdown {
+        background-color: rgb(62, 62, 91) !important;
+      }
+      label {
+        width: 185px;
+        font-family: "Montserrat";
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px !important;
+        line-height: 24px;
+        color: #ffffff !important;
+        opacity: 1 !important;
+      }
+      input {
+        width: 425px;
+        height: 48px;
+        background: #2b2b3f;
+        border: 1px solid #727288;
+        border-radius: 8px;
+      }
+    
+      .ant-picker {
+        width: 425px !important;
+        height: 48px;
+        background-color: #2b2b3f;
+        border: 1px solid #727288;
+        input {
+          width: 131px;
+          height: 48px;
+          border-radius: 8px;
+          font-size: 18px;
+          color: white !important;
+        
+        }
+    
+        .ant-picker-suffix {
+          color: #ff7506 !important;
+          font-size: 24px;
+          svg {
+            width: 24px;
+          }
+        }
+      }
+      .ant-select-selector {
+        height: 48px !important;
+        border: 1px solid #727288 !important;
+        border-radius: 8px;
+    
+        display: flex;
+        align-items: center;
+        background-color: #2b2b3f !important;
+        color: white !important;
+      }
+    
+      .ant-select-selection-item::after {
+        color: #ffffff !important;
+      }
+      span.ant-select-arrow {
+        color: #ff7506 !important;
+      }
+      :where(.css-dev-only-do-not-override-1cr6b6).ant-input {
+        font-family: "Montserrat";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    
+        display: flex !important;
+        align-items: center !important;
+        letter-spacing: -0.002em;
+    
+        color: #ffffff;
+    
+    }
+    
+     
+    .ant-upload.ant-upload-select {
+      width: 215px !important;
+      height: 350px !important;
+    }
+    .ant-upload-list-item-container {
+      width: 215px !important;
+      height: 350px !important;
+    }
+    span.ant-upload {
+      color: #ffffff;
+      font-size: 20px;
+    }
+    :where(.css-dev-only-do-not-override-1cr6b6).ant-select-multiple .ant-select-selection-item {
+   
+    background: rebeccapurple;
+ 
+}
+}
+.btn-group {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }

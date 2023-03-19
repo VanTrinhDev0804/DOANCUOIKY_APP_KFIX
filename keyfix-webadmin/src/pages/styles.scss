@@ -1,0 +1,138 @@
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  &-selectLanguage {
+    margin-top: 24px;
+    margin-right: 80px;
+  }
+}
+
+.Form_login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Form_login-title {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+
+  cursor: pointer;
+  h3 {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 48px;
+    color: white;
+  }
+}
+.Form_login-subtitle {
+  display: flex;
+  justify-content: center;
+  span {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+  }
+}
+.Form_login-sendSuccess {
+  // display: flex;
+  // justify-content: center;
+  // flex-direction: column;
+  // align-items: center;
+  p {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+    margin: 0;
+  }
+}
+
+.Form_login-title_error {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+
+  cursor: pointer;
+  h3 {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 48px;
+    color: red;
+  }
+}
+.ant-form {
+  width: 472px;
+  label {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: white !important;
+    opacity: 0.7;
+  }
+  input {
+    height: 48px;
+    border-radius: 8px;
+    font-size: 18px;
+    color: white;
+    background-color: #2b2b3f;
+  }
+  input:focus,
+  input:hover {
+    border-color: rgba(52, 122, 255, 1);
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: center;
+  }
+  .login-form-button {
+    width: 208px;
+    height: 56px;
+    border-radius: 8px;
+  }
+}
+.Forget_password {
+  margin-top: 205px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration-line: underline;
+  color: #ff7506;
+  cursor: pointer;
+}
+.login__Status {
+  color: #ff4747;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+.notify_login {
+  display: none;
+}
+.Formforgort_Password {
+  width: 688px;
+}
+.PageReset_Error{
+    width: 585px;
+    .Form_login-subtitle{
+        margin-bottom: 70px;
+    }
+}

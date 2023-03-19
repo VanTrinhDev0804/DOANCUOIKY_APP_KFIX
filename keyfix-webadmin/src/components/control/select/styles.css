@@ -1,0 +1,46 @@
+.Control-Select {
+  display: flex;
+  align-items: center;
+  margin-right: 64px;
+}
+.Control-Select .Label-Select {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ffffff;
+  margin-right: 16px;
+}
+.Control-Select .Label-Select h4 {
+  margin: 0;
+}
+.Control-Select .ant-select-selector {
+  border-color: #ff7506 !important;
+  border-radius: 8px;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  background-color: #1e1e2e !important;
+  color: white !important;
+}
+.Control-Select .ant-select-selection-item::after {
+  color: #ffffff !important;
+}
+
+.ant-select-item-option-content {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+.ant-select-item.ant-select-item-option.ant-select-item-option-active.ant-select-item-option-selected {
+  background-color: #ff7506;
+}
+
+:where(.css-dev-only-do-not-override-1cr6b6).ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #ff7506;
+}/*# sourceMappingURL=styles.css.map */

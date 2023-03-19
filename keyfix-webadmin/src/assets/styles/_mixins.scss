@@ -1,0 +1,21 @@
+
+
+@mixin fornt_Comon{
+    width: 162px;
+    height: 40px;
+    background-color: $btnLoginColor;
+    color: $whiteColor;
+    box-shadow: 0px 0px 6px #E7E9F2;
+    border-radius: 8px;
+    border-color: $btnLoginColor;
+    margin: 0px 10px 0px 10px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: 'Nunito';
+    font-style: normal;
+    &:hover{
+        background-color: $primaryColor;
+        border-color: $primaryColor;
+    }
+}

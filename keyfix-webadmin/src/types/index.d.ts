@@ -38,7 +38,7 @@ export interface DataTypeThoSuaKhoa {
   id: string;
   maTho: string;
   tenTho: string;
-  sdt: string;
+  phone: string;
   cccd: string;
   ngaySinh: string;
   diaChi: string;

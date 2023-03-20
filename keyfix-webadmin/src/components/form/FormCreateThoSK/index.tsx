@@ -18,38 +18,48 @@ import { Link, useHistory, useParams } from "react-router-dom";
 
 import "./styles.scss";
 import dayjs from "dayjs";
-import { storage } from "../../../firebase/cofig";
+import { auth, storage } from "../../../firebase/cofig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { UpdateData, WriteDataGenerateID } from "../../../firebase/AsyncActtions";
+import {
+  UpdateData,
+  writeDataFireStore,
+  WriteDataGenerateID,
+} from "../../../firebase/AsyncActtions";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { IParams } from "../../../types";
-import { loadDataThoSuaKhoa, updateThoSuaKhoa } from "../../../redux/slice/thoSuaKhoaSlice";
+import {
+  loadDataThoSuaKhoa,
+  updateThoSuaKhoa,
+} from "../../../redux/slice/thoSuaKhoaSlice";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const dateFormat = "DD/MM/YYYY";
 const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
-  const history = useHistory()
-  const dispatch = useAppDispatch()
-  const {tag} : IParams = useParams()
-  const { dataThoSuaKhoa } = useAppSelector(state=> state.thoSuaKhoa)
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const { tag }: IParams = useParams();
+  const { dataThoSuaKhoa } = useAppSelector((state) => state.thoSuaKhoa);
 
+  const thoUpdate = dataThoSuaKhoa.find((item) => {
+    return item.maTho === `${tag}`;
+  });
 
-  const thoUpdate = dataThoSuaKhoa.find((item )=>{
-    return item.maTho === `${tag}`
-  })
-  
+  const maThoDf = "T".concat(Date.now().toString());
+  const generateEmail = "keyer"
+    .concat(Date.now().toString())
+    .concat("@gmail.com");
 
-  
-
-  
   const [imgText, setImgText] = useState(thoUpdate ? thoUpdate.img : "");
-  const [maTho, setMaTho] = useState(thoUpdate ? thoUpdate.maTho : "");
+  const [maTho, setMaTho] = useState(thoUpdate ? thoUpdate.maTho : maThoDf);
   const [tenTho, setTenTho] = useState(thoUpdate ? thoUpdate.tenTho : "");
-  const [sdt, setSdt] = useState(thoUpdate ? thoUpdate.sdt : "");
+  const [sdt, setSdt] = useState(thoUpdate ? thoUpdate.phone : "");
   const [cccd, setCCCD] = useState(thoUpdate ? thoUpdate.cccd : "");
 
   const [diaChi, setDiaChi] = useState(thoUpdate ? thoUpdate.diaChi : "");
-  const [ngaySinh, setNgaySinh] = useState(thoUpdate ?  thoUpdate.ngaySinh: "");
-  const [balanceAc, setBalanceAc] = useState(thoUpdate ? thoUpdate.balanceAc.toString() : "");
+  const [ngaySinh, setNgaySinh] = useState(thoUpdate ? thoUpdate.ngaySinh : "");
+  const [balanceAc, setBalanceAc] = useState(
+    thoUpdate ? thoUpdate.balanceAc.toString() : ""
+  );
   const [loaiSC, setLoaiSC] = useState(thoUpdate ? thoUpdate.loaiSC : []);
   const onChangeDateNS: DatePickerProps["onChange"] = (date, dateString) => {
     setNgaySinh(dateString);
@@ -57,22 +67,23 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
 
   // Upload ảnh
   const [fileList, setFileList] = useState<UploadFile[]>(
-    thoUpdate ? 
-    [
-    {
-        uid: '',
-        name: '',
-        status: 'done',
-        url: thoUpdate? thoUpdate.img :"", 
-    },
-  ] : []);
+    thoUpdate
+      ? [
+          {
+            uid: "",
+            name: "",
+            status: "done",
+            url: thoUpdate ? thoUpdate.img : "",
+          },
+        ]
+      : []
+  );
 
   const pr: UploadProps = {
     // action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     listType: "picture-card",
     beforeUpload(file) {
       const storageRef = ref(storage, `imageTho/${file.name}`);
-    
 
       // 'file' comes from the Blob or File API
       uploadBytes(storageRef, file).then((snapshot) => {
@@ -84,7 +95,6 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
             console.log(error);
           });
       });
-
     },
   };
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -112,8 +122,8 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
   // handle
 
   const handleThem = () => {
-    let key = dataThoSuaKhoa && dataThoSuaKhoa.length +1;
- 
+    let key = dataThoSuaKhoa && dataThoSuaKhoa.length + 1;
+
     const dataUpload = {
       key: key,
       maTho: maTho,
@@ -121,48 +131,66 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
       cccd: cccd,
       diaChi: diaChi,
       ngaySinh: ngaySinh,
-      sdt: sdt,
+      phone: sdt,
       balanceAc: parseInt(balanceAc),
       loaiSC: loaiSC,
       img: imgText,
+      email: generateEmail,
+      isVerify : false,
+      otp: "000000"
     };
 
     const isEmty = Object.values(dataUpload).includes("");
-    const checkMaTho = dataUpload.maTho ? dataThoSuaKhoa?.findIndex((item)=>{
-        return item.maTho === dataUpload.maTho
-    }): -1
+    const checkMaTho = dataUpload.maTho
+      ? dataThoSuaKhoa?.findIndex((item) => {
+          return item.maTho === dataUpload.maTho;
+        })
+      : -1;
 
     if (isEmty) {
       alert("Phải điền đầy đủ thông tin");
     } else {
       // checkMaNV ===-1
-      if (!isEmty && checkMaTho ===-1) {
+      if (!isEmty && checkMaTho === -1) {
         const dataup = { id: "", ...dataUpload };
-        WriteDataGenerateID(dataUpload, "Keyer");
-        dispatch(loadDataThoSuaKhoa(dataThoSuaKhoa?.concat(dataup)))
+        createUserWithEmailAndPassword(auth, dataUpload.email, dataUpload.phone)
+          .then((userCredential) => {
+          
+            const userId = userCredential.user.uid;
+            const keyerCreate = {userId , ...dataUpload}
+            writeDataFireStore(keyerCreate ,"Keyer",dataUpload.phone )
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+          });
+        // WriteDataGenerateID(dataUpload, "Keyer");
+        dispatch(loadDataThoSuaKhoa(dataThoSuaKhoa?.concat(dataup)));
         alert("Thêm Thành Công");
-        history.replace("/thosuakhoa")
-      }
-      else if(checkMaTho !==-1){
-          alert("Mã đã tồn tại")
+        // create acount
+
+        history.replace("/thosuakhoa");
+      } else if (checkMaTho !== -1) {
+        alert("Mã đã tồn tại");
       }
     }
-   
   };
-  const handelUpdateData =()=>{
-    const idUpdate = thoUpdate && thoUpdate.id
-    const key = thoUpdate && thoUpdate.key
-    const maTho = thoUpdate && thoUpdate.maTho
+  const handelUpdateData = () => {
+    const idUpdate = thoUpdate && thoUpdate.id;
+    const key = thoUpdate && thoUpdate.key;
+    const maTho = thoUpdate && thoUpdate.maTho;
     const dataUpload = {
       id: idUpdate,
-      key, 
+      key,
       maTho,
       tenTho: tenTho,
       cccd: cccd,
       diaChi: diaChi,
       ngaySinh: ngaySinh,
       sdt: sdt,
-      balanceAc: parseInt(balanceAc) ,
+      balanceAc: parseInt(balanceAc),
       loaiSC: loaiSC,
       img: imgText,
     };
@@ -177,16 +205,16 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
       // checkMaNV ===-1
       if (!isEmty) {
         // const dataup = { ...dataUpload };
-        UpdateData(dataUpload, "Keyer" , idUpdate);
-        dispatch(updateThoSuaKhoa(dataUpload))
+        UpdateData(dataUpload, "Keyer", idUpdate);
+        dispatch(updateThoSuaKhoa(dataUpload));
         alert("UpdateSucess");
-        history.replace("/thosuakhoa")
+        history.replace("/thosuakhoa");
       }
       // else if(checkMaNV !==-1){
       //     alert("Mã nhân viên tồn tại")
       // }
     }
-  }
+  };
 
   const options: SelectProps["options"] = [
     {
@@ -237,16 +265,11 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
                 <Input
                   type="text"
                   name="maTho"
-                  onChange={(e) => setMaTho(e.target.value)
-                  }
-                  disabled={props.typeform ==="update" ? true: false}
+                  onChange={(e) => setMaTho(e.target.value)}
+                  disabled={true}
                 />
               </Form.Item>
-              <Form.Item
-                label="Họ Tên "
-                name="tenTho"
-                initialValue={tenTho}
-              >
+              <Form.Item label="Họ Tên " name="tenTho" initialValue={tenTho}>
                 <Input
                   type="text"
                   name="tenTho"

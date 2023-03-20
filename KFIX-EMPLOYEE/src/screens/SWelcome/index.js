@@ -1,45 +1,103 @@
-import { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import generalColor from "../../generals/colors";
 import generalStyle from "../../generals/generalStyle";
 import IntroduceSlider from "./components/IntroduceSlide";
 import styles from "./styles/stylesSWelcome";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/action";
+import { clearErrResponse } from "../../redux/slice/authSlice";
 
 const Welcome = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [checkPhone, setCheckPhone] = useState(false);
+  const [checkPassword, setCheckPassword] = useState(false);
+  const [loader, setloader] = useState(false);
+  const [phoneNumber, setphoneNumber] = useState("0386200961");
+  const [password, setpassword] = useState("0386200961");
+
+  const dispatch = useDispatch();
+  const { user, isAuthenticated , loading , error} = useSelector((state) => state.auth);
+
   const handleLogin = () => {
-    navigation.navigate('MainScreen')
-  }
+    console.log("phone", phoneNumber, password);
+    dispatch(login(phoneNumber, password));
+  };
+  useEffect(() => {
+    if (loading) {
+      setloader(true);
+    } else {
+      setloader(false);
+    }
+    if(error){
+      alert(error)
+      dispatch(clearErrResponse())
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.navigate("MainScreen");
+    }
+  }, [isAuthenticated]);
+
   return (
     <View style={styles.container}>
       <IntroduceSlider />
       <View style={{ paddingVertical: 50 }}>
         <Text style={styles.header}>Đăng nhập</Text>
         <View style={{ marginTop: 10 }}>
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <TextInput
               style={generalStyle.input}
               keyboardType="numeric"
               placeholder="Số điện thoại"
+              value={phoneNumber}
+              onChangeText={setphoneNumber}
             />
-            <Text style={{color: generalColor.error}}>Số điện thoại không hợp lệ!</Text>
+            {checkPhone ? (
+              <Text style={{ color: generalColor.error }}>
+                Số điện thoại không hợp lệ!
+              </Text>
+            ) : (
+              ""
+            )}
           </View>
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <TextInput
               style={generalStyle.input}
               secureTextEntry={true}
               placeholder="Mật khẩu"
+              value={password}
+              onChangeText={setpassword}
             />
-            <Text style={{color: generalColor.error}}>Mật khẩu không hợp lệ!</Text>
+            {checkPassword ? (
+              <Text style={{ color: generalColor.error }}>
+                Mật khẩu không hợp lệ!
+              </Text>
+            ) : (
+              ""
+            )}
           </View>
 
-          <TouchableOpacity style={styles.btnForgotPass} onPress={() => navigation.navigate('SForgotPassword')}>
+          <TouchableOpacity
+            style={styles.btnForgotPass}
+            onPress={() => navigation.navigate("SForgotPassword")}
+          >
             <Text style={{ color: generalColor.primary }}>Quên mật khẩu?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={generalStyle.button} onPress={handleLogin}>
-            <Text style={styles.txtButton}>Đăng nhập</Text>
-          </TouchableOpacity>
+          {loader ? (
+            <ActivityIndicator
+              size="large"
+              color={"bray"}
+              animating={true}
+            ></ActivityIndicator>
+          ) : (
+            <TouchableOpacity style={generalStyle.button} onPress={handleLogin}>
+              <Text style={styles.txtButton}>Đăng nhập</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

@@ -31,38 +31,43 @@ exports.loginUser = async (request, response) => {
     .where("phone", "==", userrequest.phone)
     .get()
     .then((data) => {
-      data.forEach((doc) => {
-        let userInfor = { ...doc.data() };
-        if (userInfor.email !== "") {
-          signInWithEmailAndPassword(
-            auth,
-            userInfor.email,
-            userrequest.password
-          )
-            .then((userCredential) => {
-              // Signed in
-              const user = userCredential.user;
-              return response.json({ user: userInfor, status: true });
-              // ...
-            })
-            .catch((error) => {
-              console.error(error);
-              return response.status(403).json({
-                error: "Đã xảy ra lỗi , vui lòng thử lại",
-                status: false,
+      if(!data.empty){
+        data.forEach((doc) => {
+          let userInfor = { ...doc.data() };
+          if (userInfor.email !== "") {
+            signInWithEmailAndPassword(
+              auth,
+              userInfor.email,
+              userrequest.password
+            )
+              .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                return response.json({ user: userInfor, status: true });
+                // ...
+              })
+              .catch((error) => {
+                console.error(error);
+                return response.status(403).json({
+                  error: "Đã xảy ra lỗi , vui lòng thử lại",
+                  status: false,
+                });
               });
+          } else {
+            return response.status(500).json({
+              error: "Đã xảy ra lỗi , vui lòng thử lại",
+              status: false,
             });
-        } else {
-          return response.status(500).json({
-            error: "Đã xảy ra lỗi , vui lòng thử lại",
-            status: false,
-          });
-        }
-      });
+          }
+        });
+      }else {
+        return response.status(500).json({ error: "Đã có lỗi", status: false });
+      }
+      
     })
     .catch((err) => {
       console.error(err);
-      return response.status(500).json({ error: err.code, status: false });
+      return response.status(500).json({ error: "Đã có lỗi !", status: false });
     });
 };
 // dang ky tk mới
@@ -113,11 +118,11 @@ exports.signUpUser = (request, response) => {
               isVerify: false,
               otp: "",
             };
-            return db.doc(`/users/${newUser.phoneNumber}`).set(userCredentials);
+           db.doc(`/users/${newUser.phoneNumber}`).set(userCredentials);
+            return response
+              .status(201)
+              .json({ token, status: true, user: userCredentials });
           })
-          .then(() => {
-            return response.status(201).json({ token, status: true , user : userCredentials});
-          });
       }
     })
 
@@ -139,6 +144,7 @@ exports.sendOTPVerify = (request, response) => {
   const datareq = {
     phone: request.body.phone,
   };
+  console.log(datareq);
 
   db.collection("users")
     .doc(datareq.phone)
@@ -163,6 +169,40 @@ exports.sendOTPVerify = (request, response) => {
         .json({ error: "Đã có lỗi xảy ra!", status: false });
     });
 };
+
+exports.VerifyOTP = (request, response) => {
+  const datareq = {
+    phone: request.body.phone,
+    otp: request.body.otp,
+  };
+  console.log(datareq);
+
+  db.doc(`/users/${datareq.phone}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        let user = { ...doc.data() };
+        console.log(user);
+        if (user) {
+          if (datareq.otp === user.otp) {
+            db.collection("users").doc(datareq.phone).update({
+              isVerify: true,
+            });
+            return response.json({ status: true });
+          } else {
+            return response
+              .status(400)
+              .json({ error: "Đã có lỗi xảy ra!", status: false });
+          }
+        } else {
+          return response
+            .status(400)
+            .json({ error: "Đã có lỗi xảy ra!", status: false });
+        }
+      }
+    });
+};
+
 exports.logOutUser = (req, res) => {
   signOut(auth)
     .then(() => {
@@ -212,5 +252,64 @@ exports.updateUserName = async (req, res) => {
       return res
         .status(400)
         .json({ error: "Đã có lỗi xảy ra!", status: false });
+    });
+};
+
+
+
+// Keyer
+
+exports.loginKeyer = async (request, response) => {
+  const userrequest = {
+    phone: request.body.phone,
+    password: request.body.password,
+  };
+
+  console.log(userrequest)
+  const { valid, errors } = validateLoginData(userrequest);
+  if (!valid) return response.status(400).json(errors);
+
+  db.collection("Keyer")
+    .where("phone", "==", userrequest.phone)
+    .get()
+    .then((data) => {
+      if(!data.empty){
+        data.forEach((doc) => {
+          let userInfor = { ...doc.data() };
+          if (userInfor.email !== "") {
+            signInWithEmailAndPassword(
+              auth,
+              userInfor.email,
+              userrequest.password
+            ).then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                return response.json({ user: userInfor, status: true });
+                // ...
+              })
+              .catch((error) => {
+                console.error(error);
+                return response.status(403).json({
+                  error: "Đã xảy ra lỗi , vui lòng thử lại",
+                  status: false,
+                });
+              });
+          } else {
+            return response.status(500).json({
+              error: "Đã xảy ra lỗi , vui lòng thử lại",
+              status: false,
+            });
+          }
+        });
+      }
+      else{
+        
+        return response.status(500).json({ error: "Đã có lỗi", status: false });
+      }
+     
+    })
+    .catch((err) => {
+      console.error(err);
+      return response.status(500).json({ error: "Đã có lỗi", status: false });
     });
 };

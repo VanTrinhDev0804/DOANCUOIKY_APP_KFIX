@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const authSlice = createSlice({
-  name: "auth",
+export const authkeyerSlice = createSlice({
+  name: "authkeyer",
   initialState: {
     loading: false,
     isAuthenticated: false,
-    isRegister: false,
     user: null,
     isVerify: false,
     error: null,
@@ -18,7 +17,6 @@ export const authSlice = createSlice({
     loginSuccess: (state, action) => {
       state.loading = false;
       state.isAuthenticated = true;
-      state.isRegister = false;
       state.user = action.payload.user;
       state.isVerify = action.payload.user.isVerify;
     },
@@ -26,31 +24,13 @@ export const authSlice = createSlice({
       state.loading = false;
       state.isAuthenticated = false;
       state.error = action.payload;
-      state.isRegister = false;
-    },
 
-    registerRequest: (state) => {
-      state.loading = true;
-    },
-    registerSuccess: (state, action) => {
-      state.loading = false;
-      state.isRegister = true;
-      state.isAuthenticated=false,
-      state.user = action.payload;
-      state.isVerify = action.payload.user.isVerify;
-      state.error = null;
-    },
-    registerFailure: (state, action) => {
-      state.loading = false;
-      state.isRegister = false;
-      state.error = action.payload;
     },
     logoutUser: (state) => {
       state.loading = false;
       state.isAuthenticated = false;
       state.user = null;
       state.isVerify = false;
-      state.isRegister = false;
     },
     updateRequest: (state) => {
       state.loading = true;
@@ -94,14 +74,11 @@ export const {
   updateRequest,
   updateUserNameSuccess,
   updateAvatarSuccess,
-  registerFailure,
-  registerRequest,
-  registerSuccess,
   loginRequest,
   loginFailure,
   loginSuccess,
   logoutUser,
   clearErrResponse,
-} = authSlice.actions;
+} = authkeyerSlice.actions;
 
-export default authSlice.reducer;
+export default authkeyerSlice.reducer;

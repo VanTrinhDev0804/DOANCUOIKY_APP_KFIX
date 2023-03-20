@@ -56,8 +56,8 @@ const ContentPageThoSK = () => {
     
     {
       title: "Số điện thoại",
-      dataIndex: "sdt",
-      key: "sdt",
+      dataIndex: "phone",
+      key: "phone",
     },
     {
       title: "CCCD/CMND",
@@ -117,7 +117,7 @@ const ContentPageThoSK = () => {
       id: "",
       maTho: "T001",
       tenTho: "Nguyễn Bảo Nam",
-      sdt: "011422121",
+      phone: "011422121",
       cccd: "0214121154",
       ngaySinh: "19/2/1990",
       diaChi: "100 đường số 10, phường 11 , gò Vấp TPHCM",

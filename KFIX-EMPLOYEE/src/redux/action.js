@@ -1,12 +1,9 @@
 import axios from "axios";
 import {
-  registerSuccess,
   loginFailure,
   loginRequest,
   loginSuccess,
   logoutUser,
-  registerRequest,
-  registerFailure,
   updateAvatarSuccess,
   updateFailure,
   updateRequest,
@@ -21,39 +18,23 @@ const serverUrl = "http://10.0.2.2:5000";
 export const login = (phone, password) => async (dispatch) => {
   try {
     dispatch(loginRequest());
-    const { data } = await axios.post(`${serverUrl}/api/login`, {
+    const { data } = await axios.post(`${serverUrl}/api/loginkeyer`, {
       phone,
       password,
     });
 
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
     if (data.status === true) {
       dispatch(loginSuccess(data));
-    } else {
-      dispatch(loginFailure());
-    }
+    } 
   } catch (error) {
+   console.log(error)
     dispatch(loginFailure(error.response.data.error));
   }
 };
 
-export const register = (dataParam) => async (dispatch) => {
-  try {
-    dispatch(registerRequest());
-
-    const { data } = await axios.post(`${serverUrl}/api/signup`, dataParam, {});
-    
-    if (data.status) {
-      dispatch(registerSuccess(data));
-      console.log('====================================');
-    console.log(data)
-    console.log('====================================');
-    } else {
-      dispatch(registerFailure("Lỗi!"));
-    }
-  } catch (error) {
-    dispatch(registerFailure(error.response.data.error));
-  }
-};
 
 export const logout = () => async (dispatch) => {
   const { data } = await axios.post(`${serverUrl}/api/logout`);

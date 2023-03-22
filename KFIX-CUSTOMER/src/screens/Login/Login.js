@@ -6,8 +6,9 @@ import { Button, FormGroup, InputField } from "../../components";
 import stylesLogin from "./styleLogin";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, sendSMSOTP } from "../../redux/action";
+import { login, sendSMSOTP, verifyOTPhandel } from "../../redux/action";
 import { ActivityIndicator } from "react-native-paper";
+import { clearErrResponse } from "../../redux/slice/authSlice";
 
 
 const Login = () => {
@@ -20,13 +21,18 @@ const Login = () => {
   const [phoneNumber, setphoneNumber] = useState("0386200961");
   const [password, setpassword] = useState("0386200961");
 
-  const {user, isAuthenticated, loading, isVerify } = useSelector((state) => state.auth);
+  const {user, isAuthenticated, loading, isVerify , error} = useSelector((state) => state.auth);
   const handelLogin = () => {
     console.log("phone", phoneNumber, password);
     dispatch(login(phoneNumber, password));
   };
   const handleVerifyPhone = (value) => {
+    if(user){
+      dispatch(verifyOTPhandel(user.phone , value))
+    }
+   
     
+     
   }
 
   useEffect(() => {
@@ -35,22 +41,21 @@ const Login = () => {
     } else {
       setloader(false);
     }
+    if(error){
+      alert(error)
+      dispatch(clearErrResponse())
+    }
   }, [loading]);
 
   useEffect(() => {
     if (isAuthenticated && isVerify) {
       navigation.navigate('Main')
-    } else if(isVerify ===false){
+    } else if(isAuthenticated &&  isVerify ===false){
+      // dispatch(sendSMSOTP( user && user.phone))
       navigation.navigate('Accuracy',{phone: user && user.phone,action: handleVerifyPhone})
     }
-  }, [isAuthenticated, loader]);
+  }, [isAuthenticated, isVerify , loading ]);
 
-  // useEffect(() => {
-  //   if (isAuthenticated && isVerify === false) {
-  //     navigation.navigate('Accuracy',{name: 'l',action: handelLogin})
-  //   }
-  // }, [isVerify]);
-  console.log(isAuthenticated, isVerify)
   return (
     <View style={generalStyle.wrapper}>
       <FormGroup>

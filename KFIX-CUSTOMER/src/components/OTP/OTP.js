@@ -1,16 +1,33 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
 import { colors, generalStyle } from "../../contains";
 import styleOTP from "./styleOTP";
 import Button from "../Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { sendSMSOTP } from "../../redux/action";
+import { ActivityIndicator } from "react-native-paper";
+import { clearErrResponse } from "../../redux/slice/authSlice";
 
 const OTP = ({ action , phone }) => {
  const dispatch = useDispatch()
-  // dispatch(sendSMSOTP(phone))
+  const {loading, isVerify , error} = useSelector(state => state.auth)
+  const [loader, setloader] = useState(false);
 
+  useEffect(() => {
+    if (loading) {
+      setloader(true);
+    } else {
+      setloader(false);
+    }
+   
+  }, [loading]);
+  useEffect(()=>{
+    if(error){
+      alert(error)
+      dispatch(clearErrResponse())
+    }
+  }, [isVerify , error])
 
   const firstOTP = useRef();
   const secondOTP = useRef();
@@ -113,7 +130,21 @@ const OTP = ({ action , phone }) => {
           }}
         />
       </View>
-      <Button title="Xác thực" onPress={handelVerify} />
+
+    
+        {loader ? (
+          <ActivityIndicator
+            size="large"
+            color={"bray"}
+            animating={true}
+          ></ActivityIndicator>
+        ) : (
+          <>
+           <Button title="Xác thực" onPress={handelVerify} />
+          </>
+        )}
+     
+    
     </View>
   );
 };

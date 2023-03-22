@@ -8,8 +8,12 @@ const ContentcreateThoSK = () => {
   const { control }: IParams = useParams();
   return (
     <div className="Content-App">
-      <ContentTitle title="Thêm thợ sửa khóa" />
-
+     
+      {control === "capnhat-tho" ? (
+            <ContentTitle title="Cập nhật thợ sửa khóa" />
+          ) : (
+            <ContentTitle title="Thêm thợ sửa khóa" />
+          )}
       <div className="Content-body">
         <div className="ContentPageThoSK">
           {control === "capnhat-tho" ? (

@@ -7,8 +7,25 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import generalStyle from "../../../generals/generalStyle";
 import stylesMe from "./styles/stylesSMe";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../redux/action";
+import { useEffect } from "react";
 
 const SMe = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const {user , isAuthenticated} = useSelector(state => state.auth)
+
+  const handleLogout =()=>{
+    dispatch(logout())
+   
+  }
+  useEffect(()=>{
+    if(isAuthenticated === false){
+      navigation.navigate('SWelcome')
+    }
+  }, [isAuthenticated])
+
   return (
     <View style={generalStyle.container}>
       <View style={{ flexDirection: "row" }}>
@@ -16,15 +33,15 @@ const SMe = () => {
           //style={styles.tinyLogo}
           style={stylesMe.avatar}
           source={{
-            uri: "https://www.themoviedb.org/t/p/w500/blKKsHlJIL9PmUQZB8f3YmMBW5Y.jpg",
+            uri: user && user.img
           }}
         />
         <View style={stylesMe.viewInfo}>
           <View style={stylesMe.info}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Nguyễn Minh Vương
+              {user && user.tenTho}
             </Text>
-            <Text style={{ fontSize: 20 }}>0899306681</Text>
+            <Text style={{ fontSize: 20 }}>{user && user.phone}</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             <Foundation name="pencil" color="#666" size={28} />
@@ -40,7 +57,7 @@ const SMe = () => {
           <FontAwesome name="line-chart" size={30} color="#000" />
           <Text style={{ marginLeft: 10 }}>Thống kê</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={stylesMe.opt}>
+        <TouchableOpacity style={stylesMe.opt} onPress ={handleLogout}>
           <Entypo name="log-out" size={30} color="#000" />
           <Text style={{ marginLeft: 10 }}>Đăng xuất</Text>
         </TouchableOpacity>

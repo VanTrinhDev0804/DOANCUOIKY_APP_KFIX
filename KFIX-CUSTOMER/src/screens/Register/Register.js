@@ -7,6 +7,7 @@ import stylesLogin from "../Login/styleLogin";
 import { useEffect, useState } from "react";
 import { register } from "../../redux/action";
 import { ActivityIndicator } from "react-native-paper";
+import { clearErrResponse } from "../../redux/slice/authSlice";
 
 const Register = () => {
   const { error, isRegister, isVerify, loading , user} = useSelector(
@@ -50,12 +51,12 @@ const Register = () => {
     if (isRegister) {
       alert("Đăng ký thành công!");
       navigation.navigate("Login");
+    }else if (error) {
+      alert(error)
+      dispatch(clearErrResponse())
     }
-    if (error) {
-      alert(error);
-    }
-  }, [error, isRegister]);
-  console.log(error, isRegister, isVerify, loading , user);
+  }, [isRegister , error]);
+  
 
   return (
     <ScrollView style={generalStyle.wrapper}>

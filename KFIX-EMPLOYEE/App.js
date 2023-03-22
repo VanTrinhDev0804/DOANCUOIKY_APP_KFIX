@@ -12,6 +12,7 @@ import {
   SOrder,
   SWelcome,
 } from "./src/screens";
+import Detail from "./src/screens/MainScreen/SHistory/components/Detail";
 import SNotifications from "./src/screens/MainScreen/SHome/SNotifications";
 
 export default function App() {
@@ -31,6 +32,8 @@ export default function App() {
           <Stack.Screen name={"SOrder"} component={SOrder} />
           <Stack.Screen name={"SChat"} component={SChat} />
           <Stack.Screen name={"SGoogleMap"} component={SGoogleMap} />
+          <Stack.Screen name={"Detail"} component={Detail} />
+
           <Stack.Screen
             name={"SNotifications"}
             component={SNotifications}

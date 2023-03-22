@@ -2,6 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import generalColor from '../../generals/colors'
 import OrderDetail from './OrderDetail'
+import SHistory from './SHistory'
+import Detail from './SHistory/components/Detail'
 
 import SHome from "./SHome"
 import SMe from "./SMe"
@@ -21,6 +23,8 @@ const MainScreen = () => {
                 iconName = "user"
             } else if(screenName == "OrderDetail") {
                 iconName = "newspaper-o"
+            } else if(screenName == "History") {
+                iconName = "history"
             }
             return <FontAwesome
                 name={iconName}
@@ -33,7 +37,9 @@ const MainScreen = () => {
         <Tab.Navigator screenOptions={screenOptions}>
             <Tab.Screen name={"Home"} component={SHome} />
             <Tab.Screen name={"OrderDetail"} component={OrderDetail} />
+            <Tab.Screen name={"History"} component={SHistory} />
             <Tab.Screen name={"Me"} component={SMe} />
+           
         </Tab.Navigator>
     )
 }

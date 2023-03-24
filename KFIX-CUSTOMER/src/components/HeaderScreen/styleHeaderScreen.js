@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 
+
 import { colors } from '../../contains'
 
 const stylesHeaderScreen = StyleSheet.create({
@@ -12,6 +13,14 @@ const stylesHeaderScreen = StyleSheet.create({
         fontSize: 25,
         color: colors.textColor,
         flex: 1,
+    },
+    option: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    txtOption: {
+        fontSize: 20,
+        color: 'orange'
     }
 })
 

@@ -31,7 +31,7 @@ const NewOrder = ({ route }) => {
   console.log(route);
   return (
     <View style={generalStyle.wrapper}>
-      <HeaderScreen goBack name="Đặt đơn" />
+      <HeaderScreen goBack name="Đặt đơn" option="Hủy"/>
       <View>
         <Text style={generalStyle.label}>Địa chỉ của bạn:</Text>
         <Pressable

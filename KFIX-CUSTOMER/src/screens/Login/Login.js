@@ -51,7 +51,7 @@ const Login = () => {
     if (isAuthenticated && isVerify) {
       navigation.navigate('Main')
     } else if(isAuthenticated &&  isVerify ===false){
-      // dispatch(sendSMSOTP( user && user.phone))
+      dispatch(sendSMSOTP( user && user.phone))
       navigation.navigate('Accuracy',{phone: user && user.phone,action: handleVerifyPhone})
     }
   }, [isAuthenticated, isVerify , loading ]);

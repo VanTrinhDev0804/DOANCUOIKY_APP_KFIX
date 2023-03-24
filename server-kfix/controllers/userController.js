@@ -155,7 +155,7 @@ exports.sendOTPVerify = (request, response) => {
   client.messages
     .create({
       body: `Ma xac thuc OTP la ${otp} `,
-      from: "+15077077817",
+      from: "+14346867175",
       to: `+84386200961`,
     })
     .then((messages) => {

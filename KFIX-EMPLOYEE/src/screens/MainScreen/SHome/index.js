@@ -9,6 +9,18 @@ import styles from "./styles/stylesSHome";
 import Geocoder from "react-native-geocoding";
 
 const SHome = () => {
+
+/**
+ * {
+ *    address: "Đại học công nghiệp TP.HCM",
+ *    coordination: {
+ *      longitude = "106.68689"
+ *      longitude = "106.68689"
+ *    }
+ * }
+ * 
+ */
+
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -34,7 +46,7 @@ const SHome = () => {
 
   return (
     <View style={generalStyle.container}>
-      <Pressable
+      {/* <Pressable
         style={styles.notification}
         onPress={() => navigation.navigate("SNotifications")}
       >
@@ -47,7 +59,7 @@ const SHome = () => {
         <View style={styles.new}>
           <Text style={styles.textNew}>1</Text>
         </View>
-      </Pressable>
+      </Pressable> */}
       <View style={styles.content}>
         <Text style={styles.title}>KFIX</Text>
         <Switch

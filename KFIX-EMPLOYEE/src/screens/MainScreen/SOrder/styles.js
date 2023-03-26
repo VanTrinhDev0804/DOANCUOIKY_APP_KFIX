@@ -37,6 +37,24 @@ const styles = StyleSheet.create({
   btn: {
     marginBottom: 10,
   },
+
+
+  infoCustomer: {
+    marginLeft: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+},
+textInfoCustomer: {
+    fontWeight: 'bold',
+    fontSize: 20
+},
+infoEmployee:{
+    justifyContent: 'space-between',
+    marginBottom: 10,
+},
+textInfoCustomer: {
+    fontSize: 20
+},
 });
 
 export default styles;

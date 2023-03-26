@@ -1,4 +1,5 @@
 import {
+  Alert,
   Linking,
   Platform,
   Text,
@@ -20,31 +21,23 @@ const SOrder = ({ received }) => {
     navigation.navigate("OrderDetail");
   };
 
+  const handleAcceptFixed = () => {
+    navigation.navigate('Home')
+  }
+
+  const handleFixed = () => {
+    Alert.alert('Thông báo', 'Bạn đã hoàn thành xong đơn hàng. Tiếp tục với đơn hàng mới nào', [
+      {text: 'Đồng ý', onPress: handleAcceptFixed},
+    ]);
+  }
+
   const latitude = "10.85584";
   const longitude = "106.63114";
-  // const openMapDirection = () => {
-  //   const url = Platform.select({
-  //     ios: `comgooglemaps://?center=${latitude},${longitude}&q=${latitude},${longitude}&zoom=14&views=traffic"`,
-  //     android: `geo://?q=${latitude},${longitude}`,
-  //   });
-  //   Linking.canOpenURL(url)
-  //     .then((supported) => {
-  //       if (supported) {
-  //         return Linking.openURL(url);
-  //       } else {
-  //         const browser_url = `https://www.google.de/maps/@${latitude},${longitude}`;
-  //         return Linking.openURL(browser_url);
-  //       }
-  //     })
-  //     .catch(() => {
-  //       if (Platform.OS === "ios") {
-  //         Linking.openURL(`maps://?q=${latitude},${longitude}`);
-  //       }
-  //     });
-  //};
 
   const handleDirect = () => {
-    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${10.82300},${106.68672}`)
+    Linking.openURL(
+      `https://www.google.com/maps/dir/?api=1&destination=${10.823},${106.68672}`
+    );
   };
   return (
     <View style={generalStyle.container}>
@@ -94,7 +87,21 @@ const SOrder = ({ received }) => {
       {received ? (
         <View>
           <View style={styles.contentOrder}>
-            <Text style={{ fontSize: 25 }}>Đơn giá: 200.000 VNĐ</Text>
+            <View style={{flex: 1}}>
+              <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
+                <Text style={[styles.textInfoCustomer]}>Giá đưa ra:</Text>
+                <Text style={[styles.textInfoCustomer]}>15.000 vnđ</Text>
+              </View>
+              <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
+                <Text style={[styles.textInfoCustomer]}>Phí di chuyển*:</Text>
+                <Text style={[styles.textInfoCustomer]}>15.000 vnđ</Text>
+              </View>
+              <View style={{ borderWidth: 0.3 }}></View>
+              <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
+                <Text style={[styles.textInfoCustomer]}>Tiền thanh toán:</Text>
+                <Text style={[styles.textInfoCustomer]}>30.000 vnđ</Text>
+              </View>
+            </View>
           </View>
           <View style={styles.options}>
             <Button
@@ -105,6 +112,7 @@ const SOrder = ({ received }) => {
             <Button
               title="Sửa xong"
               customStyle={{ backgroundColor: "orange", ...styles.btn }}
+              onPress={handleFixed}
             />
           </View>
         </View>

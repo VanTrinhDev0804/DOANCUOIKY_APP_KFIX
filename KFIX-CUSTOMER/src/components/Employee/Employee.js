@@ -1,13 +1,23 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from '@react-navigation/native'
 import styleEmployee from "./styleEmployee";
 
 const Employee = (props) => {
-const navigation = useNavigation()
+const navigation = useNavigation();
+const handleSendRequireOrder = () => {
+  Alert.alert('KFix', 'Đơn hàng sẽ được gửi đến nhân viên sửa khóa', [
+    {
+      text: 'Hủy',
+      onPress: () => console.log('Cancel Pressed'),
+      style: 'Cancel',
+    },
+    {text: 'Đồng ý', onPress: () => navigation.navigate('Main')},
+  ]);
+}
   return (
     <TouchableOpacity
     style={styleEmployee.wrapper}
-    onPress={() => navigation.navigate('OrderEstimate')}
+    onPress={handleSendRequireOrder}
     >
       <Image
         //style={styles.tinyLogo}

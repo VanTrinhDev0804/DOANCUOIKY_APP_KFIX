@@ -40,6 +40,10 @@ const generalStyle = StyleSheet.create({
   containerRow: {
     flexDirection: "row"
   },
+  rowCenterV: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
   
 });
 

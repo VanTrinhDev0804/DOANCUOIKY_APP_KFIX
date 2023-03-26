@@ -33,7 +33,6 @@ const TopTab = () => {
         }}
       >
         <Tab.Screen name="New" component={New} options={{ tabBarLabel: ({focused}) =>  <Text>Mới</Text>}}/>
-        <Tab.Screen name="Fixing" component={Fixing} options={{ tabBarLabel: 'Đang sửa' }}/>
         <Tab.Screen name="Completed" component={Completed} options={{ tabBarLabel: 'Đã hoàn thành' }}/>
       </Tab.Navigator>
     </View>

@@ -3,9 +3,12 @@ import { StyleSheet } from "react-native";
 const stylesItem = StyleSheet.create({
     wrapper: {
         //borderWidth: 1,
+        //flexWrap: 'wrap',
+    
+        //backgroundColor: 'red',
         padding: 20,
-        marginBottom: 10
-        //borderRadius: 15,
+        marginBottom: 10,
+        borderRadius: 15,
         //borderColor: '#000',
         // elevation: 100,
         // shadowColor: '#000',
@@ -25,6 +28,14 @@ const stylesItem = StyleSheet.create({
         //iOS
         shadowOffset: { width: 5, height: 5 },
         shadowOpacity: 0.26,      
+    },
+    contentItem: {
+        marginBottom: 10,
+        //flexWrap: 'wrap'
+    },
+    text: {
+        fontSize: 16,
+        marginLeft: 10
     }
 })
 

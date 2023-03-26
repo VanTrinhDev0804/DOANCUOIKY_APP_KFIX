@@ -4,8 +4,15 @@ import { colors, generalStyle } from "../../contains";
 import Contact from "../Order/Contact/Contact";
 import stylesBill from "./stylesBill";
 import { Button } from "../../components";
+import { useState } from "react";
 
 const Bill = () => {
+  const [orderAccept,setOrderAccept] = useState(false)
+
+  const handleAcceptOrder = () => {
+    setOrderAccept(true)
+  }
+  
   return (
     <View style={generalStyle.wrapper}>
       <View style={stylesBill.general}>
@@ -17,7 +24,7 @@ const Bill = () => {
           </View>
 
           <View style={stylesBill.note}>
-            <Text style={{ color: colors.primaryColor }}>Hóa đơn dự kiến</Text>
+            <Text style={{ color: colors.primaryColor }}>{orderAccept ? 'Hóa đơn' : 'Hóa đơn dự kiến'}</Text>
           </View>
         </View>
       </View>
@@ -57,7 +64,8 @@ const Bill = () => {
           <Text style={[stylesBill.textInfoCustomer]}>30.000 vnđ</Text>
         </View>
       </View>
-      <Button title="Chấp nhận"/>
+      {!orderAccept && <Button title="Chấp nhận" onPress={handleAcceptOrder}/>}
+      
       <Text style={{marginTop: 10}}>Lưu ý: Phí di chuyển được phát sinh tự động, dựa vào khoảng cách, thời gian bạn yêu cầu.</Text>
     </View>
   );

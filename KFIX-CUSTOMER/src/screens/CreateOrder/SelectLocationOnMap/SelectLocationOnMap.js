@@ -1,14 +1,15 @@
-import {View, Text, Dimensions} from 'react-native';
-import { useEffect, useRef, useState } from 'react'
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import {Button} from '../../../components';
-import stylesSelectOnMap from './stylesSelectOnMap';
-import Entypo from 'react-native-vector-icons/Entypo'
-import { colors } from '../../../contains';
-import Geocoder from 'react-native-geocoding'
-import { useNavigation } from '@react-navigation/native'
+import { View, Text, Dimensions } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { Button } from "../../../components";
+import stylesSelectOnMap from "./stylesSelectOnMap";
+import Entypo from "react-native-vector-icons/Entypo";
+import { colors } from "../../../contains";
+import Geocoder from "react-native-geocoding";
+import { useNavigation } from "@react-navigation/native";
+import { getAddressFromLocation } from "../../../utils/map";
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 const ASPECT_RATIO = width / height;
 
@@ -22,59 +23,63 @@ let INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 };
 const SelectLocationOnMap = () => {
- 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
-  const mapRef = useRef()
-  const [locationSelected,setLocationSelected] = useState('')
-
+  const mapRef = useRef();
+  const [locationSelected, setLocationSelected] = useState({
+    address: "",
+    coordinates: {
+      latitude: 0,
+      longitude: 0,
+    },
+  });
 
   const handleGetPossion = async () => {
-    let camera = await mapRef.current.getCamera()
-    console.log(camera.center);
-      Geocoder.init(
-        'AIzaSyDymGZaNKMgK9-_NNceShNhRE2xtfqecW4',
-        {
-          language: 'vn'
-        }
-      )
-      Geocoder.from(camera.center)
-        .then(json => {
-          let addressComponent = json.results[0].formatted_address;
-          setLocationSelected({
-            address: addressComponent,
-            coordinates: camera.center
-          })
-      })
-    }
+    let camera = await mapRef.current.getCamera();
+    const coordinate = {
+      latitude: camera.center.latitude,
+      longitude: camera.center.longitude,
+    };
+    const address = await getAddressFromLocation(coordinate);
+    setLocationSelected({
+      address: address,
+      coordinates: {
+        latitude: camera.latitude,
+        longitude: camera.longitude,
+      },
+    });
+  };
 
-    const handleChooseLocation = () => {
-      navigation.navigate('NewOrder',{currentLocation: locationSelected})
-    }
-    
+  const handleChooseLocation = () => {
+    navigation.navigate("NewOrder", { currentLocation: locationSelected });
+  };
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <MapView
         ref={mapRef}
         style={stylesSelectOnMap.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_POSITION}
         zoomEnabled={true}
-        onRegionChangeComplete={handleGetPossion} 
-      >
-        </MapView>
-        <Entypo
-          name="location-pin"
-          size={40}
-          color={colors.primaryColor}
-          style={stylesSelectOnMap.iconChooseOnMap}
-        />
+        onRegionChangeComplete={handleGetPossion}
+      ></MapView>
+      <Entypo
+        name="location-pin"
+        size={40}
+        color={colors.primaryColor}
+        style={stylesSelectOnMap.iconChooseOnMap}
+      />
       <View style={stylesSelectOnMap.wrapSelectLocation}>
         <View style={stylesSelectOnMap.location}>
           <Text>Vị trí bạn chọn:</Text>
           <Text>{locationSelected?.address}</Text>
         </View>
-        <Button title="Chọn" customStyle={stylesSelectOnMap.btnSelect} onPress={handleChooseLocation}/>
+        <Button
+          title="Chọn"
+          customStyle={stylesSelectOnMap.btnSelect}
+          onPress={handleChooseLocation}
+        />
       </View>
     </View>
   );

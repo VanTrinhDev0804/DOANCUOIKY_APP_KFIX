@@ -1,5 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  TextInput,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +20,11 @@ import {
 import stylesSearchLocation from "./stylesSearchLocation";
 import { colors, generalStyle } from "../../../contains";
 import Geocoder from "react-native-geocoding";
+import { useDebounce } from "../../../hooks";
+
+import { MAP_4D_KEY } from "../../../private/keyMap";
+import axiosClient from "../../../api/axiosClient";
+import { getAddressFromLocation, getAddressFromText } from "../../../utils/map";
 
 // {
 //   address: '',
@@ -36,7 +47,13 @@ let INITIAL_POSITION = {
 
 const SearchLocation = ({ route }) => {
   const navigation = useNavigation();
-  const [addressCustomer, setAdressCustomer] = useState({
+
+  const [txtSearch, setTxtSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+
+  const debouncedValue = useDebounce(txtSearch, 500);
+
+  const [addressCustomer, setAddressCustomer] = useState({
     address: "",
     coordinates: {
       latitude: 0,
@@ -44,67 +61,64 @@ const SearchLocation = ({ route }) => {
     },
   });
 
-  //
-  const getLocationUserNow = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      console.log("Permission to access location was denied");
-      return null;
-    }
-    let location = await Location.getCurrentPositionAsync({});
-    Geocoder.init("AIzaSyDymGZaNKMgK9-_NNceShNhRE2xtfqecW4", {
-      language: "vn",
+  useEffect(() => {
+    //console.log(txtSearch);
+    const getAddress = async () => {
+      let listAddress = await getAddressFromText(txtSearch);
+      if (listAddress === null) setSearchResult([]);
+      else setSearchResult([...listAddress]);
+    };
+    getAddress();
+  }, [debouncedValue]);
+
+  const handleChangeTxt = (value) => {
+    setTxtSearch(value);
+  };
+
+  const handleChosseResultSerch = (result) => {
+    setAddressCustomer({
+      address: result.address,
+      coordinates: {
+        latitude: result.location.lat,
+        longitude: result.location.lng,
+      },
     });
-    Geocoder.from({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    })
-      .then((json) => {
-        console.log(json);
-        //let addressComponent = json.results[0].formatted_address;
-        const currentLocation = {
-          address: json.results[0].formatted_address,
+    navigation.navigate("NewOrder", {
+      currentLocation: {
+        address: result.address,
+        coordinates: {
+          latitude: result.location.lat,
+          longitude: result.location.lng,
+        },
+      },
+    });
+  };
+
+  const getLocationUserNow = async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return null;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      const coordinate = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      const address = await getAddressFromLocation(coordinate);
+      navigation.navigate("NewOrder", {
+        currentLocation: {
+          address: address,
           coordinates: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           },
-        };
-        navigation.navigate("NewOrder", { currentLocation });
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
+        },
       });
-  };
-
-  const handleSelected = (details = GooglePlaceDetail, data) => {
-    // const position = {
-    //   latitude: details?.geometry.location.lat || 0,
-    //   longitude: details?.geometry.location.lng || 0,
-    // };
-    Geocoder.init("AIzaSyDymGZaNKMgK9-_NNceShNhRE2xtfqecW4", {
-      language: "vn",
-    });
-    Geocoder.from({
-      latitude: details?.geometry.location.lat || 0,
-      longitude: details?.geometry.location.lng || 0
-    })
-      .then((json) => {
-        console.log(json);
-        //let addressComponent = json.results[0].formatted_address;
-        const currentLocation = {
-          address: json.results[0].formatted_address,
-          coordinates: {
-            latitude: details?.geometry.location.lat,
-            longitude: details?.geometry.location.lng,
-          },
-        };
-        navigation.navigate("NewOrder", { currentLocation });
-      })
-      .catch((error) => {
-        console.log(error);
-        return null;
-      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChooseCurrentLocation = () => {
@@ -157,20 +171,27 @@ const SearchLocation = ({ route }) => {
             <Text style={colors.textColor}>Vị trí hiện tại của bạn</Text>
           </TouchableOpacity>
         </View>
-        <GooglePlacesAutocomplete
-          styles={{ textInput: stylesSearchLocation.txtSearch }}
+        <TextInput
+          style={stylesSearchLocation.txtSearch}
           placeholder="Nhập địa chỉ của bạn"
-          enablePoweredByContainer={false}
-          fetchDetails
-          onPress={(data, details = null) => {
-            handleSelected(details, data);
-          }}
-          query={{
-            key: "AIzaSyDymGZaNKMgK9-_NNceShNhRE2xtfqecW4",
-            language: "vn",
-            components: "country:vn",
-          }}
+          value={txtSearch}
+          onChangeText={(text) => handleChangeTxt(text)}
         />
+        {searchResult.length > 0 && (
+          <View style={stylesSearchLocation.resultSearch}>
+            {searchResult.map((result) => {
+              return (
+                <TouchableOpacity
+                  key={result.id}
+                  style={stylesSearchLocation.itemResult}
+                  onPress={() => handleChosseResultSerch(result)}
+                >
+                  <Text>{result.address}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
       </View>
     </View>
   );

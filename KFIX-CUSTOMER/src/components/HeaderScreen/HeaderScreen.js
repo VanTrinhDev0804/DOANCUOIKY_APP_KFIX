@@ -5,10 +5,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { generalStyle } from "../../contains";
 import stylesHeaderScreen from "./styleHeaderScreen";
 
-const HeaderScreen = ({ goBack, name, option }) => {
+const HeaderScreen = ({ goBack, name, option,eventOption }) => {
   const navigation = useNavigation();
   return (
-    <View style={stylesHeaderScreen.constain}>
+    <View style={stylesHeaderScreen.constain }>
       <TouchableOpacity
         style={generalStyle.flex1}
         onPress={() => navigation.goBack()}
@@ -20,7 +20,7 @@ const HeaderScreen = ({ goBack, name, option }) => {
       </View>
       <View style={[generalStyle.flex1, stylesHeaderScreen.option]}>
         {option && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={eventOption}>
             <Text style={stylesHeaderScreen.txtOption}>Hủy</Text>
           </TouchableOpacity>
         )}

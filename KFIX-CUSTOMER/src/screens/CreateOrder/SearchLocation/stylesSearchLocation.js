@@ -32,6 +32,8 @@ const stylesSearchLocation = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8
   },
 
   options: {
@@ -51,6 +53,20 @@ const stylesSearchLocation = StyleSheet.create({
     btnRadius: {
       borderRadius: 20
     }
+  },
+  resultSearch: {
+    marginTop: 5,
+    borderRadius: 10,
+    width: '100%',
+    minHeight: 50,
+    borderWidth: 1,
+    padding: 10
+  },
+
+  itemResult: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   }
   // btnBack: {
   //   position: 'absolute',

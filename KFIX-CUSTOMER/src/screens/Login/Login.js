@@ -30,9 +30,6 @@ const Login = () => {
     if(user){
       dispatch(verifyOTPhandel(user.phone , value))
     }
-   
-    
-     
   }
 
   useEffect(() => {

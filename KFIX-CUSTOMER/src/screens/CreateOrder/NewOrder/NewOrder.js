@@ -91,7 +91,7 @@ const NewOrder = ({ route }) => {
           >
             <View style={stylesNewOrder.wConstainLocatin}>
               <Entypo
-                name="location-pin"
+                name="lock"
                 size={35}
                 color={colors.primaryColor}
               />

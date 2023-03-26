@@ -4,6 +4,9 @@ const generalStyle = StyleSheet.create({
   mt10: {
     marginTop: 10,
   },
+  mr10: {
+    marginRight: 10,
+  },
   mb2: {
     marginBottom: 20,
   },
@@ -16,10 +19,17 @@ const generalStyle = StyleSheet.create({
     paddingVertical: 30,
     backgroundColor: '#fff',
   },
+  rowCenterV: {
+    flexDirection: 'row',
+    alignItems: "center"
+  },
   containCenter: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  containerRow: {
+    flexDirection: 'row'
   },
   containRowCenter: {
     flexDirection: 'row',

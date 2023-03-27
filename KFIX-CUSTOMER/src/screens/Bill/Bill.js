@@ -38,7 +38,7 @@ const Bill = () => {
           <Entypo name="location-pin" size={30} color="red" />
           <View style={stylesBill.infoCustomer}>
             <Text style={stylesBill.textInfoCustomer}>
-              158 Tân Sơn Nhì, Tân Phú, Hồ Chí Minhhhhhhhhhhhhhhhhh
+              158 Tân Sơn Nhì, Tân Phú, Hồ Chí Minh
             </Text>
           </View>
         </View>

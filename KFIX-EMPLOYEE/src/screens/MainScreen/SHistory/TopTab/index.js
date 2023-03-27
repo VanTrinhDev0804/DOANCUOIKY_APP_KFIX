@@ -2,7 +2,6 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { Text, View } from "react-native";
 import { generalColor, generalStyle } from "../../../../generals";
 import Completed from "../components/Completed";
-import Fixing from "../components/Fixing";
 import New from "../components/New";
 
 

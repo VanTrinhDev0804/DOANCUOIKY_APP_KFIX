@@ -4,8 +4,6 @@ import generalColor from "../../../../generals/colors";
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   notification:{
     marginTop: 20,
@@ -27,7 +25,8 @@ const styles = StyleSheet.create({
   },
   textNew: {
     color: '#fff',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+
   },
   title: {
     fontSize: 80,
@@ -36,8 +35,11 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   status: {
-    marginTop: 30,
-    fontSize: 30
+    fontSize: 20,
+  },
+  switch: {
+    transform: [{ scaleX: 1.3 }, { scaleY: 1.3}],
+    marginRight: 10
   }
 });
 

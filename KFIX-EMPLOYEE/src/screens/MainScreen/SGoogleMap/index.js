@@ -77,7 +77,6 @@ const GoogleMap = () => {
       >
         <Marker coordinate={destination} />
         <Marker coordinate={origin}/>
-
         <MapViewDirections
           origin={origin}
           destination={destination}

@@ -31,7 +31,7 @@ const Item = ({ onPress }) => {
           </View>
         </View>
         <View style={[generalStyle.rowCenterV,stylesItem.contentItem]}>
-          <FontAwesome5 name="coins" size={25} color="yellow" />
+          <FontAwesome5 name="coins" size={25} color="#FFD700" />
           <View style={{flexWrap: 'wrap'}}>
             <Text style={stylesItem.text}>150.000 vnđ</Text>
           </View>

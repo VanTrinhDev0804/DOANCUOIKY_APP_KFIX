@@ -86,11 +86,13 @@ const SearchLocation = ({ route }) => {
     navigation.navigate("NewOrder", {
       currentLocation: {
         address: result.address,
+       
         coordinates: {
           latitude: result.location.lat,
           longitude: result.location.lng,
         },
       },
+      loaiKhoa: route.params.loaiKhoa,
     });
   };
 
@@ -110,11 +112,13 @@ const SearchLocation = ({ route }) => {
       navigation.navigate("NewOrder", {
         currentLocation: {
           address: address,
+
           coordinates: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           },
         },
+        loaiKhoa: route.params.loaiKhoa,
       });
     } catch (error) {
       console.log(error);

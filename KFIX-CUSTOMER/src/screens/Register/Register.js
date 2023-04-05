@@ -5,7 +5,7 @@ import { generalStyle } from "../../contains";
 import { Button, FormGroup, InputField } from "../../components";
 import stylesLogin from "../Login/styleLogin";
 import { useEffect, useState } from "react";
-import { register } from "../../redux/action";
+import { register } from "../../redux/actions/action";
 import { ActivityIndicator } from "react-native-paper";
 import { clearErrResponse } from "../../redux/slice/authSlice";
 

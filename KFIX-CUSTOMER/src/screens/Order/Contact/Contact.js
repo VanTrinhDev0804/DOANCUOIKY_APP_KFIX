@@ -6,7 +6,9 @@ import { Linking } from "react-native";
 import stylesContact from "./stylesContact";
 import { Button } from "../../../components";
 
-const Contact = () => {
+const Contact = (props) => {
+  const { keyer} = props
+
   const phoneNumber = '0899306681'
   const navigation = useNavigation()
   return (
@@ -20,23 +22,23 @@ const Contact = () => {
           borderRadius: 100,
         }}
         source={{
-          uri: "https://www.themoviedb.org/t/p/w500/blKKsHlJIL9PmUQZB8f3YmMBW5Y.jpg",
+          uri: keyer && keyer.img,
         }}
       />
 
       <View style={{ marginLeft: 20 }}>
-        <Text style={{ fontSize: 18 }}>Nguyễn Minh Vương</Text>
+        <Text style={{ fontSize: 18 }}>{keyer && keyer.tenTho}</Text>
         <View style={{flexDirection: 'row'}}>
         <Button
             icon={ <Ionicons name="call" size={25} color="#fff" /> }
             customStyle={stylesContact.customStyleIconRadius}
-            onPress={()=>Linking.openURL(`tel:${phoneNumber}`)}
+            onPress={()=>Linking.openURL(`tel:${keyer && keyer.phone}`)}
         />
         <View style={{marginRight: 10}}></View>
         <Button
             icon={ <AntDesign name="message1" size={25} color="#fff" /> }
             customStyle={stylesContact.customStyleIconRadius}
-            onPress={()=>navigation.navigate('Chat')}
+            onPress={()=>navigation.navigate('Chat')} 
         />
         </View>
         </View>

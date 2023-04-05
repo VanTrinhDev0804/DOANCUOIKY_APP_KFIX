@@ -6,7 +6,7 @@ import { Button, FormGroup, InputField } from "../../components";
 import stylesLogin from "./styleLogin";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, sendSMSOTP, verifyOTPhandel } from "../../redux/action";
+import { login, sendSMSOTP, verifyOTPhandel } from "../../redux/actions/action";
 import { ActivityIndicator } from "react-native-paper";
 import { clearErrResponse } from "../../redux/slice/authSlice";
 

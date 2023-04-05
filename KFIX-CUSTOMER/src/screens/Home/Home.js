@@ -24,7 +24,7 @@ const Home = () => {
         <Text style={stylesHome.titleProblem}>Vấn đề của bạn</Text>
         <View style={stylesHome.opts}>
           {problems.map(problem => {
-            return <Option key={problem.id} problem={problem.name} img={problem.image}/>;
+            return <Option key={problem.id} loaiKhoa={problem.name} img={problem.image}/>;
           })}
         </View>
       </View>

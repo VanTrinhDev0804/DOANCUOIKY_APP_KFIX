@@ -22,8 +22,10 @@ import { auth, storage } from "../../../firebase/cofig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   UpdateData,
+  updateUserRTDatabase,
   writeDataFireStore,
   WriteDataGenerateID,
+  writeUserRTDatabase,
 } from "../../../firebase/AsyncActtions";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { IParams } from "../../../types";
@@ -139,6 +141,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
       isVerify : false,
       otp: "000000"
     };
+   
 
     const isEmty = Object.values(dataUpload).includes("");
     const checkMaTho = dataUpload.maTho
@@ -159,6 +162,16 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
             const userId = userCredential.user.uid;
             const keyerCreate = {userId , ...dataUpload}
             writeDataFireStore(keyerCreate ,"Keyer",dataUpload.phone )
+            const datarealtime = {
+              tenTho: tenTho,
+              dinhVi: diaChi,
+              phone: sdt,
+              balanceAc: parseInt(balanceAc),
+              loaiSC: loaiSC,
+              img: imgText,
+              status: "Offline"
+            }
+            writeUserRTDatabase(userId, datarealtime)
             // ...
           })
           .catch((error) => {
@@ -178,7 +191,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
     }
   };
   const handelUpdateData = () => {
-    const idUpdate = thoUpdate && thoUpdate.id;
+    const idUpdate = thoUpdate ? thoUpdate.id : "";
     const key = thoUpdate && thoUpdate.key;
     const maTho = thoUpdate && thoUpdate.maTho;
     const dataUpload = {
@@ -209,6 +222,15 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
         dispatch(updateThoSuaKhoa(dataUpload));
         alert("UpdateSucess");
         history.replace("/thosuakhoa");
+        const datarealtime = {
+          tenTho: tenTho,
+          dinhVi: diaChi,
+          phone: sdt,
+          balanceAc: parseInt(balanceAc),
+          loaiSC: loaiSC,
+          img: imgText,
+        }
+        updateUserRTDatabase(idUpdate, datarealtime)
       }
       // else if(checkMaNV !==-1){
       //     alert("Mã nhân viên tồn tại")

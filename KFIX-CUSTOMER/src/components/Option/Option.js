@@ -5,13 +5,13 @@ import styleOption from './stylesOption';
 
 const windowWidth = Dimensions.get('window').width;
 
-const Option = ({problem,img}) => {
+const Option = ({loaiKhoa,img}) => {
   console.log(img);
     const navigation = useNavigation()
   return (
     <TouchableOpacity
       style={styleOption.btnOpt}
-      onPress={() => navigation.navigate('NewOrder',{problem})}
+      onPress={() => navigation.navigate('NewOrder',{loaiKhoa})}
     >
     
       <View style={styleOption.opt}>
@@ -20,7 +20,7 @@ const Option = ({problem,img}) => {
           resizeMode="contain"
           source={{uri: img}}
         />
-        <Text>{problem}</Text>
+        <Text>{loaiKhoa}</Text>
       </View>
     </TouchableOpacity>
   );

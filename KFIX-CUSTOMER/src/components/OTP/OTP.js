@@ -5,7 +5,7 @@ import { colors, generalStyle } from "../../contains";
 import styleOTP from "./styleOTP";
 import Button from "../Button";
 import { useDispatch, useSelector } from "react-redux";
-import { sendSMSOTP } from "../../redux/action";
+import { sendSMSOTP } from "../../redux/actions/action";
 import { ActivityIndicator } from "react-native-paper";
 import { clearErrResponse } from "../../redux/slice/authSlice";
 

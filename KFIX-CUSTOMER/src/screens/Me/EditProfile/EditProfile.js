@@ -6,7 +6,7 @@ import styleProfile from "../Profile/stylesProfile";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAvatarUser, updateUserName } from "../../../redux/action";
+import { updateAvatarUser, updateUserName } from "../../../redux/actions/action";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/config";
 const EditProfile = () => {

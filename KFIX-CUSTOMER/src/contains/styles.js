@@ -46,8 +46,11 @@ const generalStyle = StyleSheet.create({
   },
   label: {
     fontSize: 20,
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius:4,
+    
   },
+ 
   opt: {
     flexDirection: 'row',
     alignItems: 'center',

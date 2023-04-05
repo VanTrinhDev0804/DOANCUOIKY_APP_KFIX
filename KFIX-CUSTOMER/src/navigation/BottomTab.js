@@ -5,9 +5,14 @@ import { colors } from '../contains'
 import { Home, Order } from '../screens'
 import Bill from '../screens/Bill/Bill'
 import Profile from '../screens/Me/Profile/Profile'
+import { useDispatch, useSelector } from 'react-redux'
+import { loadOrder } from '../redux/actions/orderAction'
 
 const Tab = createBottomTabNavigator()
 const BottomTab = () => {
+    const dispatch = useDispatch()
+    const {user} = useSelector(state => state.auth)
+    
     const screenOptions = ({route}) => ({
         headerShown: false,
         tabBarHideOnKeyboard: true,
@@ -18,11 +23,13 @@ const BottomTab = () => {
             let screenName = route.name
             let iconName = "home"
             if(screenName == "Order") {
-                iconName = "clock-o"
+                dispatch(loadOrder(user.userId))
+                iconName = "book"
             } else if (screenName ==='Profile'){
-                iconName = "user"
+                dispatch(loadOrder(user.userId))
+                iconName = "user-o"
             } else if (screenName === 'Bill') {
-                iconName = "money"
+                iconName = "bell-o"
             }
             return <FontAwesome
                 name={iconName}

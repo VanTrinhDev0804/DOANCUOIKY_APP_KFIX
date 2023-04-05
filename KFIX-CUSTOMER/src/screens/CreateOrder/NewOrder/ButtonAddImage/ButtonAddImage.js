@@ -4,9 +4,38 @@ import { colors, generalStyle } from "../../../../contains";
 import styles from "./styles";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-
-const ButtonAddImage = () => {
+import { storage } from "../../../../firebase/config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+const ButtonAddImage = ({onValue , orderID}) => {
   const [pickedImagePath, setPickedImagePath] = useState("");
+
+
+  async function uploadImageAsync(uri) {
+    // Why are we using XMLHttpRequest? See:
+    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    const fileRef = ref(storage, `order/${orderID}`);
+    const result = await uploadBytes(fileRef, blob);
+
+    // We're done with the blob, close and release it
+    blob.close();
+
+    return await getDownloadURL(fileRef);
+  }
+
   const openCamera = async () => {
     // Ask the user for the permission to access the camera
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -23,7 +52,8 @@ const ButtonAddImage = () => {
 
     if (!result.canceled) {
       setPickedImagePath(result.assets[0].uri);
-      console.log(result);
+      const uploadUrl = await uploadImageAsync(result.assets[0].uri);
+      onValue(uploadUrl)
     }
   };
   return (

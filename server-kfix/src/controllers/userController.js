@@ -1,7 +1,7 @@
-const { admin, db } = require("../db");
-const User = require("../models/user");
-const config = require("../utils/config");
+const { db } = require("../../db");
 
+const config = require("../utils/config");
+const {getDatabase} = require("firebase/database")
 const { initializeApp } = require("firebase/app");
 const {
   getAuth,
@@ -10,15 +10,18 @@ const {
   signOut,
 } = require("firebase/auth");
 const app = initializeApp(config);
+const database = getDatabase(app)
 const auth = getAuth(app);
 
-const { validateSignUpData, validateLoginData } = require("../validators");
+const { validateSignUpData, validateLoginData } = require("../../validators");
 const { json } = require("body-parser");
 const { response, request } = require("express");
 const client = require("../utils/configtwilio");
 
 // User login
+
 exports.loginUser = async (request, response) => {
+  console.log(request.body)
   const userrequest = {
     phone: request.body.phone,
     password: request.body.password,

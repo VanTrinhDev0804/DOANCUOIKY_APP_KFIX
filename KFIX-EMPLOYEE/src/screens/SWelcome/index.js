@@ -21,9 +21,9 @@ const Welcome = () => {
   const { user, isAuthenticated , loading , error} = useSelector((state) => state.auth);
 
   const handleLogin = () => {
-    // console.log("phone", phoneNumber, password);
-    // dispatch(login(phoneNumber, password));
-    navigation.navigate('MainScreen')
+    console.log("phone", phoneNumber, password);
+    dispatch(login(phoneNumber, password));
+    // navigation.navigate('MainScreen')
   };
   useEffect(() => {
     if (loading) {

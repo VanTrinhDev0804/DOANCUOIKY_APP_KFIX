@@ -6,7 +6,7 @@ import { generalStyle } from "../../../contains"
 
 const OrderEstimate = () => {
     const navigation = useNavigation()
-
+    
     return (
         <View style={generalStyle.wrapper}>
             <HeaderScreen goBack name="Hóa đơn ước tính"/>

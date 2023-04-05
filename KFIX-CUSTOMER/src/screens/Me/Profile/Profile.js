@@ -8,7 +8,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import generalStyle from "../../../contains/styles";
 import styleProfile from "./stylesProfile";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../redux/action";
+import { logout } from "../../../redux/actions/action";
 const { width } = Dimensions.get("window");
 
 const Profile = () => {

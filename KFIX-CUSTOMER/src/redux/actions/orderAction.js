@@ -16,7 +16,7 @@ export const loadKeyerLocation = () => async (dispatch)=>{
         dispatch(loadKeyerSuccess(data))
         
       } else {
-        console.log("No data available");
+        // console.log("No data available");
         dispatch(loadKeyerFailure("No data available"))
 
       }
@@ -35,7 +35,7 @@ export const loadOrder = (userID) => async (dispatch)=>{
       dispatch(loadOrderSuccess({...snapshot.val()}))
       
     } else {
-      console.log("No data available");
+      // console.log("No data available");
       dispatch(loadOrderFailure("No data available"))
 
     }

@@ -21,6 +21,9 @@ export const orderSlice = createSlice({
         state.error = action.payload
     
       },
+    updateOneOrder: (state , action) =>{
+      state.value = action.payload
+    }
   },
 });
 
@@ -28,6 +31,7 @@ export const {
     loadOrderRequest,
     loadOrderSuccess,
     loadOrderFailure,
+    updateOneOrder,
      
 } = orderSlice.actions
 

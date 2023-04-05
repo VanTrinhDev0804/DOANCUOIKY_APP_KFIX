@@ -7,10 +7,11 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import RadioGroup from "react-native-radio-buttons-group";
 import { useNavigation } from "@react-navigation/native";
 import { generalStyle } from "../../contains";
+import { ref, onValue, onChildChanged } from "firebase/database";
+import { database } from "../../firebase/config";
+
 import {
   Alert,
-  Image,
-  Modal,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -20,16 +21,28 @@ import {
 import { Button } from "../../components";
 import Contact from "./Contact/Contact";
 import ReasonCancelOrder from "./ReasonsCancelOrder/ReasonCancelOrder";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { loadOrder } from "../../redux/actions/orderAction";
+
+import { useEffect } from "react";
+import { updateOneOrder } from "../../redux/slice/orderSlice";
 
 const Order = () => {
   const navigation = useNavigation();
-  const { value } = useSelector((state) => state.order);
-  const keyer = value.keyer;
-  const { status , diaChi , problem , price} = value;
-  console.log("====================================");
-  console.log(value);
-  console.log("====================================");
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { value, loading } = useSelector((state) => state.order);
+  const keyer = value && value.keyer;
+  const [statusOrder, setStatusOrder] = useState(value ? value.status : "");
+
+  const orderRef = ref(database, "Orders/" + user.userId);
+  onChildChanged(orderRef, (data) => {
+    if(data.exists()){
+      
+      setStatusOrder(data.val());
+
+    }
+  });
   const [modalVisible, setModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
@@ -40,7 +53,6 @@ const Order = () => {
       [
         {
           text: "Đồng ý",
-          // onPress: () => console.log("Cancel Pressed"),
           style: "Cancel",
         },
       ]
@@ -49,6 +61,7 @@ const Order = () => {
 
   const PullAndRefreshControl = () => {
     setRefresh(true);
+    dispatch(loadOrder(user.userId));
 
     setTimeout(() => {
       setRefresh(false);
@@ -56,190 +69,250 @@ const Order = () => {
   };
 
   return (
-    <View style={generalStyle.wrapper}>
-      <View style={stylesOrder.wapperorder}>
-        <Text style={stylesOrder.orderTitle}>
-          Chi tiết hóa đơn {value.orderID}
-        </Text>
-      </View>
-
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refresh}
-            onRefresh={PullAndRefreshControl}
-          />
-        }
-      >
-        <View style={stylesOrder.wrapper}>
-          <View style={generalStyle.mb2}>
-            <Text style={{ color: "#888" , marginBottom: 20}}>
-              Đặt dịch vụ lúc {value && value.createAt}
-            </Text>
-            <Text style ={{ color: "#888"}}>Thợ sửa:</Text>
-            <View style ={{ borderWidth: 1,
-        paddingHorizontal: 10,
-        borderRadius: 10,
-        }}>
-
-            <Contact keyer={keyer} />
-
-            </View>
-          </View>
-
-
-
-          <View style={{ flexDirection: "row" }}>
-            <Ionicons name="ios-newspaper-outline" size={20} color="green" />
-            <Text style={{ marginLeft: 10 }}>Thợ sửa khóa đã nhận đơn</Text>
-          </View>
-
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color={status && status === "Đợi thợ báo giá" ? "green" : "#ccc"}
-          />
-
-          <View style={{ flexDirection: "row" }}>
-            <FontAwesome5
-              name="money-check"
-              size={20}
-              color={status && status === "Đợi thợ báo giá" ? "green" : "#ccc"}
-            />
-            <Text
-              style={{
-                marginLeft: 10,
-                color: status && status === "Đợi thợ báo giá" ? "#000" : "#ccc",
-              }}
-            >
-              Thợ báo phí sửa chữa
+    <>
+      {value ? (
+        <View style={generalStyle.wrapper}>
+          <View style={stylesOrder.wapperorder}>
+            <Text style={stylesOrder.orderTitle}>
+              Chi tiết hóa đơn {value.orderID}
             </Text>
           </View>
-          {/* thợ đang đến */}
 
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color={status && status === "Thợ đang đến" ? "green" : "#ccc"}
-          />
-          <View style={{ flexDirection: "row" }}>
-            <FontAwesome5
-              name="motorcycle"
-              size={20}
-              color={status && status === "Thợ đang đến" ? "green" : "#ccc"}
-            />
-            <Text
-              style={{
-                marginLeft: 10,
-                color: status && status === "Thợ đang đến" ? "#000" : "#ccc",
-              }}
-            >
-              Thợ sửa khóa đang đến
-            </Text>
-          </View>
-          {/* Đang sửa chữa */}
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color={status && status === "Đang sửa chữa" ? "green" : "#ccc"}
-          />
-          <View style={{ flexDirection: "row" }}>
-            <MaterialIcons
-              name="home-repair-service"
-              size={20}
-              color={status && status === "Đang sửa chữa" ? "green" : "#ccc"}
-            />
-            <Text
-              style={{
-                marginLeft: 10,
-                color: status && status === "Đang sửa chữa" ? "#000" : "#ccc",
-              }}
-            >
-              Đang sửa khóa
-            </Text>
-          </View>
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color={status && status === "Hoàn thành" ? "green" : "#ccc"}
-          />
-          {/* Hoàn thành */}
-          <View style={{ flexDirection: "row" }}>
-            <AntDesign
-              name="checkcircle"
-              size={20}
-              color={status && status === "Hoàn thành" ? "green" : "#ccc"}
-            />
-            <Text
-              style={{
-                marginLeft: 10,
-                color: status && status === "Hoàn thành" ? "#000" : "#ccc",
-              }}
-            >
-              Sửa xong
-            </Text>
-          </View>
-        </View>
-
-        <View style={stylesOrder.orderDetail}>
-          <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
-            <Entypo name="location-pin" size={30} color="red" />
-            <View style={stylesOrder.infoCustomer }>
-              <Text style={stylesOrder.textInfoCustomerdiaChi}>
-                {diaChi}
-              </Text>
-            </View>
-          </View>
-          <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
-            <Entypo name="warning" size={30} color="orange" />
-            <View style={stylesOrder.infoCustomer}>
-              <Text style={stylesOrder.textInfoCustomer}>{problem}</Text>
-            </View>
-          </View>
-          <View style={{ borderWidth: 0.3 }}></View>
-          <View style={[generalStyle.rowCenterV, stylesOrder.infoEmployee]}>
-            <Text style={[stylesOrder.textInfoCustomer]}>Phí sửa chữa:</Text>
-            {
-              status === "Đợi thợ báo giá" ?             <FontAwesome5
-              name="info-circle"
-              size={24}
-              color={status && status === "Thợ đang đến" ? "green" : "#ccc"}
-              onPress={handlenotifyPrice}
-            /> :
-            <Text style={[stylesOrder.textInfoCustomer]}>{price}</Text> 
-
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refresh}
+                onRefresh={PullAndRefreshControl}
+              />
             }
+          >
+            <View style={stylesOrder.wrapper}>
+              <View style={generalStyle.mb2}>
+                <Text style={{ color: "#888", marginBottom: 20 }}>
+                  Đặt dịch vụ lúc {value && value.createAt}
+                </Text>
+                <View style={stylesOrder.orderDetail}>
+                  <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
+                    <Entypo name="location-pin" size={30} color="red" />
+                    <View style={stylesOrder.infoCustomer}>
+                      <Text style={stylesOrder.textInfoCustomerdiaChi}>
+                        {value && value.diaChi}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
+                    <Entypo name="warning" size={30} color="orange" />
+                    <View style={stylesOrder.infoCustomer}>
+                      <Text style={stylesOrder.textInfoCustomer}>
+                        {value && value.problem}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={[generalStyle.rowCenterV, stylesOrder.infoEmployee]}
+                  >
+                    <Text style={[stylesOrder.textInfoCustomer]}>
+                      Phí sửa chữa:
+                    </Text>
+                    {statusOrder=== "Đợi thợ báo giá" ? (
+                      <FontAwesome5
+                        name="info-circle"
+                        size={24}
+                        color={
+                          statusOrder=== "Thợ đang đến"
+                            ? "green"
+                            : "#ccc"
+                        }
+                        onPress={handlenotifyPrice}
+                      />
+                    ) : (
+                      <Text style={[stylesOrder.textInfoCustomer]}>
+                        {value && value.price} vnđ
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              </View>
+              <Text style={{ color: "#888", marginBottom: 10 }}>
+                Trạng thái đơn :
+              </Text>
 
+              <View style={{ flexDirection: "row" }}>
+                <Ionicons
+                  name="ios-newspaper-outline"
+                  size={20}
+                  color="green"
+                />
+                <Text style={{ marginLeft: 10 }}>Thợ sửa khóa đã nhận đơn</Text>
+              </View>
 
+              <Entypo
+                name="dots-three-vertical"
+                size={20}
+                color={
+                  statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"
+                }
+              />
+
+              <View style={{ flexDirection: "row" }}>
+                <FontAwesome5
+                  name="money-check"
+                  size={20}
+                  color={
+                    statusOrder === "Đợi thợ báo giá"
+                      ? "green"
+                      : "#ccc"
+                  }
+                />
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    color:
+                      statusOrder === "Đợi thợ báo giá"
+                        ? "#000"
+                        : "#ccc",
+                  }}
+                >
+                  Thợ báo phí sửa chữa
+                </Text>
+              </View>
+              {/* thợ đang đến */}
+
+              <Entypo
+                name="dots-three-vertical"
+                size={20}
+                color={
+                  statusOrder === "Thợ đang đến" ? "green" : "#ccc"
+                }
+              />
+              <View style={{ flexDirection: "row" }}>
+                <FontAwesome5
+                  name="motorcycle"
+                  size={20}
+                  color={
+                    statusOrder === "Thợ đang đến" ? "green" : "#ccc"
+                  }
+                />
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    color:
+                      statusOrder === "Thợ đang đến"
+                        ? "#000"
+                        : "#ccc",
+                  }}
+                >
+                  Thợ sửa khóa đang đến
+                </Text>
+              </View>
+              {/* Đang sửa chữa */}
+              <Entypo
+                name="dots-three-vertical"
+                size={20}
+                color={
+                  statusOrder === "Đang sửa chữa" ? "green" : "#ccc"
+                }
+              />
+              <View style={{ flexDirection: "row" }}>
+                <MaterialIcons
+                  name="home-repair-service"
+                  size={20}
+                  color={
+                    statusOrder === "Đang sửa chữa" ? "green" : "#ccc"
+                  }
+                />
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    color:
+                      statusOrder === "Đang sửa chữa"
+                        ? "#000"
+                        : "#ccc",
+                  }}
+                >
+                  Đang sửa khóa
+                </Text>
+              </View>
+              <Entypo
+                name="dots-three-vertical"
+                size={20}
+                color={
+                  statusOrder === "Hoàn thành" ? "green" : "#ccc"
+                }
+              />
+              {/* Hoàn thành */}
+              <View style={{ flexDirection: "row" }}>
+                <AntDesign
+                  name="checkcircle"
+                  size={20}
+                  color={
+                    statusOrder === "Hoàn thành" ? "green" : "#ccc"
+                  }
+                />
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    color:
+                      statusOrder === "Hoàn thành" ? "#000" : "#ccc",
+                  }}
+                >
+                  Sửa xong
+                </Text>
+              </View>
+            </View>
+
+            <Text style={{ color: "#888" }}>Thợ sửa:</Text>
+            <View
+              style={{
+                borderWidth: 1,
+                paddingHorizontal: 10,
+                borderRadius: 10,
+              }}
+            >
+              <Contact keyer={keyer} />
+            </View>
+
+            <ReasonCancelOrder
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+            />
+
+            {value && value.status === "Đang sửa khóa" ? (
+              <Button
+                title="XÁC NHẬN SỬA XONG"
+                onPress={() => {
+                  navigation.navigate("Vote");
+                }}
+              />
+            ) : (
+              ""
+            )}
+            {(value && value.status !== "Đang sửa khóa") ||
+            value.status !== "Hoàn Thành" ? (
+              <Button
+                title="HỦY"
+                onPress={() => setModalVisible(true)}
+                customStyle={{ backgroundColor: "red" }}
+              />
+            ) : (
+              ""
+            )}
+          </ScrollView>
+        </View>
+      ) : (
+        <View style={generalStyle.wrapper}>
+          <View style={stylesOrder.wapperorder}>
+            <Text style={stylesOrder.orderTitle}>Bạn chưa có đơn hàng!</Text>
           </View>
         </View>
-        <ReasonCancelOrder
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-        <Button
-          title="XÁC NHẬN SỬA XONG"
-          onPress={() => {
-            navigation.navigate("Vote");
-          }}
-        />
-        <Button
-          title="HỦY"
-          onPress={() => setModalVisible(true)}
-          customStyle={{ backgroundColor: "red" }}
-        />
-      </ScrollView>
-    </View>
+      )}
+    </>
   );
 };
 
 const stylesOrder = StyleSheet.create({
   wrapper: {
-    // borderWidth: 1,
-    padding: 10,
-    // borderBottomWidth: 2,
-    // borderColor: "#ccc",
-    // borderRadius: 6,
+    padding: 5,
   },
   orderTitle: {
     fontSize: 18,
@@ -254,7 +327,10 @@ const stylesOrder = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: "#ccc",
   },
-  orderDetail: {},
+  orderDetail: {
+    borderTopWidth: 0.3,
+    borderTopColor: "#ccc",
+  },
   infoCustomer: {
     marginLeft: 10,
     flexDirection: "row",
@@ -264,13 +340,13 @@ const stylesOrder = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
   },
-  textInfoCustomerdiaChi :{
-    fontSize :16,
-    fontWeight: "bold"
+  textInfoCustomerdiaChi: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   infoEmployee: {
     justifyContent: "space-between",
-    marginBottom: 10,
+    // marginBottom: 5,
   },
   textInfoCustomer: {
     fontSize: 16,

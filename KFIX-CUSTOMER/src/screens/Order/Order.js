@@ -33,16 +33,18 @@ const Order = () => {
   const { user } = useSelector((state) => state.auth);
   const { value, loading } = useSelector((state) => state.order);
   const keyer = value && value.keyer;
-  const [statusOrder, setStatusOrder] = useState(value ? value.status : "");
+
+  const [statusOrder, setStatusOrder] = useState(value && `${value.status}`);
 
   const orderRef = ref(database, "Orders/" + user.userId);
-  onChildChanged(orderRef, (data) => {
-    if(data.exists()){
-      
-      setStatusOrder(data.val());
 
+  onChildChanged(orderRef, (data) => {
+    if (data.exists()) {
+      setStatusOrder(data.val());
     }
   });
+
+  console.log(value)
   const [modalVisible, setModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
@@ -114,14 +116,12 @@ const Order = () => {
                     <Text style={[stylesOrder.textInfoCustomer]}>
                       Phí sửa chữa:
                     </Text>
-                    {statusOrder=== "Đợi thợ báo giá" ? (
+                    {statusOrder === "Đợi thợ báo giá" ? (
                       <FontAwesome5
                         name="info-circle"
                         size={24}
                         color={
-                          statusOrder=== "Thợ đang đến"
-                            ? "green"
-                            : "#ccc"
+                          statusOrder === "Thợ đang đến" ? "green" : "#ccc"
                         }
                         onPress={handlenotifyPrice}
                       />
@@ -149,28 +149,19 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={
-                  statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"
-                }
+                color={statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"}
               />
 
               <View style={{ flexDirection: "row" }}>
                 <FontAwesome5
                   name="money-check"
                   size={20}
-                  color={
-                    statusOrder === "Đợi thợ báo giá"
-                      ? "green"
-                      : "#ccc"
-                  }
+                  color={statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"}
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color:
-                      statusOrder === "Đợi thợ báo giá"
-                        ? "#000"
-                        : "#ccc",
+                    color: statusOrder === "Đợi thợ báo giá" ? "#000" : "#ccc",
                   }}
                 >
                   Thợ báo phí sửa chữa
@@ -181,25 +172,18 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={
-                  statusOrder === "Thợ đang đến" ? "green" : "#ccc"
-                }
+                color={statusOrder === "Thợ đang đến" ? "green" : "#ccc"}
               />
               <View style={{ flexDirection: "row" }}>
                 <FontAwesome5
                   name="motorcycle"
                   size={20}
-                  color={
-                    statusOrder === "Thợ đang đến" ? "green" : "#ccc"
-                  }
+                  color={statusOrder === "Thợ đang đến" ? "green" : "#ccc"}
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color:
-                      statusOrder === "Thợ đang đến"
-                        ? "#000"
-                        : "#ccc",
+                    color: statusOrder === "Thợ đang đến" ? "#000" : "#ccc",
                   }}
                 >
                   Thợ sửa khóa đang đến
@@ -209,25 +193,18 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={
-                  statusOrder === "Đang sửa chữa" ? "green" : "#ccc"
-                }
+                color={statusOrder === "Đang sửa chữa" ? "green" : "#ccc"}
               />
               <View style={{ flexDirection: "row" }}>
                 <MaterialIcons
                   name="home-repair-service"
                   size={20}
-                  color={
-                    statusOrder === "Đang sửa chữa" ? "green" : "#ccc"
-                  }
+                  color={statusOrder === "Đang sửa chữa" ? "green" : "#ccc"}
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color:
-                      statusOrder === "Đang sửa chữa"
-                        ? "#000"
-                        : "#ccc",
+                    color: statusOrder === "Đang sửa chữa" ? "#000" : "#ccc",
                   }}
                 >
                   Đang sửa khóa
@@ -236,24 +213,19 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={
-                  statusOrder === "Hoàn thành" ? "green" : "#ccc"
-                }
+                color={statusOrder === "Hoàn thành" ? "green" : "#ccc"}
               />
               {/* Hoàn thành */}
               <View style={{ flexDirection: "row" }}>
                 <AntDesign
                   name="checkcircle"
                   size={20}
-                  color={
-                    statusOrder === "Hoàn thành" ? "green" : "#ccc"
-                  }
+                  color={statusOrder === "Hoàn thành" ? "green" : "#ccc"}
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color:
-                      statusOrder === "Hoàn thành" ? "#000" : "#ccc",
+                    color: statusOrder === "Hoàn thành" ? "#000" : "#ccc",
                   }}
                 >
                   Sửa xong
@@ -277,7 +249,7 @@ const Order = () => {
               setModalVisible={setModalVisible}
             />
 
-            {value && value.status === "Đang sửa khóa" ? (
+            {statusOrder === "Đang sửa khóa" ? (
               <Button
                 title="XÁC NHẬN SỬA XONG"
                 onPress={() => {
@@ -287,8 +259,7 @@ const Order = () => {
             ) : (
               ""
             )}
-            {(value && value.status !== "Đang sửa khóa") ||
-            value.status !== "Hoàn Thành" ? (
+            {statusOrder !== "Đang sửa khóa" || statusOrder !== "Hoàn thành" ? (
               <Button
                 title="HỦY"
                 onPress={() => setModalVisible(true)}

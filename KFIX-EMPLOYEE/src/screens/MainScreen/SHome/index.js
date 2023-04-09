@@ -44,6 +44,7 @@ const SHome = () => {
   };
 
   const toggleSwitch = async () => {
+    console.log(isEnabled)
     if (!isEnabled) {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -90,7 +91,7 @@ const SHome = () => {
             thumbColor={isEnabled ? generalColor.border : generalColor.border}
             ios_backgroundColor="#3e3e3e"
             //onValueChange={toggleSwitch}
-            onValueChange={toggleSwitch}
+            onValueChange={toggleSwitch()}
             value={isEnabled}
             style={styles.switch}
           />

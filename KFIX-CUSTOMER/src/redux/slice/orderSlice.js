@@ -19,6 +19,7 @@ export const orderSlice = createSlice({
     loadOrderFailure: (state, action) => {
         state.loading = false;
         state.error = action.payload
+        state.value = null
     
       },
     updateOneOrder: (state , action) =>{

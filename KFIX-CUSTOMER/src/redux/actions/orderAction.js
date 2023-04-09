@@ -2,7 +2,7 @@ import { getDatabase, ref, child, get } from "firebase/database";
 import { loadKeyerFailure, loadKeyerRequest, loadKeyerSuccess } from "../slice/keyerSlice";
 import { loadOrderFailure, loadOrderRequest, loadOrderSuccess } from "../slice/orderSlice"
 
-export const loadKeyerLocation = () => async (dispatch)=>{
+export const loadKeyerLocation = (dinhvi) => async (dispatch)=>{
     dispatch(loadKeyerRequest)
     const dbRef = ref(getDatabase());
     get(child(dbRef, `Keyers`)).then((snapshot) => {
@@ -33,9 +33,8 @@ export const loadOrder = (userID) => async (dispatch)=>{
   get(child(dbRef, `Orders/${userID}`)).then((snapshot) => {
     if (snapshot.exists()) {
       dispatch(loadOrderSuccess({...snapshot.val()}))
-      
     } else {
-      // console.log("No data available");
+      console.log("No data available");
       dispatch(loadOrderFailure("No data available"))
 
     }

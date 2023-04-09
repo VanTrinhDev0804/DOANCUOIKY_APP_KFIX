@@ -3,14 +3,16 @@ import React, { useState } from "react";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import RadioGroup from "react-native-radio-buttons-group";
 import { useNavigation } from '@react-navigation/native'
-
 import { Button } from "../../../components"
 import styles from "./styles";
-
+import { removeOrderRTDatabase } from "../../../firebase/asynsActions";
+import { useDispatch, useSelector } from "react-redux";
+import {loadOrderSuccess} from "../../../redux/slice/orderSlice"
 const ReasonCancelOrder = ({modalVisible,setModalVisible}) => {
 
   const navigation = useNavigation()
-
+  const {user} = useSelector(state => state.auth)
+  const dispatch = useDispatch
   const [radioButtons, setRadioButtons] = useState([
     {
       id: "1", // acts as primary key, should be unique and non-empty string
@@ -44,7 +46,7 @@ const ReasonCancelOrder = ({modalVisible,setModalVisible}) => {
     },
   ]);
   const [selectedReason,setSelectedReson] = useState({})
-  console.log(selectedReason);
+  // console.log(selectedReason);
 
   const [disabledConfirm,setDisableConfirm] = useState(true);
   function onPressRadioButton(radioButtonsArray) {
@@ -55,6 +57,8 @@ const ReasonCancelOrder = ({modalVisible,setModalVisible}) => {
    }
 
    const handleCancelOrder = () => {
+    removeOrderRTDatabase(user.userId)
+    // dispatch(loadOrderSuccess({}))
     navigation.navigate('Home')
     setModalVisible(false)
    }

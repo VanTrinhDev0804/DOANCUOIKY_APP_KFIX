@@ -1,6 +1,6 @@
 
 import { database } from "./config";
-import { ref, set, update } from "firebase/database";
+import { ref, remove, set, update } from "firebase/database";
 
 export const writeOrderRTDatabase = (Id, data) => {
     set(ref(database, "Orders/" + Id), {
@@ -17,5 +17,10 @@ export const writeOrderRTDatabase = (Id, data) => {
 
   
     update(ref(database), updates);
+  };
+  export const removeOrderRTDatabase = (orderId, data) => {
+   const deleteRef = ref(database , "Orders/" +orderId) 
+    remove(deleteRef)
+
   };
   

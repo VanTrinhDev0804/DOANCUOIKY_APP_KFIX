@@ -26,6 +26,8 @@ import { loadOrder } from "../../redux/actions/orderAction";
 
 import { useEffect } from "react";
 import { updateOneOrder } from "../../redux/slice/orderSlice";
+import { formatTimeFromCreateAt } from "../../utils/date";
+import Notification from "../../Notification/Notification";
 
 const Order = () => {
   const navigation = useNavigation();
@@ -89,7 +91,8 @@ const Order = () => {
             <View style={stylesOrder.wrapper}>
               <View style={generalStyle.mb2}>
                 <Text style={{ color: "#888", marginBottom: 20 }}>
-                  Đặt dịch vụ lúc {value && value.createAt}
+                  Đặt dịch vụ lúc {value && formatTimeFromCreateAt(value.createAt)}
+                  
                 </Text>
                 <View style={stylesOrder.orderDetail}>
                   <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
@@ -150,7 +153,7 @@ const Order = () => {
                 name="dots-three-vertical"
                 size={20}
                 color={
-                  statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"
+                  (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                 }
               />
 
@@ -159,7 +162,7 @@ const Order = () => {
                   name="money-check"
                   size={20}
                   color={
-                    statusOrder === "Đợi thợ báo giá"
+                    (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                       ? "green"
                       : "#ccc"
                   }
@@ -168,7 +171,7 @@ const Order = () => {
                   style={{
                     marginLeft: 10,
                     color:
-                      statusOrder === "Đợi thợ báo giá"
+                    (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                         ? "#000"
                         : "#ccc",
                   }}
@@ -182,7 +185,7 @@ const Order = () => {
                 name="dots-three-vertical"
                 size={20}
                 color={
-                  statusOrder === "Thợ đang đến" ? "green" : "#ccc"
+                  (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                 }
               />
               <View style={{ flexDirection: "row" }}>
@@ -190,14 +193,14 @@ const Order = () => {
                   name="motorcycle"
                   size={20}
                   color={
-                    statusOrder === "Thợ đang đến" ? "green" : "#ccc"
+                    (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                   }
                 />
                 <Text
                   style={{
                     marginLeft: 10,
                     color:
-                      statusOrder === "Thợ đang đến"
+                    (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                         ? "#000"
                         : "#ccc",
                   }}
@@ -210,7 +213,7 @@ const Order = () => {
                 name="dots-three-vertical"
                 size={20}
                 color={
-                  statusOrder === "Đang sửa chữa" ? "green" : "#ccc"
+                  (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                 }
               />
               <View style={{ flexDirection: "row" }}>
@@ -218,14 +221,14 @@ const Order = () => {
                   name="home-repair-service"
                   size={20}
                   color={
-                    statusOrder === "Đang sửa chữa" ? "green" : "#ccc"
+                    (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                   }
                 />
                 <Text
                   style={{
                     marginLeft: 10,
                     color:
-                      statusOrder === "Đang sửa chữa"
+                    (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                         ? "#000"
                         : "#ccc",
                   }}
@@ -256,7 +259,7 @@ const Order = () => {
                       statusOrder === "Hoàn thành" ? "#000" : "#ccc",
                   }}
                 >
-                  Sửa xong
+                  Hoàn thành
                 </Text>
               </View>
             </View>
@@ -277,18 +280,23 @@ const Order = () => {
               setModalVisible={setModalVisible}
             />
 
-            {value && value.status === "Đang sửa khóa" ? (
-              <Button
-                title="XÁC NHẬN SỬA XONG"
-                onPress={() => {
-                  navigation.navigate("Vote");
-                }}
-              />
+            {value && statusOrder === "Hoàn thành" ? (
+              <>
+                <Button
+                  title="XÁC NHẬN HOÀN THÀNH"
+                  onPress={() => {
+                    navigation.navigate("Vote");
+                  }}
+                />
+                <Notification
+                  title="Sửa xong"
+                  body="Cảm ơn bạn đã lựa chọn KFix"
+                />
+              </>
             ) : (
               ""
             )}
-            {(value && value.status !== "Đang sửa khóa") ||
-            value.status !== "Hoàn Thành" ? (
+            { value && statusOrder === "Báo giá" ? (
               <Button
                 title="HỦY"
                 onPress={() => setModalVisible(true)}

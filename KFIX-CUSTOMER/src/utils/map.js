@@ -27,4 +27,13 @@ export const getAddressFromText = async (text) => {
   }
 };
 
+export const calcDistance2Location = async (location1,location2) => {
+  const url = `http://api.map4d.vn/sdk/route/matrix?key=${MAP_4D_KEY}&origins=${location1}&destinations=${location2}&mode=motorcycle&language=vi&weighting=2`
+  const result = await axiosClient.get(url);
+  console.log(result);
+  if(result.code === 'ok') {
+    return result;
+  } else return null;
+}
+
 

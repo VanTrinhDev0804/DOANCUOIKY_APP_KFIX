@@ -11,18 +11,12 @@ import {
 } from "../slice/orderSlice";
 import { calcDistance2Location } from "../../utils/map";
 
-<<<<<<< HEAD
 export const loadKeyerLocation = (addressCustomer) => async (dispatch) => {
   dispatch(loadKeyerRequest);
   const dbRef = ref(getDatabase());
   get(child(dbRef, `Keyers`))
     .then((snapshot) => {
-=======
-export const loadKeyerLocation = (dinhvi) => async (dispatch)=>{
-    dispatch(loadKeyerRequest)
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `Keyers`)).then((snapshot) => {
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
+
       if (snapshot.exists()) {
         let promises = [];
 
@@ -81,22 +75,7 @@ export const loadKeyerLocation = (dinhvi) => async (dispatch)=>{
 export const loadOrder = (userID) => async (dispatch) => {
   dispatch(loadOrderRequest);
   const dbRef = ref(getDatabase());
-<<<<<<< HEAD
-  get(child(dbRef, `Orders/${userID}`))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        dispatch(loadOrderSuccess({ ...snapshot.val() }));
-      } else {
-        // console.log("No data available");
-        dispatch(loadOrderFailure("No data available"));
-      }
-    })
-    .catch((error) => {
-      dispatch(loadOrderFailure("No data available"));
-      //   console.error(error);
-    });
-};
-=======
+
   get(child(dbRef, `Orders/${userID}`)).then((snapshot) => {
     if (snapshot.exists()) {
       dispatch(loadOrderSuccess({...snapshot.val()}))
@@ -111,4 +90,4 @@ export const loadOrder = (userID) => async (dispatch) => {
   });
   
 }
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
+

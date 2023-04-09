@@ -152,40 +152,28 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-<<<<<<< HEAD
                 color={
                   (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                 }
-=======
-                color={statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"}
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
               />
 
               <View style={{ flexDirection: "row" }}>
                 <FontAwesome5
                   name="money-check"
                   size={20}
-<<<<<<< HEAD
                   color={
                     (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                       ? "green"
                       : "#ccc"
                   }
-=======
-                  color={statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"}
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-<<<<<<< HEAD
                     color:
                     (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                         ? "#000"
                         : "#ccc",
-=======
-                    color: statusOrder === "Đợi thợ báo giá" ? "#000" : "#ccc",
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
                   }}
                 >
                   Thợ báo phí sửa chữa
@@ -196,37 +184,25 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-<<<<<<< HEAD
                 color={
                   (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                 }
-=======
-                color={statusOrder === "Thợ đang đến" ? "green" : "#ccc"}
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
               />
               <View style={{ flexDirection: "row" }}>
                 <FontAwesome5
                   name="motorcycle"
                   size={20}
-<<<<<<< HEAD
                   color={
                     (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                   }
-=======
-                  color={statusOrder === "Thợ đang đến" ? "green" : "#ccc"}
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-<<<<<<< HEAD
                     color:
                     (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                         ? "#000"
                         : "#ccc",
-=======
-                    color: statusOrder === "Thợ đang đến" ? "#000" : "#ccc",
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
                   }}
                 >
                   Thợ sửa khóa đang đến
@@ -236,37 +212,25 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-<<<<<<< HEAD
                 color={
                   (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                 }
-=======
-                color={statusOrder === "Đang sửa chữa" ? "green" : "#ccc"}
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
               />
               <View style={{ flexDirection: "row" }}>
                 <MaterialIcons
                   name="home-repair-service"
                   size={20}
-<<<<<<< HEAD
                   color={
                     (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
                   }
-=======
-                  color={statusOrder === "Đang sửa chữa" ? "green" : "#ccc"}
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-<<<<<<< HEAD
                     color:
                     (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
                         ? "#000"
                         : "#ccc",
-=======
-                    color: statusOrder === "Đang sửa chữa" ? "#000" : "#ccc",
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
                   }}
                 >
                   Đang sửa khóa
@@ -311,7 +275,6 @@ const Order = () => {
               setModalVisible={setModalVisible}
             />
 
-<<<<<<< HEAD
             {value && statusOrder === "Hoàn thành" ? (
               <>
                 <Button
@@ -329,19 +292,6 @@ const Order = () => {
               ""
             )}
             { value && statusOrder === "Báo giá" ? (
-=======
-            {statusOrder === "Đang sửa khóa" ? (
-              <Button
-                title="XÁC NHẬN SỬA XONG"
-                onPress={() => {
-                  navigation.navigate("Vote");
-                }}
-              />
-            ) : (
-              ""
-            )}
-            {statusOrder !== "Đang sửa khóa" || statusOrder !== "Hoàn thành" ? (
->>>>>>> 03194dd5baab5d4f2f877a3a01e168a900ac28d7
               <Button
                 title="HỦY"
                 onPress={() => setModalVisible(true)}

@@ -104,11 +104,13 @@ const NewOrder = ({ route }) => {
 
   const handleAddImgURL = (value) => {
     setImgURL(value);
+
   };
 
   const handelOpenNote = () => {
     setShowNote(!showNote);
   };
+
 
   return (
     <View style={generalStyle.wrapper}>

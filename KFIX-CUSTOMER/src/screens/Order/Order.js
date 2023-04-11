@@ -34,7 +34,7 @@ const Order = () => {
   const { value, loading } = useSelector((state) => state.order);
   const keyer = value && value.keyer;
 
-  const [statusOrder, setStatusOrder] = useState(value && `${value.status}`);
+  const [statusOrder, setStatusOrder] = useState(`${value.status}`);
 
   const orderRef = ref(database, "Orders/" + user.userId);
 
@@ -44,7 +44,7 @@ const Order = () => {
     }
   });
 
-  console.log(value)
+
   const [modalVisible, setModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(false);
 

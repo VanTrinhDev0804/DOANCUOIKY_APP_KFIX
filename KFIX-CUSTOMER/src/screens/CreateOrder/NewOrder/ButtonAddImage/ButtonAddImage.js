@@ -3,16 +3,16 @@ import Entypo from "react-native-vector-icons/Entypo";
 import { colors, generalStyle } from "../../../../contains";
 import styles from "./styles";
 import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 import { useState } from "react";
 import { storage } from "../../../../firebase/config";
+import { launchCamera } from "react-native-image-picker";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-const ButtonAddImage = ({onValue , orderID}) => {
+const ButtonAddImage = ({ onValue, orderID }) => {
   const [pickedImagePath, setPickedImagePath] = useState("");
 
-
-  async function uploadImageAsync(uri) {
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+  const [status, requestPermission] = ImagePicker.useCameraPermissions();
+  const uploadImageAsync = async (uri) => {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -32,29 +32,28 @@ const ButtonAddImage = ({onValue , orderID}) => {
 
     // We're done with the blob, close and release it
     blob.close();
-
     return await getDownloadURL(fileRef);
-  }
+  };
 
-  const openCamera = async () => {
-    // Ask the user for the permission to access the camera
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your camera!");
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync();
-
-    // Explore the result
-    console.log(result);
-
-    if (!result.canceled) {
-      setPickedImagePath(result.assets[0].uri);
-      const uploadUrl = await uploadImageAsync(result.assets[0].uri);
-      onValue(uploadUrl)
-    }
+  const openCamera = () => {
+    requestPermission().then((data) => {
+   
+      if ((data.status = "granted")) {
+        ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.mediaTypes })
+          .then((responese) => {
+            if (!responese.canceled) {
+              setPickedImagePath(responese.assets[0].uri);
+              uploadImageAsync(responese.assets[0].uri).then((url) => {
+                onValue(url);
+              });
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        alert("You've refused to allow this appp to access your camera!");
+        return;
+      }
+    });
   };
   return (
     <>

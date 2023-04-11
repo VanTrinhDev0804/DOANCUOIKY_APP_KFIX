@@ -16,13 +16,13 @@ export const loadKeyerLocation = (dinhvi) => async (dispatch)=>{
         dispatch(loadKeyerSuccess(data))
         
       } else {
-        // console.log("No data available");
+     
         dispatch(loadKeyerFailure("No data available"))
 
       }
     }).catch((error) => {
         dispatch(loadKeyerFailure("No data available"))
-    //   console.error(error);
+  
     });
     
 }
@@ -34,13 +34,13 @@ export const loadOrder = (userID) => async (dispatch)=>{
     if (snapshot.exists()) {
       dispatch(loadOrderSuccess({...snapshot.val()}))
     } else {
-      console.log("No data available");
+   
       dispatch(loadOrderFailure("No data available"))
 
     }
   }).catch((error) => {
       dispatch(loadOrderFailure("No data available"))
-  //   console.error(error);
+ 
   });
   
 }

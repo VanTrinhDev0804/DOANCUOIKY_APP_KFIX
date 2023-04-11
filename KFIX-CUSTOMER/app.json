@@ -11,13 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "sdkVersion" : "46.0.0",
+    "plugins": ["expo-image-picker"],
+    "sdkVersion": "47.0.0",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -26,9 +25,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      
       "permissions": [
         "INTERNET",
-        "ACCESS_FINE_LOCATION"
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "CAMERA_ROLL"
       ]
     },
     "web": {

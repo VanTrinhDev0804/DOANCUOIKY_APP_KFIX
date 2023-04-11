@@ -8,7 +8,6 @@ const Employee = (props) => {
   const navigation = useNavigation();
   const { user } = useSelector((state) => state.auth);
 
-
   const handleSelectKeyer = (data) => {
     
     const order ={  ...props.order , ...data , userOrder : {
@@ -57,7 +56,7 @@ const Employee = (props) => {
       <View style={styleEmployee.info}>
         <Text style={{ fontWeight: "bold" }}>{props.name}</Text>
         <Text>Đánh giá: {props.vote}</Text>
-        <Text>Khoảng cách: {props.distance}Km</Text>
+        <Text>Khoảng cách: {props.distance}</Text>
       </View>
     </TouchableOpacity>
   );

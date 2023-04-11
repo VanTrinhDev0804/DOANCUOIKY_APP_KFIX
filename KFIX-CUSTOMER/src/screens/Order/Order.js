@@ -26,6 +26,8 @@ import { loadOrder } from "../../redux/actions/orderAction";
 
 import { useEffect } from "react";
 import { updateOneOrder } from "../../redux/slice/orderSlice";
+import { formatTimeFromCreateAt } from "../../utils/date";
+import Notification from "../../Notification/Notification";
 
 const Order = () => {
   const navigation = useNavigation();
@@ -91,7 +93,8 @@ const Order = () => {
             <View style={stylesOrder.wrapper}>
               <View style={generalStyle.mb2}>
                 <Text style={{ color: "#888", marginBottom: 20 }}>
-                  Đặt dịch vụ lúc {value && value.createAt}
+                  Đặt dịch vụ lúc {value && formatTimeFromCreateAt(value.createAt)}
+                  
                 </Text>
                 <View style={stylesOrder.orderDetail}>
                   <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
@@ -149,19 +152,28 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"}
+                color={
+                  (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
+                }
               />
 
               <View style={{ flexDirection: "row" }}>
                 <FontAwesome5
                   name="money-check"
                   size={20}
-                  color={statusOrder === "Đợi thợ báo giá" ? "green" : "#ccc"}
+                  color={
+                    (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
+                      ? "green"
+                      : "#ccc"
+                  }
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color: statusOrder === "Đợi thợ báo giá" ? "#000" : "#ccc",
+                    color:
+                    (statusOrder === "Báo giá" || statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
+                        ? "#000"
+                        : "#ccc",
                   }}
                 >
                   Thợ báo phí sửa chữa
@@ -172,18 +184,25 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={statusOrder === "Thợ đang đến" ? "green" : "#ccc"}
+                color={
+                  (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
+                }
               />
               <View style={{ flexDirection: "row" }}>
                 <FontAwesome5
                   name="motorcycle"
                   size={20}
-                  color={statusOrder === "Thợ đang đến" ? "green" : "#ccc"}
+                  color={
+                    (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
+                  }
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color: statusOrder === "Thợ đang đến" ? "#000" : "#ccc",
+                    color:
+                    (statusOrder === "Thợ đang đến" || statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
+                        ? "#000"
+                        : "#ccc",
                   }}
                 >
                   Thợ sửa khóa đang đến
@@ -193,18 +212,25 @@ const Order = () => {
               <Entypo
                 name="dots-three-vertical"
                 size={20}
-                color={statusOrder === "Đang sửa chữa" ? "green" : "#ccc"}
+                color={
+                  (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
+                }
               />
               <View style={{ flexDirection: "row" }}>
                 <MaterialIcons
                   name="home-repair-service"
                   size={20}
-                  color={statusOrder === "Đang sửa chữa" ? "green" : "#ccc"}
+                  color={
+                    (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành") ? "green" : "#ccc"
+                  }
                 />
                 <Text
                   style={{
                     marginLeft: 10,
-                    color: statusOrder === "Đang sửa chữa" ? "#000" : "#ccc",
+                    color:
+                    (statusOrder === "Thợ đang sửa" || statusOrder === "Hoàn thành")
+                        ? "#000"
+                        : "#ccc",
                   }}
                 >
                   Đang sửa khóa
@@ -228,7 +254,7 @@ const Order = () => {
                     color: statusOrder === "Hoàn thành" ? "#000" : "#ccc",
                   }}
                 >
-                  Sửa xong
+                  Hoàn thành
                 </Text>
               </View>
             </View>
@@ -249,17 +275,23 @@ const Order = () => {
               setModalVisible={setModalVisible}
             />
 
-            {statusOrder === "Đang sửa khóa" ? (
-              <Button
-                title="XÁC NHẬN SỬA XONG"
-                onPress={() => {
-                  navigation.navigate("Vote");
-                }}
-              />
+            {value && statusOrder === "Hoàn thành" ? (
+              <>
+                <Button
+                  title="XÁC NHẬN HOÀN THÀNH"
+                  onPress={() => {
+                    navigation.navigate("Vote");
+                  }}
+                />
+                <Notification
+                  title="Sửa xong"
+                  body="Cảm ơn bạn đã lựa chọn KFix"
+                />
+              </>
             ) : (
               ""
             )}
-            {statusOrder !== "Đang sửa khóa" || statusOrder !== "Hoàn thành" ? (
+            { value && statusOrder === "Báo giá" ? (
               <Button
                 title="HỦY"
                 onPress={() => setModalVisible(true)}

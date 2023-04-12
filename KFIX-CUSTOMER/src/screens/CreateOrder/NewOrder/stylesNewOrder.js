@@ -10,6 +10,9 @@ const stylesNewOrder = StyleSheet.create({
         fontSize: 20,
         color: colors.textColor,
     }
+
+
+    
 })
 
 export default stylesNewOrder

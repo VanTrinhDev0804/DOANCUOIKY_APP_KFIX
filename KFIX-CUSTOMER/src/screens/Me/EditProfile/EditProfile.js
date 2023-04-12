@@ -24,6 +24,7 @@ const EditProfile = () => {
     });
 
     if (!result.canceled) {
+    
       const uploadUrl = await uploadImageAsync(result.assets[0].uri);
       setImage(uploadUrl);
     } else {

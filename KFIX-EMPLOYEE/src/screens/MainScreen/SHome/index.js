@@ -13,9 +13,10 @@ import MapViewDirections from "react-native-maps-directions";
 import { Marker } from "react-native-maps";
 import { useRef } from "react";
 import { getAddressFromLocation } from "../../../utils/map";
+import { useSelector } from "react-redux";
+import { updateUserOnlineRTDatabase } from "../../../firebase/asynsActions";
 
 const SHome = () => {
-  
   const { width, height } = Dimensions.get("window");
 
   const ASPECT_RATIO = width / height;
@@ -33,8 +34,10 @@ const SHome = () => {
   const navigation = useNavigation();
   const mapRef = useRef();
   const [isEnabled, setIsEnabled] = useState(false);
-  const [currentLoction,setCurrentLocation] = useState({address: '', coordinate: {}})
+  const [loadingLoaction, setLoadingLocation] = useState(false);
+  const [currentLoction, setCurrentLocation] = useState({address: '', coordinate: {}});
 
+    const {user}= useSelector(state => state.auth)
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -42,9 +45,8 @@ const SHome = () => {
       mapRef.current?.animateCamera(camera, { duration: 1000 });
     }
   };
-
   const toggleSwitch = async () => {
-    console.log(isEnabled)
+    
     if (!isEnabled) {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -59,11 +61,25 @@ const SHome = () => {
           };
           const address = await getAddressFromLocation(coordinate);
           moveTo(coordinate);
-          await setCurrentLocation({
+           setCurrentLocation({
             address: address,
             coordinate: coordinate
           })
           setIsEnabled((previousState) => !previousState);
+
+          const dataUserRealtime = {
+            balanceAc: user.balanceAc,
+            dinhVi: currentLoction,
+            img: user.img,
+            phone: user.phone,
+            status : "Online", 
+            tenTho: user.tenTho,
+            loaiSC: user.loaiSC,
+
+          }
+          updateUserOnlineRTDatabase(user.userId, dataUserRealtime);
+
+
           console.log({
             address,
             coordinate
@@ -74,10 +90,19 @@ const SHome = () => {
       }
     } else {
       setIsEnabled(!isEnabled);
-      //await Location.requestForegroundPermissionsAsync
-    }
-  };
+      const dataUserRealtime = {
+        balanceAc: user.balanceAc,
+        dinhVi: null,
+        img: user.img,
+        phone: user.phone,
+        status : "Offline", 
+        tenTho: user.tenTho,
+        loaiSC: user.loaiSC,
 
+      }
+      updateUserOnlineRTDatabase(user.userId, dataUserRealtime);
+    }
+  }
   return (
     <View style={generalStyle.container}>
       <View style={{ flexDirection: "row" }}>
@@ -90,8 +115,7 @@ const SHome = () => {
             trackColor={{ false: "#767577", true: generalColor.primary }}
             thumbColor={isEnabled ? generalColor.border : generalColor.border}
             ios_backgroundColor="#3e3e3e"
-            //onValueChange={toggleSwitch}
-            onValueChange={toggleSwitch()}
+            onValueChange={toggleSwitch}
             value={isEnabled}
             style={styles.switch}
           />

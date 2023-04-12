@@ -15,7 +15,9 @@ import {
   verifyOTPFailure,
 } from "../slice/authSlice";
 
+
 const serverUrl = "http://192.168.1.6:5000";
+
 
 // user
 export const login = (phone, password) => async (dispatch) => {
@@ -44,9 +46,7 @@ export const register = (dataParam) => async (dispatch) => {
     
     if (data.status) {
       dispatch(registerSuccess(data));
-      console.log('====================================');
-    console.log(data)
-    console.log('====================================');
+     
     } else {
       dispatch(registerFailure("Lỗi!"));
     }
@@ -72,7 +72,7 @@ export const updateAvatarUser = (avatar, phone) => async (dispatch) => {
     });
     if(data.status){
       dispatch(updateAvatarSuccess(data.avatar));
-      console.log(data)
+  
     }
  
   } catch (error) {
@@ -88,7 +88,7 @@ export const updateUserName = (name, phone) => async (dispatch) => {
     });
     if (data.status) {
       dispatch(updateUserNameSuccess(data.value));
-      console.log(data)
+    
     }
   } catch (error) {
     dispatch(updateFailure("Đã có lỗi!"));

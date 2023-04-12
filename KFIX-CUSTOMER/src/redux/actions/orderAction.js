@@ -11,7 +11,8 @@ import {
 } from "../slice/orderSlice";
 import { calcDistance2Location } from "../../utils/map";
 
-export const loadKeyerLocation = (addressCustomer) => async (dispatch) => {
+export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) => {
+  console.log(keyType);
   dispatch(loadKeyerRequest);
   const dbRef = ref(getDatabase());
   get(child(dbRef, `Keyers`))
@@ -19,16 +20,18 @@ export const loadKeyerLocation = (addressCustomer) => async (dispatch) => {
 
       if (snapshot.exists()) {
         let promises = [];
+        console.log('add',addressCustomer);
 
         snapshot.forEach((childSnapshot) => {
           if (
             childSnapshot.val().status === "Online" &&
-            childSnapshot.val().balanceAc > 0
+            childSnapshot.val().balanceAc > 0 &&
+            childSnapshot.val().loaiSC.includes(keyType)
           ) {
             const coordinatesKeyer =
-              childSnapshot.val().dinhVi.latitude +
+              childSnapshot.val().dinhVi.coordinate.latitude +
               "," +
-              childSnapshot.val().dinhVi.longitude;
+              childSnapshot.val().dinhVi.coordinate.longitude;
 
             const promise = new Promise(async (resolve, reject) => {
               try {
@@ -62,13 +65,13 @@ export const loadKeyerLocation = (addressCustomer) => async (dispatch) => {
           dispatch(loadKeyerSuccess(data));
         });
       } else {
-        // console.log("No data available");
-        dispatch(loadKeyerFailure("No data available"));
+     
+        dispatch(loadKeyerFailure("No data available"))
+
       }
-    })
-    .catch((error) => {
-      dispatch(loadKeyerFailure("No data available"));
-      //   console.error(error);
+    }).catch((error) => {
+        dispatch(loadKeyerFailure("No data available"))
+  
     });
 };
 
@@ -80,13 +83,13 @@ export const loadOrder = (userID) => async (dispatch) => {
     if (snapshot.exists()) {
       dispatch(loadOrderSuccess({...snapshot.val()}))
     } else {
-      console.log("No data available");
+   
       dispatch(loadOrderFailure("No data available"))
 
     }
   }).catch((error) => {
       dispatch(loadOrderFailure("No data available"))
-  //   console.error(error);
+ 
   });
   
 }

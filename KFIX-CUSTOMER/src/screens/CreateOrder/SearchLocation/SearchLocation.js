@@ -22,7 +22,7 @@ import { colors, generalStyle } from "../../../contains";
 import Geocoder from "react-native-geocoding";
 import { useDebounce } from "../../../hooks";
 
-import { MAP_4D_KEY } from "../../../private/keyMap";
+
 import axiosClient from "../../../api/axiosClient";
 import { getAddressFromLocation, getAddressFromText } from "../../../utils/map";
 

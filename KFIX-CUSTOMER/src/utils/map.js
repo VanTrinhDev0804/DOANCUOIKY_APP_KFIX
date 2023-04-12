@@ -1,5 +1,7 @@
-import { MAP_4D_KEY } from "../private/keyMap";
+
+
 import axiosClient from "../api/axiosClient";
+const MAP_4D_KEY ="36fe7a30f8841c5dd252cbc43c4649ff"
 
 export const getAddressFromLocation = async (location) => {
   console.log(123);

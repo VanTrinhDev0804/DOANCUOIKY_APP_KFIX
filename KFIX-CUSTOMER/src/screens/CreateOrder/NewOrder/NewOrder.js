@@ -98,18 +98,20 @@ const NewOrder = ({ route }) => {
     } else {
       // writeOrderRTDatabase(orderID, neworder);
       // dinh vi, 
-      dispatch(loadKeyerLocation());
+      dispatch(loadKeyerLocation(address, route.params.loaiKhoa));
       navigation.navigate("HaveEmployee", { Order: neworder });
     }
   };
 
   const handleAddImgURL = (value) => {
     setImgURL(value);
+
   };
 
   const handelOpenNote = () => {
     setShowNote(!showNote);
   };
+
 
   return (
     <View style={generalStyle.wrapper}>

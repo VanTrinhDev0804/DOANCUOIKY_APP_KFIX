@@ -13,8 +13,26 @@ import MapViewDirections from "react-native-maps-directions";
 import { Marker } from "react-native-maps";
 import { useRef } from "react";
 import { getAddressFromLocation } from "../../../utils/map";
-import { useSelector } from "react-redux";
-import { updateUserOnlineRTDatabase } from "../../../firebase/asynsActions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateKeyerByKeyvalue,
+  updateUserOnlineRTDatabase,
+  updateUserOnlineStatus,
+} from "../../../firebase/asynsActions";
+import { ActivityIndicator } from "react-native-paper";
+import { database } from "../../../firebase/config";
+import {
+  onValue,
+  onChildChanged,
+  ref,
+  getDatabase,
+  get,
+  child,
+} from "firebase/database";
+import { loadStatusOnline } from "../../../redux/slice/authSlice";
+import { loadOrder } from "../../../redux/actions/orderAction";
+import { Alert } from "react-native";
+import { loadOrderSuccess } from "../../../redux/slice/orderSlice";
 
 const SHome = () => {
   const { width, height } = Dimensions.get("window");
@@ -30,14 +48,20 @@ const SHome = () => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
-
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const mapRef = useRef();
+  const [loading, setLoadding] = useState(false);
+  const { order, loadding } = useSelector((state) => state.order);
   const [isEnabled, setIsEnabled] = useState(false);
   const [loadingLoaction, setLoadingLocation] = useState(false);
-  const [currentLoction, setCurrentLocation] = useState({address: '', coordinate: {}});
 
-    const {user}= useSelector(state => state.auth)
+  const [currentLoction, setCurrentLocation] = useState({
+    address: "",
+    coordinate: {},
+  });
+
+  const { user } = useSelector((state) => state.auth);
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -45,8 +69,41 @@ const SHome = () => {
       mapRef.current?.animateCamera(camera, { duration: 1000 });
     }
   };
+  const dbRef = ref(getDatabase());
+  const orderReciveOff = () => {
+    get(child(dbRef, `Keyers/${user.userId}/order`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        let value = snapshot.val();
+        const dataUserRealtime =
+          value !== ""
+            ? {
+                balanceAc: user.balanceAc,
+                dinhVi: currentLoction,
+                img: user.img,
+                phone: user.phone,
+                status: "Xử lý đơn hàng",
+                tenTho: user.tenTho,
+                loaiSC: user.loaiSC,
+                order: value,
+              }
+            : {
+                balanceAc: user.balanceAc,
+                dinhVi: currentLoction,
+                img: user.img,
+                phone: user.phone,
+                status: "Online",
+                tenTho: user.tenTho,
+                loaiSC: user.loaiSC,
+                order: "",
+              };
+
+        updateUserOnlineRTDatabase(user.userId, dataUserRealtime);
+        setLoadding(false);
+      }
+    });
+  };
   const toggleSwitch = async () => {
-    
+    setLoadding(true);
     if (!isEnabled) {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -55,54 +112,70 @@ const SHome = () => {
       } else {
         try {
           let location = await Location.getCurrentPositionAsync({});
+
           const coordinate = {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           };
           const address = await getAddressFromLocation(coordinate);
           moveTo(coordinate);
-           setCurrentLocation({
+          setCurrentLocation({
             address: address,
-            coordinate: coordinate
-          })
-          setIsEnabled((previousState) => !previousState);
-
-          const dataUserRealtime = {
-            balanceAc: user.balanceAc,
-            dinhVi: currentLoction,
-            img: user.img,
-            phone: user.phone,
-            status : "Online", 
-            tenTho: user.tenTho,
-            loaiSC: user.loaiSC,
-
-          }
-          updateUserOnlineRTDatabase(user.userId, dataUserRealtime);
-
-
-          console.log({
-            address,
-            coordinate
+            coordinate: coordinate,
           });
+          setIsEnabled((previousState) => !previousState);
+          orderReciveOff();
         } catch (error) {
           console.log(error);
         }
       }
     } else {
       setIsEnabled(!isEnabled);
-      const dataUserRealtime = {
-        balanceAc: user.balanceAc,
-        dinhVi: null,
-        img: user.img,
-        phone: user.phone,
-        status : "Offline", 
-        tenTho: user.tenTho,
-        loaiSC: user.loaiSC,
-
-      }
-      updateUserOnlineRTDatabase(user.userId, dataUserRealtime);
+      setLoadding(false);
     }
-  }
+  };
+  // realtime order
+  const orderKeyerRef = ref(database, "Keyers/" + user.userId);
+  const orderKeyerStatus = ref(database, "Keyers/" + user.userId + "/order");
+
+  onChildChanged(orderKeyerRef, (data) => {
+    if (data.exists()) {
+      if (data.key.toString() === "status" && data.val() === "Xử lý đơn hàng") {
+        Alert.alert("KFix", "Bạn nhận được yêu cầu xử lý từ khách hàng!", [
+          {
+            text: "Chi tiết đơn hàng",
+            onPress: () => navigation.navigate("SOrder"),
+            style: "cancel",
+          },
+        ]);
+      }
+    }
+  });
+  const handleOffline = () => {
+    get(child(dbRef, `Keyers/${user.userId}/order`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        if (snapshot.val() !== "") {
+          Alert.alert("KFix", "Bạn có đơn hàng chưa hoàn thành!", [
+            {
+              text: "Chi tiết đơn hàng",
+              onPress: () => {
+                updateUserOnlineStatus(user.userId, "Xử lý đơn hàng");
+                navigation.navigate("OrderDetail");
+              },
+            },
+          ]);
+        } else {
+          updateUserOnlineStatus(user.userId, "Offline");
+          dispatch(loadStatusOnline(false));
+        }
+      }
+    });
+  };
+  useEffect(() => {
+    if (isEnabled === false) {
+      handleOffline();
+    }
+  }, [isEnabled]);
   return (
     <View style={generalStyle.container}>
       <View style={{ flexDirection: "row" }}>
@@ -111,14 +184,28 @@ const SHome = () => {
           <Text style={styles.status}>{isEnabled ? "Online" : "Offline"}</Text>
         </View>
         <View style={{ flex: 1 }}>
-          <Switch
-            trackColor={{ false: "#767577", true: generalColor.primary }}
-            thumbColor={isEnabled ? generalColor.border : generalColor.border}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-            style={styles.switch}
-          />
+          {loading ? (
+            <View style={{ flexDirection: "row-reverse" }}>
+              <ActivityIndicator
+                size="small"
+                color={"green"}
+                animating={true}
+              ></ActivityIndicator>
+            </View>
+          ) : (
+            <View>
+              <Switch
+                trackColor={{ false: "#767577", true: generalColor.primary }}
+                thumbColor={
+                  isEnabled ? generalColor.border : generalColor.border
+                }
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+                style={styles.switch}
+              />
+            </View>
+          )}
         </View>
       </View>
       <View style={styles.content}>

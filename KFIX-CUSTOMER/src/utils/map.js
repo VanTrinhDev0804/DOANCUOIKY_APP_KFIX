@@ -1,7 +1,7 @@
 
 
 import axiosClient from "../api/axiosClient";
-const MAP_4D_KEY =""
+const MAP_4D_KEY ="36fe7a30f8841c5dd252cbc43c4649ff"
 
 export const getAddressFromLocation = async (location) => {
 
@@ -38,5 +38,3 @@ export const calcDistance2Location = async (location1,location2) => {
     return result;
   } else return null;
 }
-
-

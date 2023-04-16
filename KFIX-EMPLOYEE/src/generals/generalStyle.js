@@ -43,8 +43,10 @@ const generalStyle = StyleSheet.create({
   rowCenterV: {
     flexDirection: 'row',
     alignItems: 'center'
-  }
-  
+  },
+  mb2: {
+    marginBottom: 20,
+  },
 });
 
 export default generalStyle;

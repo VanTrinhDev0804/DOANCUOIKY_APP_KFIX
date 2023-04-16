@@ -7,22 +7,30 @@ import generalStyle from "../../../../generals/generalStyle";
 import styles from "./styles";
 import { Button } from "../../../../components";
 
-const Contact = () => {
-  const phoneNumber = "0899306681";
+const Contact = (props) => {
+  
   const navigation = useNavigation()
   return (
     <View style={[generalStyle.containerRow,{marginTop: 10}]}>
-      <Button
+      {
+        props.status && props.status !=="Báo Giá"?
+        <>
+        <Button
         icon={<Ionicons name="call" size={25} color="#fff" />}
         customStyle={styles.customStyleIconRadius}
-        onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+        onPress={() => Linking.openURL(`tel:${props.phoneNumber ? props.phoneNumber : ""}`)}
       />
+      
       <View style={{ marginRight: 10 }}></View>
       <Button
         icon={<AntDesign name="message1" size={25} color="#fff" />}
         customStyle={styles.customStyleIconRadius}
         onPress={()=>navigation.navigate('SChat')}
       />
+      </>: ""
+      }
+    
+     
     </View>
   );
 };

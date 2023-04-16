@@ -8,7 +8,9 @@ export const authkeyerSlice = createSlice({
     user: null,
     isVerify: false,
     error: null,
+    isOnline : false,
     isUpdate: false,
+    orderReciveID: null
   },
   reducers: {
     loginRequest: (state) => {
@@ -63,6 +65,12 @@ export const authkeyerSlice = createSlice({
     clearErrResponse: (state , actions) => {
       state.error = null
     },
+    loadStatusOnline: (state , actions) => {
+      state.isOnline = actions.payload
+    },
+    updateOrderRecive : (state , actions) => {
+      state.orderReciveID = actions.payload
+    },
   },
 });
 
@@ -79,6 +87,8 @@ export const {
   loginSuccess,
   logoutUser,
   clearErrResponse,
+  loadStatusOnline,
+  updateOrderRecive
 } = authkeyerSlice.actions;
 
 export default authkeyerSlice.reducer;

@@ -9,7 +9,7 @@ const { View, Text, Image } = require("react-native");
 const HaveEmployee = ({ route }) => {
   const Order = route.params.Order;
   const { value, loading } = useSelector((state) => state.keyer);
-  console.log(value);
+ 
   return (
     <View style={generalStyle.wrapper}>
       <HeaderScreen goBack name="Thợ" />

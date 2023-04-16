@@ -7,9 +7,28 @@ import Detail from './SHistory/components/Detail'
 
 import SHome from "./SHome"
 import SMe from "./SMe"
+import { useDispatch, useSelector } from 'react-redux'
+import { Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { useEffect } from 'react'
+import { child, get, getDatabase, onValue, ref } from 'firebase/database'
+import { database } from '../../firebase/config'
+import { loadOrderSuccess } from '../../redux/slice/orderSlice'
+import { loadOrder } from '../../redux/actions/orderAction'
 
 const Tab = createBottomTabNavigator()
 const MainScreen = () => {
+    const {isOnline , user} = useSelector(state => state.auth)
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
+    // useEffect(()=>{
+    //     if(isOnline){
+    //         console.log(isOnline)
+      
+    //     }
+    // }, [isOnline])
+  
+
     const screenOptions = ({route}) => ({
         headerShown: false,
         tabBarHideOnKeyboard: true,

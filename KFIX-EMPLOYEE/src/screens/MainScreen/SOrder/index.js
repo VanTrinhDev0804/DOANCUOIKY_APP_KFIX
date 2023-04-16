@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Modal from "react-native-modal";
+import CurrencyInput from "react-native-currency-input";
+import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -14,22 +17,84 @@ import generalStyle from "../../../generals/generalStyle";
 import { Avartar, Contact, Image, ImageChoosen } from "../components";
 import styles from "./styles";
 import { Button } from "../../../components";
+import { useDispatch, useSelector } from "react-redux";
+import { ScrollView } from "react-native";
+import { formatTimeFromCreateAt } from "../../../utils/date";
+import { useState } from "react";
+import { Docso, to_vietnamese } from "../../../utils/docso";
+import {
+  updateKeyOrder,
+  updateKeyerByKeyvalue,
+} from "../../../firebase/asynsActions";
+import { loadOrder } from "../../../redux/actions/orderAction";
+import iconright from "../../../assests/images/arrow-right.png";
+import SwipeButton from "rn-swipe-button";
+
+import {
+  child,
+  get,
+  getDatabase,
+  onChildChanged,
+  onValue,
+  ref,
+} from "firebase/database";
+import { database } from "../../../firebase/config";
+import {
+  loadOrderFailure,
+  loadOrderRequest,
+  loadOrderSuccess,
+  updateStatusOrder,
+} from "../../../redux/slice/orderSlice";
 const SOrder = ({ received }) => {
+  const { order, loadding } = useSelector((state) => state.order);
+  const { user, isOnline } = useSelector((state) => state.auth);
+
+  const orderKeyerStatus = ref(database, "Keyers/" + user.userId + "/status");
+
+  const dispatch = useDispatch();
+  const dbRef = ref(getDatabase());
+ 
+  onValue(
+    orderKeyerStatus,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        if (snapshot.val() === "Xử lý đơn hàng") {
+          if (order === null) {
+            get(child(dbRef, `Keyers/${user.userId}/order`)).then((data) => {
+              if (data.exists()) {
+                const orderId = data.val();
+                dispatch(loadOrder(orderId));
+              }
+            });
+          }
+        }
+      }
+    },
+    {
+      onlyOnce: true,
+    }
+  );
+  if (order) {
+    const orderValueRef = order && ref(database, "Orders/" + order.userID);
+    onChildChanged(orderValueRef, (snapshot) => {
+      if (snapshot.exists()) {
+        if (order !== null) {
+          setStatusOrder(snapshot.val());
+          dispatch(updateStatusOrder(snapshot.val()));
+        }
+      }
+    });
+  }
+ 
+  const status = order && order.status;
+  const [statusOrder, setStatusOrder] = useState(status);
+
+  console.log(statusOrder)
   const navigation = useNavigation();
 
-  const handleReceive = () => {
-    navigation.navigate("OrderDetail");
+  const handleBaoGia = () => {
+    setModalVisibleBG(true);
   };
-
-  const handleAcceptFixed = () => {
-    navigation.navigate('Home')
-  }
-
-  const handleFixed = () => {
-    Alert.alert('Thông báo', 'Bạn đã hoàn thành xong đơn hàng. Tiếp tục với đơn hàng mới nào', [
-      {text: 'Đồng ý', onPress: handleAcceptFixed},
-    ]);
-  }
 
   const latitude = "10.85584";
   const longitude = "106.63114";
@@ -39,85 +104,199 @@ const SOrder = ({ received }) => {
       `https://www.google.com/maps/dir/?api=1&destination=${10.823},${106.68672}`
     );
   };
+  const [isModalVisibleBG, setModalVisibleBG] = useState(false);
+  const [isModalVisibleCall, setModalVisibleCall] = useState(false);
+
+  const [price, setPrice] = useState(null);
+  const [txtPrice, settextPrce] = useState("");
+  const toggleModalBaoGia = () => {
+    let orderUserId = order.userID;
+
+    if (price > 0 && orderUserId !== null) {
+      updateKeyOrder(`${orderUserId}/price`, price);
+      updateKeyOrder(`${orderUserId}/status`, "Khách hàng xác nhận");
+      setModalVisibleBG(!isModalVisibleBG);
+      setModalVisibleCall(true);
+    } else {
+      settextPrce("Nhập phí sửa chữa");
+    }
+  };
+  // Gọi cho khách
+  const handleCallCustomer = () => {
+    Linking.openURL(`tel:${order && order.userOrder.phone}`);
+    dispatch(loadOrder(orderUserId));
+  };
+
+  const HandelHoanThanhDon = () => {
+    let orderUserId = order.userID;
+
+    if (isOnline) {
+      updateKeyerByKeyvalue(`${user.userId}/status`, "Online");
+    } else {
+      updateKeyerByKeyvalue(`${user.userId}/status`, "Offline");
+    }
+    updateKeyerByKeyvalue(`${user.userId}/order`, "");
+    updateKeyOrder(`${orderUserId}/status`, "Hoàn thành");
+    dispatch(loadOrderFailure());
+  };
   return (
-    <View style={generalStyle.container}>
-      <View style={styles.container}>
-        <Avartar
-          width={90}
-          height={90}
-          link="https://static.wikia.nocookie.net/onepiece/images/b/bd/Yamato_Anime_Infobox.png/revision/latest?cb=20220119060149"
-        />
-        <View>
-          <Text style={generalStyle.txtName}>Mr. Vuong</Text>
-          <Contact />
-          {/* <TouchableOpacity>
+    <>
+      {order ? (
+        <ScrollView>
+          <View style={generalStyle.container}>
+            <View style={styles.wapperorder}>
+              <Text style={styles.orderTitle}>
+                Chi tiết hóa đơn {order && order.orderID}
+              </Text>
+            </View>
+            <Text style={{ color: "#888", marginTop: 20 }}>Khách hàng:</Text>
+            <View style={styles.container}>
+              <Avartar
+                width={90}
+                height={90}
+                link={order && order.userOrder.avartar}
+              />
+              <View>
+                <Text style={generalStyle.txtName}>
+                  {order && order.userOrder.username}
+                </Text>
+                <Contact phoneNumber={order && order.keyer.phone} status ={statusOrder}/>
+                {/* <TouchableOpacity>
                 <AntDesign name="message1" size={25} color="#000" />
             </TouchableOpacity> */}
-        </View>
-      </View>
-      <View>
-        <View style={styles.contentOrder}>
-          <MaterialIcons name="error" size={25} color="orange" />
-          <Text style={styles.reasonOrder}>Mat chia khoa</Text>
-        </View>
-        <View style={styles.contentOrder}>
-          <MaterialIcons name="location-pin" size={25} color="red" />
-          <Text style={styles.reasonOrder}>158 Tan Son Nhi, Tan Phu, HCM</Text>
-        </View>
-        <View style={styles.contentOrder}>
-          <MaterialCommunityIcons
-            name="map-marker-distance"
-            size={25}
-            color="green"
-          />
-          <Text style={styles.reasonOrder}>12 Km</Text>
-        </View>
-        <View style={styles.contentOrder}>
-          <MaterialIcons name="note" size={25} color="blue" />
-          <Text style={styles.reasonOrder}>Den truoc 8h toi gium tois</Text>
-        </View>
-        <View style={styles.contentOrder}>
-          <View style={styles.images}>
-            <ImageChoosen onlyView={true} />
-            <ImageChoosen onlyView={true} />
-            <ImageChoosen onlyView={true} />
-          </View>
-        </View>
-      </View>
-      {received ? (
-        <View>
-          <View style={styles.contentOrder}>
-            <View style={{flex: 1}}>
-              <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
-                <Text style={[styles.textInfoCustomer]}>Giá đưa ra:</Text>
-                <Text style={[styles.textInfoCustomer]}>15.000 vnđ</Text>
-              </View>
-              <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
-                <Text style={[styles.textInfoCustomer]}>Phí di chuyển*:</Text>
-                <Text style={[styles.textInfoCustomer]}>15.000 vnđ</Text>
-              </View>
-              <View style={{ borderWidth: 0.3 }}></View>
-              <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
-                <Text style={[styles.textInfoCustomer]}>Tiền thanh toán:</Text>
-                <Text style={[styles.textInfoCustomer]}>30.000 vnđ</Text>
               </View>
             </View>
-          </View>
-          <View style={styles.options}>
+
+            <View>
+              <View style={styles.orderDetail}>
+                <Text style={{ color: "#888", marginBottom: 20 }}>
+                  Đặt dịch vụ lúc{" "}
+                  {order && formatTimeFromCreateAt(order.createAt)}
+                </Text>
+                <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
+                  <Entypo name="location-pin" size={30} color="red" />
+                  <View style={styles.infoCustomer}>
+                    <Text style={styles.textInfoCustomerdiaChi}>
+                      {order && order.diaChi}
+                    </Text>
+                  </View>
+                </View>
+                <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
+                  <Entypo name="warning" size={30} color="orange" />
+                  <View style={styles.infoCustomer}>
+                    <Text style={styles.textInfoCustomer}>
+                      {order && order.problem}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.contentOrder}>
+                <MaterialCommunityIcons
+                  name="map-marker-distance"
+                  size={25}
+                  color="green"
+                />
+                <Text style={styles.reasonOrder}>
+                  {order && order.keyer.distance}
+                </Text>
+              </View>
+              <View style={styles.contentOrder}>
+                {order && order.note ? (
+                  <>
+                    <MaterialIcons name="note" size={25} color="blue" />
+                    <Text style={styles.reasonOrder}>{order.note}</Text>
+                  </>
+                ) : (
+                  ""
+                )}
+              </View>
+              <View style={styles.contentOrder}>
+                <Text style={{ color: "#888", marginBottom: 20 }}>
+                  Tình trạng khóa
+                </Text>
+                <View style={styles.images}>
+                  <ImageChoosen onlyView={true} img={order && order.image} />
+                </View>
+              </View>
+            </View>
+            {order && order.status !== "Báo giá" ? (
+              <>
+                <View style={{ borderWidth: 0.3, marginTop: 20 }}></View>
+                <View style={[generalStyle.rowCenterV, styles.infoEmployee]}>
+                  <Text style={[styles.textInfoCustomer]}>
+                    Thu tiền của khách:
+                  </Text>
+                  <Text style={[styles.textInfoCustomer]}>
+                    {order && order.price + "VND"}
+                  </Text>
+                </View>
+                {order && order.status === "Khách hàng xác nhận" ? (
+                  <Text style={{ color: "#888", marginBottom: 20 }}>
+                    Chi phí sửa chữa đã được gửi đến khách hàng!Đảm bảo khách
+                    hàng chấp nhận đơn giá! Đơn hàng sẽ tự động hủy khi khách
+                    hàng không chấp nhận đơn giá mà bạn đưa ra!
+                  </Text>
+                ) : statusOrder=== "Thợ đang đến" ? (
+                  <Text style={{ color: "#888", marginBottom: 20 }}>
+                    Chi phí sửa chữa đã được xác nhận bởi khách hàng!
+                  </Text>
+                ) : (
+                  ""
+                )}
+              </>
+            ) : (
+              ""
+            )}
+            <View style={{ marginTop: 20 }}>
+              {statusOrder === "Thợ đang đến" ? (
+                <SwipeButton
+                  disabled={false}
+                  containerStyles={{ borderRadius: 10 }}
+                  railStyles={{ borderRadius: 10 }}
+                  thumbIconStyles={{ borderRadius: 5 }}
+                  thumbIconImageSource={iconright}
+                  //disable the button by doing true (Optional)
+                  swipeSuccessThreshold={100}
+                  height={60}
+                  title="Truợt để hoàn thành"
+                  onSwipeSuccess={HandelHoanThanhDon}
+                  //After the completion of swipe (Optional)
+                  railFillBackgroundColor="#99CC99" //(Optional)
+                  railFillBorderColor="#99CC99" //(Optional)
+                  thumbIconBackgroundColor="#008000" //(Optional)
+                  thumbIconBorderColor="#008000" //(Optional)
+                  railBackgroundColor="#bbeaa6" //(Optional)
+                  railBorderColor="#99CC99"
+                />
+              ) : order && order.status === "Báo giá" ? (
+                <Button
+                  title="Báo giá"
+                  customStyle={styles.btn}
+                  onPress={handleBaoGia}
+                />
+              ) : statusOrder === "Khách hàng xác nhận" ? (
+                <Button
+                  title="Gọi cho khách!"
+                  onPress={() =>
+                    Linking.openURL(`tel:${order && order.userOrder.phone}`)
+                  }
+                />
+              ) : (
+                ""
+              )}
+
+              {/* <View style={styles.options}>
             <Button
               title="Chỉ đường"
               customStyle={{ backgroundColor: "blue", ...styles.btn }}
               onPress={handleDirect}
             />
-            <Button
-              title="Sửa xong"
-              customStyle={{ backgroundColor: "orange", ...styles.btn }}
-              onPress={handleFixed}
-            />
-          </View>
-        </View>
-      ) : (
-        <View>
+          
+          </View> */}
+            </View>
+
+            {/* <View>
           <View style={styles.contentOrder}>
             <View style={{ flex: 1 }}>
               <TextInput
@@ -128,19 +307,83 @@ const SOrder = ({ received }) => {
             </View>
           </View>
           <View style={styles.options}>
-            <Button
-              title="Nhận đơn"
-              customStyle={styles.btn}
-              onPress={handleReceive}
-            />
+           
             <Button
               title="Từ chối"
               customStyle={{ backgroundColor: "red", ...styles.btn }}
             />
           </View>
         </View>
+     */}
+          </View>
+          {/* Modal Báo Giá */}
+          <Modal
+            isVisible={isModalVisibleBG}
+            onBackdropPress={() => setModalVisibleBG(false)}
+          >
+            <View
+              style={{ backgroundColor: "#fff", borderRadius: 8, padding: 20 }}
+            >
+              <Text style={{ fontSize: 18 }}>
+                Nhập phí sửa chữa cho đơn hàng!
+              </Text>
+              <View style={styles.contentOrder}>
+                <View style={{ flex: 1 }}>
+                  <CurrencyInput
+                    style={generalStyle.input}
+                    keyboardType="numeric"
+                    placeholder="Đơn giá"
+                    value={price}
+                    onChangeValue={setPrice}
+                    delimiter="."
+                    // separator="."
+                    precision={false}
+                    minValue={0}
+                    onChangeText={(formattedValue) => {
+                      settextPrce(to_vietnamese(price).trim());
+                    }}
+                  />
+                </View>
+              </View>
+              {txtPrice !== "" ? (
+                <Text style={{ color: "green", marginBottom: 20 }}>
+                  {price > 0 ? txtPrice + " đồng" : txtPrice}
+                </Text>
+              ) : (
+                <Text style={{ color: "#888", marginBottom: 20 }}>
+                  Chi phí sửa chữa sẽ được gửi đến khách hàng. Bạn hạy chắn chắn
+                  nhập phí sửa chữa phù hợp cho đơn hàng và thu tiền theo đúng
+                  đơn giá đã nhập!
+                </Text>
+              )}
+
+              <Button title="Xác nhận" onPress={toggleModalBaoGia} />
+            </View>
+          </Modal>
+
+          {/* Modal call KH */}
+          <Modal
+            isVisible={isModalVisibleCall}
+            onBackdropPress={() => setModalVisibleCall(false)}
+          >
+            <View
+              style={{ backgroundColor: "#fff", borderRadius: 8, padding: 20 }}
+            >
+              <Text style={{ fontSize: 18 }}>Gọi cho khách hàng!</Text>
+              <Button title="Gọi cho khách!" onPress={handleCallCustomer} />
+            </View>
+          </Modal>
+        </ScrollView>
+      ) : (
+        <View style={generalStyle.container}>
+          <View style={generalStyle.wrapper}>
+            <View style={styles.wapperorder}>
+              <Text style={styles.orderTitle}>Bạn chưa có đơn hàng!</Text>
+            </View>
+          </View>
+        </View>
       )}
-    </View>
+    </>
   );
 };
 

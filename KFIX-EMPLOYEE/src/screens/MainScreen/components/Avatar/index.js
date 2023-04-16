@@ -12,7 +12,7 @@ const Avartar = (props) => {
         marginRight: 20
       }}
       source={{
-        uri: props.link,
+        uri: props.link ? props.link : "https://firebasestorage.googleapis.com/v0/b/key-fix.appspot.com/o/order%2F%231681309439106?alt=media&token=a944639a-064e-4ab7-b2f6-36a4a8ddc194",
       }}
     />
   );

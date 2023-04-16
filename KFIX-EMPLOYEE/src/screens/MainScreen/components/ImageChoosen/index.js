@@ -36,7 +36,7 @@ const ImageChosen = (props) => {
         <Image
           style={styles.image}
           source={{
-            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9C6q-pAfSDX8WBmgEF9lpB19n1JOc-qS_QY7KVh8Iru4Qxu3p5TW5LfsZRGD00hrV9_w&usqp=CAU",
+            uri: props.img ? props.img : "" ,
           }}
         />
         {!props.onlyView && (
@@ -70,7 +70,8 @@ const ImageChosen = (props) => {
           <Image
           style={styles.imageView}
             source={{
-              uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9C6q-pAfSDX8WBmgEF9lpB19n1JOc-qS_QY7KVh8Iru4Qxu3p5TW5LfsZRGD00hrV9_w&usqp=CAU",
+              uri: props.img ? props.img : "" ,
+
             }}
           />
         </View>

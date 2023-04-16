@@ -8,7 +8,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import generalStyle from "../../../generals/generalStyle";
 import stylesMe from "./styles/stylesSMe";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../redux/action";
+import { logout } from "../../../redux/actions/action";
 import { useEffect } from "react";
 
 const SMe = () => {

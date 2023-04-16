@@ -1,7 +1,7 @@
 
 import axiosClient from "../api/axiosClient";
-import { MAP_4D_KEY } from "../private/keyMap";
 
+const MAP_4D_KEY ="36fe7a30f8841c5dd252cbc43c4649ff"
 export const getAddressFromLocation = async (location) => {
     const locationStr = location.latitude + ',' + location.longitude;
     const url = `https://api.map4d.vn/sdk/v2/geocode?key=${MAP_4D_KEY}&location=${locationStr}`;

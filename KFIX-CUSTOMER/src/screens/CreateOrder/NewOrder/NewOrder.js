@@ -97,7 +97,7 @@ const NewOrder = ({ route }) => {
       Alert.alert("Thông báo", "Vui lòng điền đầy đủ thông tin");
     } else {
       // writeOrderRTDatabase(orderID, neworder);
-      dispatch(loadKeyerLocation());
+      dispatch(loadKeyerLocation(address));
       navigation.navigate("HaveEmployee", { Order: neworder });
     }
   };

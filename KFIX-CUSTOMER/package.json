@@ -21,10 +21,7 @@
     "expo-image-picker": "~14.0.2",
     "expo-location": "^15.0.1",
     "expo-notifications": "^0.18.1",
-<<<<<<< HEAD
     "expo-permissions": "^14.1.1",
-=======
->>>>>>> 7220188dc3414abe85fd7442bef2200c8cf20759
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.17.2",
     "query-string": "^8.1.0",

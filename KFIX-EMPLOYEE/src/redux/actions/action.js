@@ -10,13 +10,9 @@ import {
   updateUserNameSuccess,
   verifyOTPSuccess,
   verifyOTPFailure,
-} from "./slice/authSlice";
+} from "../slice/authSlice";
 
-<<<<<<< HEAD
-const serverUrl = "http://192.168.102.145:5000";
-=======
-const serverUrl = "http://192.168.43.30:5000";
->>>>>>> 7220188dc3414abe85fd7442bef2200c8cf20759
+const serverUrl = "http://192.168.1.5:5000";
 
 // user
 export const login = (phone, password) => async (dispatch) => {

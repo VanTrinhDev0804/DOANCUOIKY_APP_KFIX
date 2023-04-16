@@ -5,10 +5,11 @@ import RadioGroup from "react-native-radio-buttons-group";
 import { useNavigation } from '@react-navigation/native'
 import { Button } from "../../../components"
 import styles from "./styles";
-import { removeOrderRTDatabase } from "../../../firebase/asynsActions";
+import { removeOrderRTDatabase, updateKeyerByKeyvalue } from "../../../firebase/asynsActions";
 import { useDispatch, useSelector } from "react-redux";
 import {loadOrderSuccess} from "../../../redux/slice/orderSlice"
-const ReasonCancelOrder = ({modalVisible,setModalVisible}) => {
+import { update } from "firebase/database";
+const ReasonCancelOrder = ({modalVisible,setModalVisible, keyerRecive}) => {
 
   const navigation = useNavigation()
   const {user} = useSelector(state => state.auth)
@@ -57,8 +58,11 @@ const ReasonCancelOrder = ({modalVisible,setModalVisible}) => {
    }
 
    const handleCancelOrder = () => {
+    
     removeOrderRTDatabase(user.userId)
-    // dispatch(loadOrderSuccess({}))
+    updateKeyerByKeyvalue(`${keyerRecive}/order` , "")
+    updateKeyerByKeyvalue(`${keyerRecive}/status` , "Online")
+
     navigation.navigate('Home')
     setModalVisible(false)
    }

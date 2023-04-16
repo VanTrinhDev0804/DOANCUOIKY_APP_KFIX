@@ -18,9 +18,22 @@ export const writeOrderRTDatabase = (Id, data) => {
   
     update(ref(database), updates);
   };
+// Update status va order ,tách để dễ xử lý
+  export const updateKeyerByKeyvalue = (keyUpdate, value) => {
+    const updates = {};
+    updates["Keyers/" + "/" + keyUpdate] = value;
+
+  
+    update(ref(database), updates);
+  };
+
   export const removeOrderRTDatabase = (orderId, data) => {
    const deleteRef = ref(database , "Orders/" +orderId) 
     remove(deleteRef)
 
   };
-  
+  export const  updateKeyOrder = (keyUpdate , value) =>{
+    const updates = {};
+    updates["Orders/" +keyUpdate] = value;
+    update(ref(database), updates);
+  }

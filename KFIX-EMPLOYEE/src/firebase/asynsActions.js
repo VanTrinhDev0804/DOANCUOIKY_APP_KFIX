@@ -7,15 +7,26 @@ export const writeOrderRTDatabase = (Id, data) => {
       ...data,
     })
   };
-
+// update status + dinh vi 
   export const updateUserOnlineRTDatabase = (usserId, data) => {
     const postData = {
       ...data
     };
     const updates = {};
-    updates["Orders/" + usserId] = postData;
+    updates["Keyers/" + usserId] = postData;
+    update(ref(database), updates);
+  };
+  export const updateKeyerByKeyvalue = (keyUpdate, value) => {
+    const updates = {};
+    updates["Keyers/" + "/" + keyUpdate] = value;
 
   
+    update(ref(database), updates);
+  };
+  // update status => offline
+  export const updateUserOnlineStatus = (usserId, status) => {
+    const updates = {};
+    updates["Keyers/" + usserId +"/status"] = status;
     update(ref(database), updates);
   };
   export const removeOrderRTDatabase = (orderId, data) => {
@@ -24,3 +35,8 @@ export const writeOrderRTDatabase = (Id, data) => {
 
   };
   
+  export const  updateKeyOrder = (keyUpdate , value) =>{
+    const updates = {};
+    updates["Orders/" +keyUpdate] = value;
+    update(ref(database), updates);
+  }

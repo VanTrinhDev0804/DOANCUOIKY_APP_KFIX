@@ -6,8 +6,9 @@ import generalStyle from "../../generals/generalStyle";
 import IntroduceSlider from "./components/IntroduceSlide";
 import styles from "./styles/stylesSWelcome";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/action";
+
 import { clearErrResponse } from "../../redux/slice/authSlice";
+import { login } from "../../redux/actions/action";
 
 const Welcome = () => {
   const navigation = useNavigation();

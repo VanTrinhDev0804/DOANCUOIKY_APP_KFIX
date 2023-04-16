@@ -37,7 +37,7 @@ const ButtonAddImage = ({ onValue, orderID }) => {
 
   const openCamera = () => {
     requestPermission().then((data) => {
-   
+      console.log(data)
       if ((data.status = "granted")) {
         ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.mediaTypes })
           .then((responese) => {

@@ -11,6 +11,43 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
+  orderTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  wapperorder: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    borderBottomWidth: 2,
+    borderBottomColor: "#ccc",
+  },
+  orderDetail: {
+    borderTopWidth: 0.3,
+    borderTopColor: "#ccc",
+  },
+  infoCustomer: {
+    marginLeft: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  textInfoCustomer: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  textInfoCustomerdiaChi: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  infoEmployee: {
+    justifyContent: "space-between",
+    // marginBottom: 5,
+  },
+  textInfoCustomer: {
+    fontSize: 16,
+  },
   contentOrder: {
     flexDirection: "row",
     marginTop: 15,

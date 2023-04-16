@@ -10,7 +10,7 @@ import { loadOrder } from '../redux/actions/orderAction'
 
 const Tab = createBottomTabNavigator()
 const BottomTab = () => {
-    const dispatch = useDispatch()
+
     const {user} = useSelector(state => state.auth)
     
     const screenOptions = ({route}) => ({
@@ -23,10 +23,9 @@ const BottomTab = () => {
             let screenName = route.name
             let iconName = "home"
             if(screenName == "Order") {
-                dispatch(loadOrder(user.userId))
                 iconName = "book"
             } else if (screenName ==='Profile'){
-                dispatch(loadOrder(user.userId))
+
                 iconName = "user-o"
             } else if (screenName === 'Bill') {
                 iconName = "bell-o"

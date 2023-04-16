@@ -11,24 +11,31 @@ import {
 } from "../slice/orderSlice";
 import { calcDistance2Location } from "../../utils/map";
 
-export const loadKeyerLocation = (addressCustomer) => async (dispatch) => {
+export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) => {
+  console.log(keyType);
   dispatch(loadKeyerRequest);
   const dbRef = ref(getDatabase());
   get(child(dbRef, `Keyers`))
     .then((snapshot) => {
       if (snapshot.exists()) {
         let promises = [];
+        console.log('add',addressCustomer);
 
         snapshot.forEach((childSnapshot) => {
           if (
             childSnapshot.val().status === "Online" &&
-            childSnapshot.val().balanceAc > 0
+            childSnapshot.val().balanceAc > 0 &&
+            childSnapshot.val().loaiSC.includes(keyType)
           ) {
             
             const coordinatesKeyer =
               childSnapshot.val().dinhVi.coordinate.latitude +
               "," +
               childSnapshot.val().dinhVi.coordinate.longitude;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5c94747ad04f88c888934a7e1bd8ccdbecc25f35
             const promise = new Promise(async (resolve, reject) => {
               try {
                 const rs = await calcDistance2Location(
@@ -65,11 +72,21 @@ export const loadKeyerLocation = (addressCustomer) => async (dispatch) => {
           dispatch(loadKeyerSuccess(data));
         });
       } else {
+<<<<<<< HEAD
         dispatch(loadKeyerFailure("No data available"));
       }
     })
     .catch((error) => {
       dispatch(loadKeyerFailure("No data available"));
+=======
+     
+        dispatch(loadKeyerFailure("No data available"))
+
+      }
+    }).catch((error) => {
+        dispatch(loadKeyerFailure("No data available"))
+  
+>>>>>>> 5c94747ad04f88c888934a7e1bd8ccdbecc25f35
     });
 };
 

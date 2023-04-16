@@ -4,7 +4,7 @@ import axiosClient from "../api/axiosClient";
 const MAP_4D_KEY ="36fe7a30f8841c5dd252cbc43c4649ff"
 
 export const getAddressFromLocation = async (location) => {
-
+  console.log(123);
     const locationStr = location.latitude + ',' + location.longitude;
     const url = `https://api.map4d.vn/sdk/v2/geocode?key=${MAP_4D_KEY}&location=${locationStr}`;
     const result = await axiosClient.get(url);
@@ -20,6 +20,7 @@ export const getAddressFromLocation = async (location) => {
 };
 
 export const getAddressFromText = async (text) => {
+  console.log(123);
   const url = `http://api.map4d.vn/sdk/autosuggest?key=${MAP_4D_KEY}&text=${text}`;
   const result = await axiosClient.get(url);
   if (result.code === 'ok') {

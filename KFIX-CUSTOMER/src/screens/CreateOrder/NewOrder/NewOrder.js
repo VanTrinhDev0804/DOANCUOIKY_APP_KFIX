@@ -97,7 +97,12 @@ const NewOrder = ({ route }) => {
       Alert.alert("Thông báo", "Vui lòng điền đầy đủ thông tin");
     } else {
       // writeOrderRTDatabase(orderID, neworder);
+<<<<<<< HEAD
       dispatch(loadKeyerLocation(address));
+=======
+      // dinh vi, 
+      dispatch(loadKeyerLocation(address, route.params.loaiKhoa));
+>>>>>>> 5c94747ad04f88c888934a7e1bd8ccdbecc25f35
       navigation.navigate("HaveEmployee", { Order: neworder });
     }
   };

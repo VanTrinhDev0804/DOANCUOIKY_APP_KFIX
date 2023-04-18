@@ -15,13 +15,7 @@ import {
   verifyOTPFailure,
 } from "../slice/authSlice";
 
-<<<<<<< HEAD
-const serverUrl = "http://192.168.1.5:5000";
-=======
-
-const serverUrl = "http://192.168.1.6:5000";
-
->>>>>>> 5c94747ad04f88c888934a7e1bd8ccdbecc25f35
+const serverUrl = "http://192.168.102.145:5000";
 
 // user
 export const login = (phone, password) => async (dispatch) => {

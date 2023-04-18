@@ -15,7 +15,7 @@ const HaveEmployee = ({ route }) => {
     <View style={generalStyle.wrapper}>
       <HeaderScreen goBack name="Thợ" />
       <View style={generalStyle.mt10}>
-        {value.length > 0 ? value.map((e) => (
+        {value && value.length > 0 ? value.map((e) => (
           <Employee
             key={e.keyerId}
             keyer={e}

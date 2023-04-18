@@ -138,10 +138,9 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
       loaiSC: loaiSC,
       img: imgText,
       email: generateEmail,
-      isVerify : false,
-      otp: "000000"
+      isVerify: false,
+      otp: "000000",
     };
-   
 
     const isEmty = Object.values(dataUpload).includes("");
     const checkMaTho = dataUpload.maTho
@@ -158,10 +157,9 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
         const dataup = { id: "", ...dataUpload };
         createUserWithEmailAndPassword(auth, dataUpload.email, dataUpload.phone)
           .then((userCredential) => {
-          
             const userId = userCredential.user.uid;
-            const keyerCreate = {userId , ...dataUpload}
-            writeDataFireStore(keyerCreate ,"Keyer",dataUpload.phone )
+            const keyerCreate = { userId, ...dataUpload };
+            writeDataFireStore(keyerCreate, "Keyer", userId);
             const datarealtime = {
               tenTho: tenTho,
               dinhVi: diaChi,
@@ -169,9 +167,10 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
               balanceAc: parseInt(balanceAc),
               loaiSC: loaiSC,
               img: imgText,
-              status: "Offline"
-            }
-            writeUserRTDatabase(userId, datarealtime)
+              order: "",
+              status: "Offline",
+            };
+            writeUserRTDatabase(userId, datarealtime);
             // ...
           })
           .catch((error) => {
@@ -207,6 +206,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
       loaiSC: loaiSC,
       img: imgText,
     };
+
     const isEmty = Object.values(dataUpload).includes("");
     // const checkMaTho = dataUpload.maTho ? data?.findIndex((item)=>{
     //     return item.maNV === dataUpload.maNV
@@ -217,6 +217,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
     } else {
       // checkMaNV ===-1
       if (!isEmty) {
+        console.log(idUpdate);
         // const dataup = { ...dataUpload };
         UpdateData(dataUpload, "Keyer", idUpdate);
         dispatch(updateThoSuaKhoa(dataUpload));
@@ -229,8 +230,13 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
           balanceAc: parseInt(balanceAc),
           loaiSC: loaiSC,
           img: imgText,
-        }
-        updateUserRTDatabase(idUpdate, datarealtime)
+          order: "",
+          status: "Offline",
+        };
+
+
+        console.log(datarealtime)
+        updateUserRTDatabase(idUpdate, datarealtime);
       }
       // else if(checkMaNV !==-1){
       //     alert("Mã nhân viên tồn tại")
@@ -241,15 +247,23 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
   const options: SelectProps["options"] = [
     {
       label: "Khóa nhà",
-      value: "Khóa nhà",
+      value: "Nhà",
     },
     {
-      label: "Khóa oto",
+      label: "Khóa xe máy",
       value: "Khóa oto",
     },
     {
-      label: "Khóa điện thoại",
-      value: "Khóa điện thoại",
+      label: "Khóa xe 4 bánh",
+      value: "Xe 4 bánh",
+    },
+    {
+      label: "Khóa tủ, két săt",
+      value: "Tủ két sắt",
+    },
+    {
+      label: "Khóa điện thoại, laptop",
+      value: "Điện thoại, Laptop",
     },
   ];
 

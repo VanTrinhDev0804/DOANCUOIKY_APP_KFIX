@@ -45,6 +45,7 @@ import {
   loadOrderSuccess,
   updateStatusOrder,
 } from "../../../redux/slice/orderSlice";
+import TimerCountdown from "react-native-timer-countdown-lucas";
 const SOrder = ({ received }) => {
   const { order, loadding } = useSelector((state) => state.order);
   const { user, isOnline } = useSelector((state) => state.auth);
@@ -53,7 +54,7 @@ const SOrder = ({ received }) => {
 
   const dispatch = useDispatch();
   const dbRef = ref(getDatabase());
- 
+
   onValue(
     orderKeyerStatus,
     (snapshot) => {
@@ -85,11 +86,14 @@ const SOrder = ({ received }) => {
       }
     });
   }
- 
-  const status = order && order.status;
-  const [statusOrder, setStatusOrder] = useState(status);
 
-  console.log(statusOrder)
+  const status = order && order.status;
+  const timeMove = order && order.keyer.timeMove
+
+  const [statusOrder, setStatusOrder] = useState(status);
+  const [disableSlide, setDisableSlide] = useState(true);
+
+  console.log(statusOrder);
   const navigation = useNavigation();
 
   const handleBaoGia = () => {
@@ -123,9 +127,16 @@ const SOrder = ({ received }) => {
   };
   // Gọi cho khách
   const handleCallCustomer = () => {
+    let orderUserId = order.userID;
     Linking.openURL(`tel:${order && order.userOrder.phone}`);
     dispatch(loadOrder(orderUserId));
   };
+  const handelCloseCall =() =>{
+    let orderUserId = order.userID;
+    dispatch(loadOrder())
+    setModalVisibleCall(false)
+  } 
+
 
   const HandelHoanThanhDon = () => {
     let orderUserId = order.userID;
@@ -139,6 +150,14 @@ const SOrder = ({ received }) => {
     updateKeyOrder(`${orderUserId}/status`, "Hoàn thành");
     dispatch(loadOrderFailure());
   };
+
+  const handelUpdateDangSuaKhoa = () => {
+    let orderUserId = order.userID;
+    if (statusOrder === "Thợ đang đến" || order.status == "Thợ đang đến") {
+      updateKeyOrder(`${orderUserId}/status`, "Thợ đang sửa");
+    }
+  };
+  
   return (
     <>
       {order ? (
@@ -160,7 +179,10 @@ const SOrder = ({ received }) => {
                 <Text style={generalStyle.txtName}>
                   {order && order.userOrder.username}
                 </Text>
-                <Contact phoneNumber={order && order.keyer.phone} status ={statusOrder}/>
+                <Contact
+                  phoneNumber={order && order.keyer.phone}
+                  status={statusOrder}
+                />
                 {/* <TouchableOpacity>
                 <AntDesign name="message1" size={25} color="#000" />
             </TouchableOpacity> */}
@@ -237,7 +259,7 @@ const SOrder = ({ received }) => {
                     hàng chấp nhận đơn giá! Đơn hàng sẽ tự động hủy khi khách
                     hàng không chấp nhận đơn giá mà bạn đưa ra!
                   </Text>
-                ) : statusOrder=== "Thợ đang đến" ? (
+                ) : statusOrder === "Thợ đang đến" ? (
                   <Text style={{ color: "#888", marginBottom: 20 }}>
                     Chi phí sửa chữa đã được xác nhận bởi khách hàng!
                   </Text>
@@ -248,27 +270,68 @@ const SOrder = ({ received }) => {
             ) : (
               ""
             )}
+
+            {/* đếm time hoàn th */}
+
             <View style={{ marginTop: 20 }}>
-              {statusOrder === "Thợ đang đến" ? (
-                <SwipeButton
-                  disabled={false}
-                  containerStyles={{ borderRadius: 10 }}
-                  railStyles={{ borderRadius: 10 }}
-                  thumbIconStyles={{ borderRadius: 5 }}
-                  thumbIconImageSource={iconright}
-                  //disable the button by doing true (Optional)
-                  swipeSuccessThreshold={100}
-                  height={60}
-                  title="Truợt để hoàn thành"
-                  onSwipeSuccess={HandelHoanThanhDon}
-                  //After the completion of swipe (Optional)
-                  railFillBackgroundColor="#99CC99" //(Optional)
-                  railFillBorderColor="#99CC99" //(Optional)
-                  thumbIconBackgroundColor="#008000" //(Optional)
-                  thumbIconBorderColor="#008000" //(Optional)
-                  railBackgroundColor="#bbeaa6" //(Optional)
-                  railBorderColor="#99CC99"
-                />
+              {statusOrder === "Thợ đang đến" && !isModalVisibleCall||
+              order.status === "Thợ đang đến" && !isModalVisibleCall ? (
+                <>
+                  <View>
+                
+                      <TimerCountdown
+                        initialSecondsRemaining={1000*(order && order.keyer.timeMove)}
+                        onTimeElapsed={handelUpdateDangSuaKhoa}
+                        allowFontScaling={true}
+                        style={{ fontSize: 20 }}
+                      />
+                   
+               
+
+                    <SwipeButton
+                      disabled={true}
+                      containerStyles={{ borderRadius: 10 }}
+                      railStyles={{ borderRadius: 10 }}
+                      thumbIconStyles={{ borderRadius: 5 }}
+                      thumbIconImageSource={iconright}
+                      onSwipeSuccess={HandelHoanThanhDon}
+                      //disable the button by doing true (Optional)
+                      swipeSuccessThreshold={100}
+                      height={60}
+                      title="Truợt để hoàn thành"
+                      //After the completion of swipe (Optional)
+                      railFillBackgroundColor="#99CC99" //(Optional)
+                      railFillBorderColor="#99CC99" //(Optional)
+                      thumbIconBackgroundColor="#008000" //(Optional)
+                      thumbIconBorderColor="#008000" //(Optional)
+                      railBackgroundColor="#bbeaa6" //(Optional)
+                      railBorderColor="#99CC99"
+                    />
+                  </View>
+                </>
+              ) : order.status === "Thợ đang sửa" ||
+                statusOrder === "Thợ đang sửa" ? (
+                <View>
+                  <SwipeButton
+                    disabled={false}
+                    containerStyles={{ borderRadius: 10 }}
+                    railStyles={{ borderRadius: 10 }}
+                    thumbIconStyles={{ borderRadius: 5 }}
+                    thumbIconImageSource={iconright}
+                    //disable the button by doing true (Optional)
+                    swipeSuccessThreshold={100}
+                    height={60}
+                    title="Truợt để hoàn thành"
+                    onSwipeSuccess={HandelHoanThanhDon}
+                    //After the completion of swipe (Optional)
+                    railFillBackgroundColor="#99CC99" //(Optional)
+                    railFillBorderColor="#99CC99" //(Optional)
+                    thumbIconBackgroundColor="#008000" //(Optional)
+                    thumbIconBorderColor="#008000" //(Optional)
+                    railBackgroundColor="#bbeaa6" //(Optional)
+                    railBorderColor="#99CC99"
+                  />
+                </View>
               ) : order && order.status === "Báo giá" ? (
                 <Button
                   title="Báo giá"
@@ -295,26 +358,6 @@ const SOrder = ({ received }) => {
           
           </View> */}
             </View>
-
-            {/* <View>
-          <View style={styles.contentOrder}>
-            <View style={{ flex: 1 }}>
-              <TextInput
-                style={generalStyle.input}
-                keyboardType="numeric"
-                placeholder="Đơn giá"
-              />
-            </View>
-          </View>
-          <View style={styles.options}>
-           
-            <Button
-              title="Từ chối"
-              customStyle={{ backgroundColor: "red", ...styles.btn }}
-            />
-          </View>
-        </View>
-     */}
           </View>
           {/* Modal Báo Giá */}
           <Modal
@@ -351,8 +394,8 @@ const SOrder = ({ received }) => {
                 </Text>
               ) : (
                 <Text style={{ color: "#888", marginBottom: 20 }}>
-                  Chi phí sửa chữa sẽ được gửi đến khách hàng. Bạn hạy chắn chắn
-                  nhập phí sửa chữa phù hợp cho đơn hàng và thu tiền theo đúng
+                  Chi phí sửa chữa sẽ được gửi đến khách hàng. Bạn hãy chắn chắn
+                  nhập phí sửa chữa phù hợp cho đơn hàng và thu phí sửa chữa theo đúng
                   đơn giá đã nhập!
                 </Text>
               )}
@@ -364,7 +407,7 @@ const SOrder = ({ received }) => {
           {/* Modal call KH */}
           <Modal
             isVisible={isModalVisibleCall}
-            onBackdropPress={() => setModalVisibleCall(false)}
+            onBackdropPress={handelCloseCall}
           >
             <View
               style={{ backgroundColor: "#fff", borderRadius: 8, padding: 20 }}

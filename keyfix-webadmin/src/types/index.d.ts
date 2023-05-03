@@ -33,7 +33,6 @@ export interface ISelect {
   placeholder?: string;
 }
 export interface DataTypeThoSuaKhoa {
-
   key: number;
   id: string;
   maTho: string;
@@ -45,4 +44,10 @@ export interface DataTypeThoSuaKhoa {
   loaiSC: Array<string>;
   balanceAc: number;
   img: string;
+}
+
+export interface DataTypeFilter {
+  date: string,
+  month: string,
+  year: string,
 }

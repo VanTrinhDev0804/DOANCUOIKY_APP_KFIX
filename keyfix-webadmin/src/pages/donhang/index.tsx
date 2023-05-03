@@ -8,6 +8,7 @@ import ContentcreateThoSK from "../../layout/ContentLayout/ContentPageThoSK/crea
 
 import LayoutHeader from "../../layout/Header/LayoutHeader";
 import { IParams } from "../../types";
+import OrderDetail from "../../layout/ContentLayout/ContentPageDonHang/chiTietDon";
 
 const DonHangPages = () => {
   const { Content } = Layout;
@@ -19,7 +20,7 @@ const DonHangPages = () => {
         <Layout>
           <LayoutHeader />
           <Content>
-            <ContentPageDonHang/>
+            { control === "chitietdonhang" ? <OrderDetail/>: <ContentPageDonHang/>}
           </Content>
         </Layout>
       </Layout>

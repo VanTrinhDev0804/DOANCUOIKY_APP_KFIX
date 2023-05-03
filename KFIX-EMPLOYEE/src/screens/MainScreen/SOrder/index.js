@@ -30,6 +30,8 @@ import { loadOrder } from "../../../redux/actions/orderAction";
 import iconright from "../../../assests/images/arrow-right.png";
 import SwipeButton from "rn-swipe-button";
 
+
+
 import {
   child,
   get,
@@ -123,6 +125,7 @@ const SOrder = ({ received }) => {
   };
   // Gọi cho khách
   const handleCallCustomer = () => {
+    let orderUserId = order.userID;
     Linking.openURL(`tel:${order && order.userOrder.phone}`);
     dispatch(loadOrder(orderUserId));
   };

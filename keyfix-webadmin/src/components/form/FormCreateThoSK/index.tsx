@@ -40,6 +40,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { tag }: IParams = useParams();
+  
   const { dataThoSuaKhoa } = useAppSelector((state) => state.thoSuaKhoa);
 
   const thoUpdate = dataThoSuaKhoa.find((item) => {

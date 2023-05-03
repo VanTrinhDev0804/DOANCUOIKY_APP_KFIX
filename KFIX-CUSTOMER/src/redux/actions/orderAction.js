@@ -12,6 +12,7 @@ import {
 import { calcDistance2Location } from "../../utils/map";
 
 export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) => {
+  
   console.log(keyType);
   dispatch(loadKeyerRequest);
   const dbRef = ref(getDatabase());
@@ -32,10 +33,7 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
               childSnapshot.val().dinhVi.coordinate.latitude +
               "," +
               childSnapshot.val().dinhVi.coordinate.longitude;
-<<<<<<< HEAD
-=======
 
->>>>>>> 5c94747ad04f88c888934a7e1bd8ccdbecc25f35
             const promise = new Promise(async (resolve, reject) => {
               try {
                 const rs = await calcDistance2Location(
@@ -72,13 +70,7 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
           dispatch(loadKeyerSuccess(data));
         });
       } else {
-<<<<<<< HEAD
-        dispatch(loadKeyerFailure("No data available"));
-      }
-    })
-    .catch((error) => {
-      dispatch(loadKeyerFailure("No data available"));
-=======
+
      
         dispatch(loadKeyerFailure("No data available"))
 
@@ -86,7 +78,7 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
     }).catch((error) => {
         dispatch(loadKeyerFailure("No data available"))
   
->>>>>>> 5c94747ad04f88c888934a7e1bd8ccdbecc25f35
+
     });
 };
 

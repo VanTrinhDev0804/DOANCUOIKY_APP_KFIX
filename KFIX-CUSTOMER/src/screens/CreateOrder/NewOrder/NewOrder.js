@@ -58,6 +58,8 @@ const NewOrder = ({ route }) => {
     }
   }, [route]);
 
+
+
   const handleEventOption = () => {
     Alert.alert("Hủy đặt đơn", "Bạn có muốn hủy đặt đơn này", [
       {
@@ -73,7 +75,7 @@ const NewOrder = ({ route }) => {
     const neworder =
       note === ""
         ? {
-            diaChi: address,
+            diaChi: address,  
             loaiKhoa: route.params.loaiKhoa,
             problem: problem,
             image: imgURL,
@@ -97,9 +99,13 @@ const NewOrder = ({ route }) => {
       Alert.alert("Thông báo", "Vui lòng điền đầy đủ thông tin");
     } else {
       // writeOrderRTDatabase(orderID, neworder);
+<<<<<<< HEAD
       // dinh vi, 
       dispatch(loadKeyerLocation(address, route.params.loaiKhoa));
 
+=======
+      dispatch(loadKeyerLocation(address, loaiKhoa));
+>>>>>>> b3963a5019a451a56a37cb4fde63469c35149b5e
       navigation.navigate("HaveEmployee", { Order: neworder });
     }
   };

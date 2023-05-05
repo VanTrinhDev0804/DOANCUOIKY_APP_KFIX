@@ -24,6 +24,7 @@ const ThoSuaKhoaPages = () => {
       // doc.data() is never undefined for query doc snapshots
       ad.push({ id: `${doc.id}`, ...doc.data() })
     });
+    
     dispatch(loadDataThoSuaKhoa(ad))
   } 
 

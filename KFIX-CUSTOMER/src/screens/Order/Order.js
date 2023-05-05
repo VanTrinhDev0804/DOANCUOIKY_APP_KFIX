@@ -35,9 +35,24 @@ import { useEffect } from "react";
 import { updateOneOrder } from "../../redux/slice/orderSlice";
 import { formatTimeFromCreateAt } from "../../utils/date";
 import Notification from "../../Notification/Notification";
-import { updateKeyOrder } from "../../firebase/asynsActions";
+import { updateKeyOrder, writeOrder2FireStrore } from "../../firebase/asynsActions";
 
 const Order = () => {
+  var currentdate = new Date();
+  var datetime =
+    currentdate.getHours() +
+    ":" +
+    currentdate.getMinutes() +
+    ", " +
+    currentdate.getDate() +
+    "/" + 
+    (currentdate.getMonth() + 1) +
+    "/" +
+    currentdate.getFullYear();
+
+
+
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -135,6 +150,21 @@ const Order = () => {
       setRefresh(false);
     }, 3000);
   };
+
+  const handelDonHangHoanThanh = ()=>{
+    let orderId = value.orderID
+   
+    if(value){
+      let orderValue = {
+        ...value, 
+        finishedDate : formatTimeFromCreateAt(datetime)
+      }
+      writeOrder2FireStrore(orderId, orderValue)
+
+    }
+    navigation.navigate("Vote" , {id : orderId})
+
+  }
 
   return (
     <>
@@ -380,9 +410,7 @@ const Order = () => {
                   <>
                     <Button
                       title="XÁC NHẬN HOÀN THÀNH"
-                      onPress={() => {
-                        navigation.navigate("Vote");
-                      }}
+                      onPress={handelDonHangHoanThanh}
                     />
                     <Notification
                       title="Sửa xong"

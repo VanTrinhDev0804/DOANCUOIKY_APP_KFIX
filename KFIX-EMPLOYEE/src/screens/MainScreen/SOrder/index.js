@@ -23,6 +23,7 @@ import { formatTimeFromCreateAt } from "../../../utils/date";
 import { useState } from "react";
 import { Docso, to_vietnamese } from "../../../utils/docso";
 import {
+  updateBalanceKeyer,
   updateKeyOrder,
   updateKeyerByKeyvalue,
 } from "../../../firebase/asynsActions";
@@ -79,7 +80,7 @@ const SOrder = ({ received }) => {
     const orderValueRef = order && ref(database, "Orders/" + order.userID);
     onChildChanged(orderValueRef, (snapshot) => {
       if (snapshot.exists()) {
-        if (order !== null) {
+        if (order !== null && snapshot.key.toString() === "status") {
           setStatusOrder(snapshot.val());
           dispatch(updateStatusOrder(snapshot.val()));
         }
@@ -140,13 +141,17 @@ const SOrder = ({ received }) => {
 
   const HandelHoanThanhDon = () => {
     let orderUserId = order.userID;
-
+    let valueBlace = user.balanceAc-1000;
     if (isOnline) {
       updateKeyerByKeyvalue(`${user.userId}/status`, "Online");
     } else {
       updateKeyerByKeyvalue(`${user.userId}/status`, "Offline");
     }
+    // update realtime
     updateKeyerByKeyvalue(`${user.userId}/order`, "");
+    updateKeyerByKeyvalue(`${user.userId}/balanceAc`, valueBlace);
+    // update so du firebase
+    updateBalanceKeyer(`${user.userId}`, valueBlace);
     updateKeyOrder(`${orderUserId}/status`, "Hoàn thành");
     dispatch(loadOrderFailure());
   };

@@ -3,10 +3,8 @@ import { IAdmin } from "../../types"
 
 
 export interface AuthState {
-
     currentAdmin:  IAdmin[], 
     loading : boolean
-
 }
 
 const initialState : AuthState = {

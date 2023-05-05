@@ -5,6 +5,7 @@ import Foundation from "react-native-vector-icons/Foundation";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import generalStyle from "../../../generals/generalStyle";
 import stylesMe from "./styles/stylesSMe";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +49,12 @@ const SMe = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <TouchableOpacity style={stylesMe.opt}>
+          <FontAwesome5 name="coins" size={30} color="#FFD700" />
+          <Text style={{ marginLeft: 10,fontSize: 25, fontWeight: 'bold' }}>Số dư: {user.balanceAc}</Text>
+        </TouchableOpacity>
       <View style={{marginTop: 10}}>
+        
         <TouchableOpacity style={stylesMe.opt}>
           <MaterialIcons name="feedback" size={30} color="#000" />
           <Text style={{ marginLeft: 10 }}>Phản hồi</Text>

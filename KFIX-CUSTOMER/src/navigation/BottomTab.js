@@ -41,8 +41,6 @@ const BottomTab = () => {
         <Tab.Navigator screenOptions={screenOptions}>
             <Tab.Screen name={"Home"} component={Home} />
             <Tab.Screen name={"Order"} component={Order} />
-            <Tab.Screen name={"Bill"} component={Bill} />
-
             <Tab.Screen name={"Profile"} component={Profile} />
         </Tab.Navigator>
     )

@@ -7,6 +7,7 @@ import ContentcreateThoSK from "../../layout/ContentLayout/ContentPageThoSK/crea
 
 import LayoutHeader from "../../layout/Header/LayoutHeader";
 import { IParams } from "../../types";
+import ContentPageChart from "../../layout/ContentLayout/ContentPageChart";
 
 const ThoSuaKhoaPages = () => {
   const { Content } = Layout;
@@ -18,13 +19,7 @@ const ThoSuaKhoaPages = () => {
         <Layout>
           <LayoutHeader />
           <Content>
-            {control === "createThoSK" ? (
-              <ContentcreateThoSK />
-            ) : control === "capnhat-tho" ? (
-              ""
-            ) : (
-              <ContentPageThoSK />
-            )}
+            <ContentPageChart/>
           </Content>
         </Layout>
       </Layout>

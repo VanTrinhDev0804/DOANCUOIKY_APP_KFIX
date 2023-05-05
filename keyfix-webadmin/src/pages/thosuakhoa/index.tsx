@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query} from "firebase/firestore";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -16,10 +16,12 @@ const ThoSuaKhoaPages = () => {
 
   const dispatch = useDispatch()
   const fecthListThoSK =async () => {
-
     const q = query(collection(db, "Keyer"));
+    //console.log(q);
     const ad : any =[]
     const querySnapshot = await getDocs(q);
+    
+    
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       ad.push({ id: `${doc.id}`, ...doc.data() })
@@ -38,17 +40,21 @@ const ThoSuaKhoaPages = () => {
   return (
     <div className="MainApp">
       <Layout>
+
         <SiderMenu />
         <Layout>
           <LayoutHeader />
+          
           <Content>
             {control === "createThoSK" ? (
               <ContentcreateThoSK />
             ) : control === "capnhat-tho" ? (
               <ContentcreateThoSK/>
             ) : (
-              <ContentPageThoSK />
-            )}
+              <div>
+                <ContentPageThoSK />
+              </div>
+            )} 
           </Content>
         </Layout>
       </Layout>

@@ -1,7 +1,9 @@
 import { Space } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
+import { Input } from 'antd';
+
 import ActionsPages from "../../../components/actionpages/ActionPages";
 
 import ContentTitle from "../../../components/common/Content/contentTitle";
@@ -12,13 +14,28 @@ import { useAppSelector } from "../../../redux/hooks";
 import { DataTypeThoSuaKhoa, IParams } from "../../../types";
 
 import "./styles.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSearchValue } from "../../../redux/slice/thoSuaKhoaSlice";
+import { updateSearchPhone } from "../../../redux/slice/searchSlice";
+import { keyerRemainingSelector } from "../../../redux/selectors";
+
+const { Search } = Input;
 
 const ContentPageThoSK = () => {
   const history = useHistory();
+  const dispatch = useDispatch()
   const pathname = history.location.pathname;
 
-  const { dataThoSuaKhoa } = useAppSelector((state) => state.thoSuaKhoa);
-  console.log(dataThoSuaKhoa)
+  //const { keyers } = useAppSelector((state) => state.thoSuaKhoa);
+  const keyers = useSelector(keyerRemainingSelector)
+  
+
+  const handleChangeSearch = (e:any) => {
+    //con/st newValue = e.target.value;
+    dispatch(updateSearchPhone(e.target.value));
+    console.log(keyerRemainingSelector);
+    
+  }
   const handleCreateTho = () => {
     history.replace(`${pathname}/createThoSK`);
   };
@@ -137,10 +154,10 @@ const ContentPageThoSK = () => {
   return (
     <div className="Content-App">
       <ContentTitle title="Danh sách thợ sửa khóa" />
-
       <div className="Content-body">
         <div className="ContentPageThoSK">
-          <TableDefault data={dataThoSuaKhoa} columns={columns} />
+          <Search placeholder="Nhập số điện thoại" onChange={handleChangeSearch} style={{ width: 300, height: 40 }}/>
+          <TableDefault data={keyers} columns={columns} />
           <ActionsPages dataRender={actionsThem} />
         </div>
       </div>

@@ -22,7 +22,6 @@ const BreadCumbLink = () => {
       return pathName.indexOf(item.path) !== -1;
     } else return false;
   });
-  console.log(breadcumbItem);
   const Showbread =
     breadcumbItem.length > 1 && breadcumbItem.length > 3
       ? breadcumbItem.slice(-3).map((item, key) => {

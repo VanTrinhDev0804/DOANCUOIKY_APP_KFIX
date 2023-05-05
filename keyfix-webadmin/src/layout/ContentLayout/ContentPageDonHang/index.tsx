@@ -1,6 +1,6 @@
-import { Space } from "antd";
+import { DatePicker,Space } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import ActionsPages from "../../../components/actionpages/ActionPages";
 
@@ -12,9 +12,18 @@ import TableDefault from "../../../components/table/tbdefault";
 import { IParams } from "../../../types";
 
 import "./styles.scss";
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from "../../../firebase/cofig";
+import Filter from "../../../components/control/filter";
+import { store } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { loadDataOrders } from "../../../redux/slice/ordersSlice";
+import { ordersRemainingSelector } from "../../../redux/selectors";
 
 const ContentPageDonHang = () => {
   const history = useHistory();
+  const dispatch = useDispatch()
+  const orders = useSelector(ordersRemainingSelector);
   const pathname = history.location.pathname;
   const { tag, id }: IParams = useParams();
 
@@ -24,6 +33,22 @@ const ContentPageDonHang = () => {
   const handleCreateTho = () => {
     history.replace(`${pathname}/createThoSK`);
   };
+
+  //console.log(store.getState().filter.dataFilter)
+  const fecthListOrder =async () => {
+    const q = query(collection(db, "Orders"));
+    const ad : any =[]
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      ad.push(doc.data())
+    });
+    dispatch(loadDataOrders(ad))
+  } 
+
+  useEffect(()=>{
+    //console.log(123);
+   fecthListOrder()
+  }, [])
 
   const actionsThem = [
     {
@@ -47,7 +72,8 @@ const ContentPageDonHang = () => {
     ngayTao: string;
     hoanThanh: string;
     dinhVi: string;
-    donGia: number;    
+    donGia: number;   
+    trangThai: string;
   }
 
   const columns: ColumnsType<DataType> = [
@@ -92,37 +118,42 @@ const ContentPageDonHang = () => {
       dataIndex: "donGia",
       key: "donGia",
     },
-
-
+    {
+      title: "Trạng thái",
+      dataIndex: "trangThai",
+      key: "trangThai",
+    },
+    
     {
       key: "actionCN",
       width:'8%',
       render: (_, record) => (
         <Space size="middle">
-          <Link to={`${pathname}/chitiet_donhang/${record.key}`}>Chi tiết</Link>
+          <Link to={`${pathname}/chitietdonhang/${record.maDon}`}>Chi tiết</Link>
         </Space>
       ),
     },
   ];
 
   const data: DataType[] = [];
-  for (let i = 1; i < 20; i++) {
+  for (let i = 0; i < orders.length; i++) {
     data.push({
-      key: i,
-      maDon: 'DH001',
-      tenKH: 'Nguyễn Thùy Trâm',
-      tenTho:'Nguyễn Bảo Nam',
-      ngayTao:'09:58 -19/12/2022',
-      hoanThanh: '10:58 -19/12/2022',
-      dinhVi: 'Gò vấp',
-      donGia: 55000 
+      key: i+1,
+      maDon: orders[i]['orderID'],
+      tenKH: orders[i]['userOrder']['username'],
+      tenTho: orders[i]['keyer']['tenTho'],
+      ngayTao: orders[i]['createAt'],
+      hoanThanh: orders[i]['finishedDate'],
+      dinhVi: orders[i]['diaChi'],
+      donGia: orders[i]['price'],
+      trangThai: orders[i]['status'],
     });
   }
 
   return (
     <div className="Content-App">
-      <ContentTitle title="Danh sách đơn hàng trong tháng" />
-
+      <ContentTitle title="Danh sách các đơn hàng" />
+      <Filter/>
       <div className="Content-body">
         <div className="ContentPageThoSK">
           <TableDefault data={data} columns={columns} />

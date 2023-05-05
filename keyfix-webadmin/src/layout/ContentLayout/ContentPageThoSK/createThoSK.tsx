@@ -6,6 +6,7 @@ import { IParams } from "../../../types";
 
 const ContentcreateThoSK = () => {
   const { control }: IParams = useParams();
+  
   return (
     <div className="Content-App">
      

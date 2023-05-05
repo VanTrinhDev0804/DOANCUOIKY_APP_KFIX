@@ -1,13 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authSlice from './slice/authSlice'
 import thoSuaKhoaSlice from './slice/thoSuaKhoaSlice'
+import filterSlice from './slice/filterSlice'
+import ordersSlice from './slice/ordersSlice'
+import searchSlice from './slice/searchSlice'
 
 // ...
 
 export const store = configureStore({
   reducer: {
     admin: authSlice,
-    thoSuaKhoa : thoSuaKhoaSlice
+    thoSuaKhoa : thoSuaKhoaSlice,
+    filter: filterSlice,
+    orders: ordersSlice,
+    search: searchSlice
   }
 })
 

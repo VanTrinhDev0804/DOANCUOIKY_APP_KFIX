@@ -285,13 +285,16 @@ const SOrder = ({ received }) => {
               order.status === "Thợ đang đến" && !isModalVisibleCall ? (
                 <>
                   <View>
-                
-                      <TimerCountdown
+                <View style ={{flexDirection : "ro"}}>
+                  <Text style ={{width :"80%"}}>Di chuyển đến vị trí của khách !! Đơn hàng của bạn sẽ hoàn thành sau :</Text>
+                <TimerCountdown
                         initialSecondsRemaining={1000*(order && order.keyer.timeMove)}
                         onTimeElapsed={handelUpdateDangSuaKhoa}
                         allowFontScaling={true}
                         style={{ fontSize: 20 }}
                       />
+                </View>
+                     
                    
                
 

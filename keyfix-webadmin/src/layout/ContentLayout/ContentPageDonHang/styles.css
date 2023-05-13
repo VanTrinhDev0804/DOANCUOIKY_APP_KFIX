@@ -1,0 +1,28 @@
+.Content-body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentPageThoSK {
+  display: block;
+  min-width: 500px;
+  min-height: 500px;
+  background-color: "#ffffff";
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.item {
+  font-size: 20px;
+  color: #000;
+  height: 50px;
+}
+.item .label {
+  min-width: 250px;
+}
+.item .value {
+  min-width: 200px;
+}/*# sourceMappingURL=styles.css.map */

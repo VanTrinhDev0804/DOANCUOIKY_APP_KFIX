@@ -1,0 +1,100 @@
+.ThoSK-Profile {
+  display: flex;
+  width: 1534px;
+  align-items: center;
+  justify-content: center;
+}
+.ThoSK-Profile_Form {
+  margin-left: 20px;
+  display: flex;
+}
+.ThoSK-Profile_FormLeft {
+  margin-right: 48px;
+}
+.ThoSK-Profile .ant-select-dropdown {
+  background-color: rgb(62, 62, 91) !important;
+}
+.ThoSK-Profile label {
+  width: 185px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px !important;
+  line-height: 24px;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+.ThoSK-Profile input {
+  width: 425px;
+  height: 48px;
+  background: #2b2b3f;
+  border: 1px solid #727288;
+  border-radius: 8px;
+}
+.ThoSK-Profile .ant-picker {
+  width: 425px !important;
+  height: 48px;
+  background-color: #2b2b3f;
+  border: 1px solid #727288;
+}
+.ThoSK-Profile .ant-picker input {
+  width: 131px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 18px;
+  color: white !important;
+}
+.ThoSK-Profile .ant-picker .ant-picker-suffix {
+  color: #ff7506 !important;
+  font-size: 24px;
+}
+.ThoSK-Profile .ant-picker .ant-picker-suffix svg {
+  width: 24px;
+}
+.ThoSK-Profile .ant-select-selector {
+  height: 48px !important;
+  border: 1px solid #727288 !important;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  background-color: #2b2b3f !important;
+  color: white !important;
+}
+.ThoSK-Profile .ant-select-selection-item::after {
+  color: #ffffff !important;
+}
+.ThoSK-Profile span.ant-select-arrow {
+  color: #ff7506 !important;
+}
+.ThoSK-Profile :where(.css-dev-only-do-not-override-1cr6b6).ant-input {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  display: flex !important;
+  align-items: center !important;
+  letter-spacing: -0.002em;
+  color: #ffffff;
+}
+.ThoSK-Profile .ant-upload.ant-upload-select {
+  width: 215px !important;
+  height: 350px !important;
+}
+.ThoSK-Profile .ant-upload-list-item-container {
+  width: 215px !important;
+  height: 350px !important;
+}
+.ThoSK-Profile span.ant-upload {
+  color: #ffffff;
+  font-size: 20px;
+}
+.ThoSK-Profile :where(.css-dev-only-do-not-override-1cr6b6).ant-select-multiple .ant-select-selection-item {
+  background: rebeccapurple;
+}
+
+.btn-group {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}/*# sourceMappingURL=styles.css.map */

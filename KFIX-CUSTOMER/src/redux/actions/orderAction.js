@@ -12,12 +12,8 @@ import {
 import { calcDistance2Location } from "../../utils/map";
 
 export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) => {
-<<<<<<< HEAD
   
-  console.log(keyType);
-=======
-  console.log(keyType , "key");
->>>>>>> b3963a5019a451a56a37cb4fde63469c35149b5e
+  
   dispatch(loadKeyerRequest);
   const dbRef = ref(getDatabase());
   get(child(dbRef, `Keyers`))
@@ -25,6 +21,7 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
       if (snapshot.exists()) {
         let promises = [];
       
+        // console.log("Data : " , snapshot.val())
 
         snapshot.forEach((childSnapshot) => {
           if (
@@ -32,16 +29,11 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
             childSnapshot.val().balanceAc > 0  
             // childSnapshot.val().loaiSC.includes(keyType)
           ) {
-            console.log(typeof(keyType))
-            console.log(keyType)
+           
             const coordinatesKeyer =
               childSnapshot.val().dinhVi.coordinate.latitude +
               "," +
               childSnapshot.val().dinhVi.coordinate.longitude;
-<<<<<<< HEAD
-
-=======
->>>>>>> b3963a5019a451a56a37cb4fde63469c35149b5e
             const promise = new Promise(async (resolve, reject) => {
               try {
                 const rs = await calcDistance2Location(
@@ -75,10 +67,11 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
         });
         Promise.all(promises).then((results) => {
           const data = results.filter((result) => result !== null);
+
+          console.log(data);
           dispatch(loadKeyerSuccess(data));
         });
       } else {
-<<<<<<< HEAD
 
      
         dispatch(loadKeyerFailure("No data available"))
@@ -88,13 +81,6 @@ export const loadKeyerLocation = (addressCustomer,keyType) => async (dispatch) =
         dispatch(loadKeyerFailure("No data available"))
   
 
-=======
-        dispatch(loadKeyerFailure("No data available"));
-      }
-    })
-    .catch((error) => {
-      dispatch(loadKeyerFailure("No data available"));
->>>>>>> b3963a5019a451a56a37cb4fde63469c35149b5e
     });
 };
 

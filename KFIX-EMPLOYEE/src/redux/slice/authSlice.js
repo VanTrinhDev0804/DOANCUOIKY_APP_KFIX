@@ -31,7 +31,7 @@ export const authkeyerSlice = createSlice({
     logoutUser: (state) => {
       state.loading = false;
       state.isAuthenticated = false;
-      state.user = null;
+      // state.user = null;
       state.isVerify = false;
     },
     updateRequest: (state) => {

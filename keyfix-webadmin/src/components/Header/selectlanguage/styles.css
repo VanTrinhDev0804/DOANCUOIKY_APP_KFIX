@@ -1,0 +1,8 @@
+.item_select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item_select .it_title {
+  margin-right: 8px;
+}/*# sourceMappingURL=styles.css.map */

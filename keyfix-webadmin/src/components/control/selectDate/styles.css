@@ -1,0 +1,37 @@
+.Control-Select {
+  display: flex;
+  align-items: center;
+  margin-right: 64px;
+}
+.Control-Select .Label-Select {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ffffff;
+  margin-right: 16px;
+}
+.Control-Select .Label-Select h4 {
+  margin: 0;
+}
+.Control-Select .ant-picker {
+  width: 325px;
+  height: 48px;
+  background-color: #2b2b3f;
+  border: 1px solid #727288;
+}
+.Control-Select .ant-picker input {
+  width: 131px;
+  height: 48px;
+  border-radius: 8px;
+  font-size: 18px;
+  color: white !important;
+}
+.Control-Select .ant-picker .ant-picker-suffix {
+  color: #ff7506 !important;
+  font-size: 24px;
+}
+.Control-Select .ant-picker .ant-picker-suffix svg {
+  width: 24px;
+}/*# sourceMappingURL=styles.css.map */

@@ -8,6 +8,11 @@ export interface IAdmin {
   avatar: string;
 }
 
+export interface IThongKe {
+  thang?:  string;
+  value? : number;
+}
+
 export interface IParams {
   page?: string;
   control?: string;
@@ -27,6 +32,7 @@ export interface IProfile {
   avatar: string;
 }
 export interface ISelect {
+  handleChange ? : Function
   title?: string;
   w?: number;
   data?: Array<{ value: string; label: string }>;

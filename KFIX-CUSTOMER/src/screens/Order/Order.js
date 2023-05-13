@@ -32,10 +32,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadOrder } from "../../redux/actions/orderAction";
 
 import { useEffect } from "react";
-import { updateOneOrder } from "../../redux/slice/orderSlice";
+import { loadOrderSuccess, updateOneOrder } from "../../redux/slice/orderSlice";
 import { formatTimeFromCreateAt } from "../../utils/date";
 import Notification from "../../Notification/Notification";
-import { updateKeyOrder, writeOrder2FireStrore } from "../../firebase/asynsActions";
+import {
+  removeOrderRTDatabase,
+  updateKeyOrder,
+  writeOrder2FireStrore,
+} from "../../firebase/asynsActions";
+import Modal from "react-native-modal";
 
 const Order = () => {
   var currentdate = new Date();
@@ -45,44 +50,40 @@ const Order = () => {
     currentdate.getMinutes() +
     ", " +
     currentdate.getDate() +
-    "/" + 
+    "/" +
     (currentdate.getMonth() + 1) +
     "/" +
     currentdate.getFullYear();
 
-
-
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-
-
   const { user } = useSelector((state) => state.auth);
   const { value, loading } = useSelector((state) => state.order);
+  const [isOrderPrice, setIsOrderPrice] = useState(false);
+  const [priceParam, setPriceParam] = useState(0);
 
   const orderRef = ref(database, "Orders/" + user.userId);
-  onValue(orderRef , (snapshot)=>{
-    if(snapshot.exists()){
-      if(value === null){
-        dispatch(loadOrder(user.userId))
+  onValue(orderRef, (snapshot) => {
+    if (snapshot.exists()) {
+      if (value === null) {
+        dispatch(loadOrder(user.userId));
       }
     }
-  })
-
+  });
 
   const keyer = value && value.keyer;
 
-  const [statusOrder, setStatusOrder] = useState(value && `${value.status}` ? `${value.status}` :"");
+  const [statusOrder, setStatusOrder] = useState(
+    value && `${value.status}` ? `${value.status}` : ""
+  );
 
-  
- useEffect(()=>{
-  if(statusOrder === "" && value !==null){
-    setStatusOrder(`${value.status}`)
-  }
+  useEffect(() => {
+    if (statusOrder === "" && value !== null) {
+      setStatusOrder(`${value.status}`);
+    }
+  }, [value]);
 
- }, [value])
-  
   onChildChanged(orderRef, (data) => {
     if (data.exists()) {
       setStatusOrder(data.val());
@@ -97,26 +98,28 @@ const Order = () => {
           const dbRef = ref(getDatabase());
           get(child(dbRef, `Orders/${user.userId}/price`)).then((snapshot) => {
             let money = snapshot.val();
-            Alert.alert(
-              "KFix",
-              `Chi phí sửa chữa cho đơn hàng của bạn ${money} VNĐ`,
-              [
-                {
-                  text: "Huỷ",
-                  onPress: () => setModalVisible(true),
-                  style: "Cancel",
-                },
+            setPriceParam(money);
+            setIsOrderPrice(true);
+            // Alert.alert(
+            //   "KFix",
+            //   `Chi phí sửa chữa cho đơn hàng của bạn ${money} VNĐ`,
+            //   [
+            //     {
+            //       text: "Huỷ",
+            //       onPress: () => setModalVisible(true),
+            //       style: "Cancel",
+            //     },
 
-                {
-                  text: "Đồng ý",
-                  style: "Cancel",
-                  onPress: () => {
-                    updateKeyOrder(`${user.userId}/status`, "Thợ đang đến");
-                    dispatch(loadOrder(user.userId));
-                  },
-                },
-              ]
-            );
+            //     {
+            //       text: "Đồng ý",
+            //       style: "Cancel",
+            //       onPress: () => {
+            //         updateKeyOrder(`${user.userId}/status`, "Thợ đang đến");
+            //         dispatch(loadOrder(user.userId));
+            //       },
+            //     },
+            //   ]
+            // );
           });
         }
       }
@@ -129,6 +132,14 @@ const Order = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
+  const handleHuy = () => {
+    setModalVisible(true);
+  };
+  const handleAccept = () => {
+    updateKeyOrder(`${user.userId}/status`, "Thợ đang đến");
+    dispatch(loadOrder(user.userId));
+    setIsOrderPrice(false)
+  };
   const handlenotifyPrice = () => {
     Alert.alert(
       "KFix",
@@ -151,20 +162,20 @@ const Order = () => {
     }, 3000);
   };
 
-  const handelDonHangHoanThanh = ()=>{
-    let orderId = value.orderID
-   
-    if(value){
+  const handelDonHangHoanThanh = () => {
+    let orderId = value.orderID;
+
+    if (value) {
       let orderValue = {
-        ...value, 
-        finishedDate : formatTimeFromCreateAt(datetime)
-      }
-      writeOrder2FireStrore(orderId, orderValue)
-
+        ...value,
+        finishedDate: formatTimeFromCreateAt(datetime),
+      };
+      writeOrder2FireStrore(orderId, orderValue);
+      removeOrderRTDatabase(user.userId);
+      dispatch(loadOrderSuccess(null));
     }
-    navigation.navigate("Vote" , {id : orderId})
-
-  }
+    navigation.navigate("Vote", { id: orderId });
+  };
 
   return (
     <>
@@ -429,6 +440,33 @@ const Order = () => {
                 ) : (
                   ""
                 )}
+
+                {/* Modal */}
+                <Modal
+                  isVisible={isOrderPrice}
+                  // onBackdropPress={handelCloseModal}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#fff",
+                      borderRadius: 8,
+                      padding: 20,
+                    }}
+                  >
+                    <Text style={{ fontSize: 18 }}>
+                      Chi phí sửa chữa cho đơn hàng của bạn là {`${priceParam}`}{" "}
+                      vnđ
+                    </Text>
+                    <Button title="Chấp nhận!" onPress={handleAccept} />
+                    <Button
+                      title="Hủy!"
+                      customStyle={{
+                        backgroundColor: "red",
+                      }}
+                      onPress={handleHuy}
+                    />
+                  </View>
+                </Modal>
               </ScrollView>
             </View>
           ) : (

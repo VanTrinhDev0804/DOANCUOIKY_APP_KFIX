@@ -2,19 +2,21 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native'
 import { generalStyle } from "../../../contains";
 import stylesVote from "./stylesVote";
+import { updateVotdOrder } from "../../../firebase/asynsActions";
 
 const { View, Text, TouchableOpacity, Image } = require("react-native");
 
-const Vote = () => {
-
+const Vote = ({ route }) => {
+  const orderId  = route.params.id && `${route.params.id}`
     const navigation = useNavigation()
 
   const [defaultRating, setDefaultRating] = useState(0);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
-
+ 
 
   const handleVote = async (item) => {
     setDefaultRating(item)
+    updateVotdOrder(orderId, item)
     await setTimeout(() => {
         navigation.navigate('Home')
     },1500)

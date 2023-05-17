@@ -17,15 +17,15 @@ const ThoSuaKhoaPages = () => {
   const dispatch = useDispatch()
   const fecthListThoSK =async () => {
     const q = query(collection(db, "Keyer"));
-    //console.log(q);
+ 
     const ad : any =[]
     const querySnapshot = await getDocs(q);
     
     
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
       ad.push({ id: `${doc.id}`, ...doc.data() })
     });
+
     dispatch(loadDataThoSuaKhoa(ad))
   } 
 

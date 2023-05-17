@@ -4,6 +4,7 @@ import thoSuaKhoaSlice from './slice/thoSuaKhoaSlice'
 import filterSlice from './slice/filterSlice'
 import ordersSlice from './slice/ordersSlice'
 import searchSlice from './slice/searchSlice'
+import thongkeSlice from './slice/thongkeSlice'
 
 // ...
 
@@ -13,7 +14,8 @@ export const store = configureStore({
     thoSuaKhoa : thoSuaKhoaSlice,
     filter: filterSlice,
     orders: ordersSlice,
-    search: searchSlice
+    search: searchSlice,
+    thongke : thongkeSlice
   }
 })
 

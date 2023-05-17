@@ -23,6 +23,7 @@ import { formatTimeFromCreateAt } from "../../../utils/date";
 import { useState } from "react";
 import { Docso, to_vietnamese } from "../../../utils/docso";
 import {
+  updateBalanceKeyer,
   updateKeyOrder,
   updateKeyerByKeyvalue,
 } from "../../../firebase/asynsActions";
@@ -81,7 +82,7 @@ const SOrder = ({ received }) => {
     const orderValueRef = order && ref(database, "Orders/" + order.userID);
     onChildChanged(orderValueRef, (snapshot) => {
       if (snapshot.exists()) {
-        if (order !== null) {
+        if (order !== null && snapshot.key.toString() === "status") {
           setStatusOrder(snapshot.val());
           dispatch(updateStatusOrder(snapshot.val()));
         }
@@ -142,13 +143,17 @@ const SOrder = ({ received }) => {
 
   const HandelHoanThanhDon = () => {
     let orderUserId = order.userID;
-
+    let valueBlace = user.balanceAc-1000;
     if (isOnline) {
       updateKeyerByKeyvalue(`${user.userId}/status`, "Online");
     } else {
       updateKeyerByKeyvalue(`${user.userId}/status`, "Offline");
     }
+    // update realtime
     updateKeyerByKeyvalue(`${user.userId}/order`, "");
+    updateKeyerByKeyvalue(`${user.userId}/balanceAc`, valueBlace);
+    // update so du firebase
+    updateBalanceKeyer(`${user.userId}`, valueBlace);
     updateKeyOrder(`${orderUserId}/status`, "Hoàn thành");
     dispatch(loadOrderFailure());
   };
@@ -280,13 +285,16 @@ const SOrder = ({ received }) => {
               order.status === "Thợ đang đến" && !isModalVisibleCall ? (
                 <>
                   <View>
-                
-                      <TimerCountdown
+                <View style ={{flexDirection : "ro"}}>
+                  <Text style ={{width :"80%"}}>Di chuyển đến vị trí của khách !! Đơn hàng của bạn sẽ hoàn thành sau :</Text>
+                <TimerCountdown
                         initialSecondsRemaining={1000*(order && order.keyer.timeMove)}
                         onTimeElapsed={handelUpdateDangSuaKhoa}
                         allowFontScaling={true}
                         style={{ fontSize: 20 }}
                       />
+                </View>
+                     
                    
                
 

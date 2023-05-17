@@ -1,0 +1,91 @@
+.Content-body {
+  position: relative;
+  display: flex;
+}
+.Content-bodyLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 30px;
+  margin-right: 172px;
+}
+.Content-body_avatar {
+  position: relative;
+}
+.Content-body_nameuser {
+  margin-top: 24px;
+}
+.Content-body_nameuser p {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  color: #f5f5ff;
+}
+.Content-bodyRight {
+  width: 572px;
+}
+.Content-bodyRight .Form-UserInfo_Top {
+  display: flex;
+}
+.Content-bodyRight .Form-UserInfo_Top input {
+  width: 274px;
+}
+.Content-bodyRight .Users-Profile_FormLeft {
+  margin-right: 24px;
+}
+.Content-bodyRight label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #ffffff !important;
+}
+.Content-bodyRight input {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 18px;
+  color: white;
+  background-color: #2b2b3f;
+  border: 1px solid #727288;
+}
+.Content-body .ant-picker {
+  width: 274px;
+  height: 48px;
+  background-color: #2b2b3f;
+  border: 1px solid #727288;
+}
+.Content-body .ant-picker input {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 18px;
+  color: white;
+}
+.Content-body .ant-picker .ant-picker-suffix {
+  color: #FF7506 !important;
+}
+.Content-body .ant-picker .ant-picker-suffix svg {
+  width: 24px;
+}
+
+.btn-group {
+  margin-top: 112px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:where(.css-dev-only-do-not-override-1cr6b6).ant-input-disabled,
+:where(.css-dev-only-do-not-override-1cr6b6).ant-input[disabled] {
+  color: white;
+  background-color: #3e3e50;
+  border-color: #d9d9d9;
+}
+
+.Icon-Camera {
+  position: absolute;
+  bottom: 0px;
+  right: 35px;
+}/*# sourceMappingURL=styles.css.map */

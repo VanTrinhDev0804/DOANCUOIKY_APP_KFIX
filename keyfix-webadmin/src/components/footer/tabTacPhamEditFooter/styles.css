@@ -1,0 +1,9 @@
+.TabTacPhamEFooter {
+  margin-top: 40px;
+  width: 1534px;
+}
+.TabTacPhamEFooter .btn-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}/*# sourceMappingURL=styles.css.map */

@@ -6,12 +6,13 @@ import {
   updateOrderRTDatabase,
   writeOrderRTDatabase,
 } from "../../firebase/asynsActions";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { loadOrder } from "../../redux/actions/orderAction";
 
 const Employee = (props) => {
   const navigation = useNavigation();
   const { user } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch()
 
 
   const handleSendRequireOrder = () => {
@@ -42,6 +43,7 @@ const Employee = (props) => {
             `${keyerSelect.keyerId}/status`,
             "Xử lý đơn hàng"
           );
+      
           navigation.navigate("Order");
         },
       },

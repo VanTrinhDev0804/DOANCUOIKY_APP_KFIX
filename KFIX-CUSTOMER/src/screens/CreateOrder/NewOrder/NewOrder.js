@@ -21,6 +21,7 @@ import ButtonAddImage from "./ButtonAddImage/ButtonAddImage";
 
 import { useDispatch, useSelector } from "react-redux";
 import { loadKeyerLocation } from "../../../redux/actions/orderAction";
+import { loadKeyerFailure } from "../../../redux/slice/keyerSlice";
 
 const NewOrder = ({ route }) => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const NewOrder = ({ route }) => {
 
   const loaiKhoa = route.params.loaiKhoa;
   const navigation = useNavigation();
-  const orderID = Date.now().toString()
+  const orderID =Date.now().toString();
   const [address, setAddress] = useState("");
   const [open, setOpen] = useState(false);
   const [showNote, setShowNote] = useState(false);
@@ -100,8 +101,8 @@ const NewOrder = ({ route }) => {
     } else {
       // writeOrderRTDatabase(orderID, neworder);
       // dinh vi, 
-      dispatch(loadKeyerLocation(address, route.params.loaiKhoa));
-
+      // dispatch(loadKeyerLocation(address, route.params.loaiKhoa));
+      dispatch(loadKeyerFailure())
       navigation.navigate("HaveEmployee", { Order: neworder });
     }
   };

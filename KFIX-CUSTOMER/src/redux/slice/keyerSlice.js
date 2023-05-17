@@ -11,6 +11,7 @@ export const keyerSlice = createSlice({
   reducers: {
     loadKeyerRequest: (state) => {
       state.loading = true;
+      // state.value = null;
     },
     loadKeyerSuccess: (state, action) => {
       state.loading = false;
@@ -18,6 +19,7 @@ export const keyerSlice = createSlice({
     },
     loadKeyerFailure: (state, action) => {
         state.loading = false;
+        state.value = null;
         state.error = action.payload
     
       },

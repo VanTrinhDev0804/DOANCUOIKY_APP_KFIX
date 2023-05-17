@@ -1,7 +1,8 @@
 
-import { database } from "./config";
+import { database, firestore } from "./config";
 import { ref, remove, set, update } from "firebase/database";
-
+import { doc, updateDoc } from "firebase/firestore";
+// Realtime
 export const writeOrderRTDatabase = (Id, data) => {
     set(ref(database, "Orders/" + Id), {
       ...data,
@@ -40,3 +41,13 @@ export const writeOrderRTDatabase = (Id, data) => {
     updates["Orders/" +keyUpdate] = value;
     update(ref(database), updates);
   }
+
+  // FireStore
+export const updateBalanceKeyer =(userId , balance)=>{
+  const keyerRef = doc(firestore, "Keyer", userId);
+  updateDoc(keyerRef, {
+    balanceAc: balance
+  });
+
+} 
+

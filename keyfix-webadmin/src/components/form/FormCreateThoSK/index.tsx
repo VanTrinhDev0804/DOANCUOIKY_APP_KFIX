@@ -47,6 +47,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
     return item.maTho === `${tag}`;
   });
 
+
   const maThoDf = "T".concat(Date.now().toString());
   const generateEmail = "keyer"
     .concat(Date.now().toString())
@@ -191,7 +192,9 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
     }
   };
   const handelUpdateData = () => {
-    const idUpdate = thoUpdate ? thoUpdate.id : "";
+    
+    let idUpdate = thoUpdate ? thoUpdate.id : "";
+   
     const key = thoUpdate && thoUpdate.key;
     const maTho = thoUpdate && thoUpdate.maTho;
     const dataUpload = {
@@ -218,7 +221,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
     } else {
       // checkMaNV ===-1
       if (!isEmty) {
-        console.log(idUpdate);
+    
         // const dataup = { ...dataUpload };
         UpdateData(dataUpload, "Keyer", idUpdate);
         dispatch(updateThoSuaKhoa(dataUpload));
@@ -236,7 +239,7 @@ const FormCreateThoSK: React.FC<{ typeform?: string }> = (props) => {
         };
 
 
-        console.log(datarealtime)
+      
         updateUserRTDatabase(idUpdate, datarealtime);
       }
       // else if(checkMaNV !==-1){

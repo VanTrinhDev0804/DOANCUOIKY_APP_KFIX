@@ -3,6 +3,8 @@ import { useNavigation } from '@react-navigation/native'
 import { generalStyle } from "../../../contains";
 import stylesVote from "./stylesVote";
 import { updateVotdOrder } from "../../../firebase/asynsActions";
+import { useDispatch } from "react-redux";
+import { loadOrderFailure } from "../../../redux/slice/orderSlice";
 
 const { View, Text, TouchableOpacity, Image } = require("react-native");
 
@@ -12,11 +14,12 @@ const Vote = ({ route }) => {
 
   const [defaultRating, setDefaultRating] = useState(0);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
- 
+ const dispatch = useDispatch()
 
   const handleVote = async (item) => {
     setDefaultRating(item)
     updateVotdOrder(orderId, item)
+    dispatch(loadOrderFailure())
     await setTimeout(() => {
         navigation.navigate('Home')
     },1500)

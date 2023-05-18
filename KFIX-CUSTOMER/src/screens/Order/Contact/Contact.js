@@ -8,7 +8,7 @@ import { Button } from "../../../components";
 
 const Contact = (props) => {
   const { keyer} = props
-
+  console.log(keyer.img)
   const phoneNumber = '0899306681'
   const navigation = useNavigation()
   return (

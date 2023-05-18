@@ -69,9 +69,9 @@ const HaveEmployee = ({ route }) => {
             }
           });
           Promise.all(promises).then((results) => {
-            console.log(results , "rs")
+            // console.log(results , "rs")
             const data = results.filter((result) => result !== null);
-          
+            console.log(data, "data")
             if(data && value ===null){
               dispatch(loadKeyerSuccess(data));
             }

@@ -136,8 +136,9 @@ const SHome = () => {
             coordinate: coordinate,
           });
           setIsEnabled((previousState) => !previousState);
-          moveTo(coordinate);
           orderReciveOff();
+          moveTo(coordinate);
+          
         } catch (error) {
           console.log(error);
         }

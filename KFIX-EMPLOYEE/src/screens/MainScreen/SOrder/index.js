@@ -31,8 +31,6 @@ import { loadOrder } from "../../../redux/actions/orderAction";
 import iconright from "../../../assests/images/arrow-right.png";
 import SwipeButton from "rn-swipe-button";
 
-
-
 import {
   child,
   get,
@@ -91,7 +89,7 @@ const SOrder = ({ received }) => {
   }
 
   const status = order && order.status;
-  const timeMove = order && order.keyer.timeMove
+  const timeMove = order && order.keyer.timeMove;
 
   const [statusOrder, setStatusOrder] = useState(status);
   const [disableSlide, setDisableSlide] = useState(true);
@@ -134,16 +132,15 @@ const SOrder = ({ received }) => {
     Linking.openURL(`tel:${order && order.userOrder.phone}`);
     dispatch(loadOrder(orderUserId));
   };
-  const handelCloseCall =() =>{
+  const handelCloseCall = () => {
     let orderUserId = order.userID;
-    dispatch(loadOrder())
-    setModalVisibleCall(false)
-  } 
-
+    dispatch(loadOrder());
+    setModalVisibleCall(false);
+  };
 
   const HandelHoanThanhDon = () => {
     let orderUserId = order.userID;
-    let valueBlace = user.balanceAc-1000;
+    let valueBlace = user.balanceAc - 1000;
     if (isOnline) {
       updateKeyerByKeyvalue(`${user.userId}/status`, "Online");
     } else {
@@ -164,7 +161,7 @@ const SOrder = ({ received }) => {
       updateKeyOrder(`${orderUserId}/status`, "Thợ đang sửa");
     }
   };
-  
+
   return (
     <>
       {order ? (
@@ -190,9 +187,6 @@ const SOrder = ({ received }) => {
                   phoneNumber={order && order.keyer.phone}
                   status={statusOrder}
                 />
-                {/* <TouchableOpacity>
-                <AntDesign name="message1" size={25} color="#000" />
-            </TouchableOpacity> */}
               </View>
             </View>
 
@@ -204,11 +198,13 @@ const SOrder = ({ received }) => {
                 </Text>
                 <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
                   <Entypo name="location-pin" size={30} color="red" />
-                  <View style={styles.infoCustomer}>
-                    <Text style={styles.textInfoCustomerdiaChi}>
-                      {order && order.diaChi}
-                    </Text>
-                  </View>
+                  <TouchableOpacity onPress={handleDirect}>
+                    <View style={styles.infoCustomer}>
+                      <Text style={styles.textInfoCustomerdiaChi}>
+                        {order && order.diaChi}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
                 <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
                   <Entypo name="warning" size={30} color="orange" />
@@ -281,22 +277,18 @@ const SOrder = ({ received }) => {
             {/* đếm time hoàn th */}
 
             <View style={{ marginTop: 20 }}>
-              {statusOrder === "Thợ đang đến" && !isModalVisibleCall||
-              order.status === "Thợ đang đến" && !isModalVisibleCall ? (
+              {(statusOrder === "Thợ đang đến" && !isModalVisibleCall) ||
+              (order.status === "Thợ đang đến" && !isModalVisibleCall) ? (
                 <>
                   <View>
-                <View style ={{flexDirection : "ro"}}>
-                  <Text style ={{width :"80%"}}>Di chuyển đến vị trí của khách !! Đơn hàng của bạn sẽ hoàn thành sau :</Text>
-                <TimerCountdown
-                        initialSecondsRemaining={1000*(order && order.keyer.timeMove)}
-                        onTimeElapsed={handelUpdateDangSuaKhoa}
-                        allowFontScaling={true}
-                        style={{ fontSize: 20 }}
-                      />
-                </View>
-                     
-                   
-               
+                    <TimerCountdown
+                      initialSecondsRemaining={
+                        1000 * (order && order.keyer.timeMove)
+                      }
+                      onTimeElapsed={handelUpdateDangSuaKhoa}
+                      allowFontScaling={true}
+                      style={{ fontSize: 20 }}
+                    />
 
                     <SwipeButton
                       disabled={true}
@@ -405,8 +397,8 @@ const SOrder = ({ received }) => {
               ) : (
                 <Text style={{ color: "#888", marginBottom: 20 }}>
                   Chi phí sửa chữa sẽ được gửi đến khách hàng. Bạn hãy chắn chắn
-                  nhập phí sửa chữa phù hợp cho đơn hàng và thu phí sửa chữa theo đúng
-                  đơn giá đã nhập!
+                  nhập phí sửa chữa phù hợp cho đơn hàng và thu phí sửa chữa
+                  theo đúng đơn giá đã nhập!
                 </Text>
               )}
 

@@ -178,7 +178,7 @@ exports.VerifyOTP = (request, response) => {
     phone: request.body.phone,
     otp: request.body.otp,
   };
-  console.log(datareq);
+  
 
   db.doc(`/users/${datareq.phone}`)
     .get()

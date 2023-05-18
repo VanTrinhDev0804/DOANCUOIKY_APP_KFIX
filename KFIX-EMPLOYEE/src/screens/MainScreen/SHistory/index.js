@@ -4,12 +4,13 @@ import { generalStyle } from "../../../generals"
 import OrderDetail from '../OrderDetail';
 import SMe from '../SMe';
 import TopTab from './TopTab';
+import Completed from './components/Completed';
 
 
 const Tab = createMaterialTopTabNavigator();
 const SHistory = () => {
     return(
-        <TopTab/>
+        <Completed/>
     )
 }
 

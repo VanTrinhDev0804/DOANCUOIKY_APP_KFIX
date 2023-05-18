@@ -15,7 +15,7 @@ const Profile = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch()
   const {user , isAuthenticated} = useSelector(state => state.auth)
-
+  console.log(user.avatar)
   const handleLogout =()=>{
     dispatch(logout())
    

@@ -5,6 +5,7 @@ import stylesVote from "./stylesVote";
 import { updateVotdOrder } from "../../../firebase/asynsActions";
 import { useDispatch } from "react-redux";
 import { loadOrderFailure } from "../../../redux/slice/orderSlice";
+import { loadOrder } from "../../../redux/actions/orderAction";
 
 const { View, Text, TouchableOpacity, Image } = require("react-native");
 
@@ -19,7 +20,7 @@ const Vote = ({ route }) => {
   const handleVote = async (item) => {
     setDefaultRating(item)
     updateVotdOrder(orderId, item)
-    dispatch(loadOrderFailure())
+    dispatch(loadOrder())
     await setTimeout(() => {
         navigation.navigate('Home')
     },1500)

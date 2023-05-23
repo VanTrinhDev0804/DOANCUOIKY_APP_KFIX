@@ -18,7 +18,7 @@ import {
 
 
 
-const serverUrl = "http://192.168.102.24:5000";
+const serverUrl = "http://192.168.1.14:5000";
 
 
 // user

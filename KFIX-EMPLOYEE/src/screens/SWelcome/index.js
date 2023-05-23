@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { clearErrResponse } from "../../redux/slice/authSlice";
 import { login } from "../../redux/actions/action";
+import { loginAuth } from "../../redux/actions/authActions";
 
 const Welcome = () => {
   const navigation = useNavigation();
@@ -23,7 +24,13 @@ const Welcome = () => {
 
   const handleLogin = () => {
     console.log("phone", phoneNumber, password);
-    dispatch(login(phoneNumber, password));
+
+
+    // no server
+    // dispatch(loginAuth(phoneNumber, password));
+
+      // co server
+      dispatch(login(phoneNumber, password));
     // navigation.navigate('MainScreen')
   };
   useEffect(() => {

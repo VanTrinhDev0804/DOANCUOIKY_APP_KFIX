@@ -5,15 +5,17 @@ import RadioGroup from "react-native-radio-buttons-group";
 import { useNavigation } from '@react-navigation/native'
 import { Button } from "../../../components"
 import styles from "./styles";
-import { removeOrderRTDatabase, updateKeyerByKeyvalue } from "../../../firebase/asynsActions";
+import { removeOrderRTDatabase, updateKeyerByKeyvalue, writeOrderCancel2FireStrore } from "../../../firebase/asynsActions";
 import { useDispatch, useSelector } from "react-redux";
 import {loadOrderSuccess} from "../../../redux/slice/orderSlice"
 import { update } from "firebase/database";
+import { loadOrder } from "../../../redux/actions/orderAction";
+import { formatTimeFromCreateAt } from "../../../utils/date";
 const ReasonCancelOrder = ({modalVisible,setModalVisible, keyerRecive}) => {
-
+  const {value} = useSelector((state) => state.order);
   const navigation = useNavigation()
   const {user} = useSelector(state => state.auth)
-  const dispatch = useDispatch
+  const dispatch = useDispatch()
   const [radioButtons, setRadioButtons] = useState([
     {
       id: "1", // acts as primary key, should be unique and non-empty string
@@ -49,6 +51,20 @@ const ReasonCancelOrder = ({modalVisible,setModalVisible, keyerRecive}) => {
   const [selectedReason,setSelectedReson] = useState({})
   // console.log(selectedReason);
 
+  var currentdate = new Date();
+  var datetime =
+    currentdate.getHours() +
+    ":" +
+    currentdate.getMinutes() +
+    ", " +
+    currentdate.getDate() +
+    "/" +
+    (currentdate.getMonth() + 1) +
+    "/" +
+    currentdate.getFullYear();
+
+
+
   const [disabledConfirm,setDisableConfirm] = useState(true);
   function onPressRadioButton(radioButtonsArray) {
     setRadioButtons(radioButtonsArray);
@@ -58,13 +74,23 @@ const ReasonCancelOrder = ({modalVisible,setModalVisible, keyerRecive}) => {
    }
 
    const handleCancelOrder = () => {
-    
+    let orderId = value.orderID;
+    if (value) {
+      let orderValue = {
+        ...value,
+        finishedDate: formatTimeFromCreateAt(datetime),
+      };
+    writeOrderCancel2FireStrore(orderId, orderValue)
+
     removeOrderRTDatabase(user.userId)
     updateKeyerByKeyvalue(`${keyerRecive}/order` , "")
     updateKeyerByKeyvalue(`${keyerRecive}/status` , "Online")
-
+    
+    
+    dispatch(loadOrder())
     navigation.navigate('Home')
     setModalVisible(false)
+  }
    }
   return (
     <Modal

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateAvatarUser, updateUserName } from "../../../redux/actions/action";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/config";
+import { updateAvatarUserAuth, updateUserNameAuth } from "../../../redux/actions/authActions";
 const EditProfile = () => {
   const { user , isUpdate , loading } = useSelector((state) => state.auth);
   const [image, setImage] = useState(user && user.avatar);
@@ -60,8 +61,16 @@ const EditProfile = () => {
 
   const handelUpdate = () => {
     if (image !== user.avatar) {
+      // no server
+      // dispatch(updateAvatarUserAuth(image, phoneNumber));
+
+      // có server
       dispatch(updateAvatarUser(image, phoneNumber));
     }else if (username !== user.username){
+//  no server
+      // dispatch(updateUserNameAuth(username, phoneNumber))
+
+      // có server
       dispatch(updateUserName(username, phoneNumber))
     }else{
       alert("Thông tin chưa có thay đổi !")

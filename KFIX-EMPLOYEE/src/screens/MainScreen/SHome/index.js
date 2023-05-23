@@ -241,7 +241,7 @@ const SHome = () => {
         <MapView
           ref={mapRef}
           style={{
-            width: Dimensions.get("window").width,
+            width: '100%',
             height: Dimensions.get("window").height,
           }}
           provider={PROVIDER_GOOGLE}

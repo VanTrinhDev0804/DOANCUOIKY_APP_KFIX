@@ -32,6 +32,7 @@ const HaveEmployee = ({ route }) => {
               childSnapshot.val().status === "Online" &&
               childSnapshot.val().balanceAc > 0 &&
               childSnapshot.val().loaiSC.includes(Order.loaiKhoa)
+              && childSnapshot.val().dinhVi.coordinate
             ) {
               const coordinatesKeyer =
                 childSnapshot.val().dinhVi.coordinate.latitude +

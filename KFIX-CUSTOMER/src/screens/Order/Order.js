@@ -179,6 +179,10 @@ const Order = () => {
 
   return (
     <>
+    <Notification
+      title="Thông báo"
+      body={statusOrder}
+    />
       {loading ? (
         ""
       ) : (

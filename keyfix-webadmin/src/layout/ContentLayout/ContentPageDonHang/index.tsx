@@ -5,8 +5,6 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import ActionsPages from "../../../components/actionpages/ActionPages";
 
 import ContentTitle from "../../../components/common/Content/contentTitle";
-
-
 import TableDefault from "../../../components/table/tbdefault";
 
 import { IParams } from "../../../types";

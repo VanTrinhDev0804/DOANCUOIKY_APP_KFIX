@@ -9,7 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, sendSMSOTP, verifyOTPhandel } from "../../redux/actions/action";
 import { ActivityIndicator } from "react-native-paper";
 import { clearErrResponse } from "../../redux/slice/authSlice";
+import { loginAuth, sendSMSOTPAuth } from "../../redux/actions/authActions";
 
+
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { useRef } from "react";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import { firebaseConfig } from "../../firebase/config";
+import firebase from "firebase/compat/app"
 
 const Login = () => {
   const navigation = useNavigation();
@@ -23,8 +30,12 @@ const Login = () => {
 
   const {user, isAuthenticated, loading, isVerify , error} = useSelector((state) => state.auth);
   const handelLogin = () => {
-    console.log("phone", phoneNumber, password);
-    dispatch(login(phoneNumber, password));
+    // console.log("phone", phoneNumber, password);
+    // // Khong co server
+    // dispatch(loginAuth(phoneNumber, password));
+
+// có server nodejs
+        dispatch(login(phoneNumber, password));
   };
   const handleVerifyPhone = (value) => {
     if(user){
@@ -44,17 +55,34 @@ const Login = () => {
     }
   }, [loading]);
 
+
   useEffect(() => {
-    if (isAuthenticated && isVerify) {
-      navigation.navigate('Main')
-    } else if(isAuthenticated &&  isVerify ===false){
-      dispatch(sendSMSOTP( user && user.phone))
-      navigation.navigate('Accuracy',{phone: user && user.phone,action: handleVerifyPhone})
-    }
-  }, [isAuthenticated, isVerify , loading ]);
+    if (isAuthenticated) {
+      navigation.navigate('Main')}
+ 
+  }, [isAuthenticated , loading ]);
+ 
+
+  // useEffect(() => {
+  //   if (isAuthenticated && isVerify) {
+  //     navigation.navigate('Main')
+  //   } else if(isAuthenticated &&  isVerify ===false){
+  //     // no server
+  //     // sendVerifyCation(user && user.phone)
+  //     // dispatch(sendSMSOTPAuth( user && user.phone))
+
+
+  //     // có server
+  //     // dispatch(sendSMSOTP( user && user.phone))
+
+  //     // navigation.navigate('Accuracy',{phone: user && user.phone,action: handleVerifyPhone})
+  //   }
+  // }, [isAuthenticated, isVerify , loading ]);
 
   return (
     <View style={generalStyle.wrapper}>
+  
+      
       <FormGroup>
         <InputField
           label="Số điện thoại:"

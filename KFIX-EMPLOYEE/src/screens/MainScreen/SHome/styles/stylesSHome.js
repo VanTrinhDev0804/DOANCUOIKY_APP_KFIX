@@ -4,6 +4,7 @@ import generalColor from "../../../../generals/colors";
 const styles = StyleSheet.create({
   content: {
     flex: 1,
+    //width: '100%'
   },
   notification:{
     marginTop: 20,

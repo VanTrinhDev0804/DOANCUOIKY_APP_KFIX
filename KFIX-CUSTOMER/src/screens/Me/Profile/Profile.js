@@ -9,6 +9,7 @@ import generalStyle from "../../../contains/styles";
 import styleProfile from "./stylesProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/actions/action";
+import { logoutAuth } from "../../../redux/actions/authActions";
 const { width } = Dimensions.get("window");
 
 const Profile = () => {
@@ -17,6 +18,11 @@ const Profile = () => {
   const {user , isAuthenticated} = useSelector(state => state.auth)
   console.log(user.avatar)
   const handleLogout =()=>{
+    // no server
+    // dispatch(logoutAuth())
+
+
+    // co server nodejs
     dispatch(logout())
    
   }

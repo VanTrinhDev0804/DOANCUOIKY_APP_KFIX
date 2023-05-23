@@ -43,6 +43,12 @@ export const writeOrder2FireStrore = (orderID,data) => {
   // later...
   setDoc(orderRef, data);
 };
+export const writeOrderCancel2FireStrore = (orderID,data) => {
+  const orderRef = doc(firestore, "OrdersCancel" , orderID);
+
+  // later...
+  setDoc(orderRef, data);
+};
 export const updateVotdOrder =(orderId , vote)=>{
   const orderRef = doc(firestore,"Orders" ,orderId);
   updateDoc(orderRef, {

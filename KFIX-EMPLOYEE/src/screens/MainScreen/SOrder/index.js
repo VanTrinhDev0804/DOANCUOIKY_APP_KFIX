@@ -2,6 +2,7 @@ import {
   Alert,
   Linking,
   Platform,
+  Pressable,
   Text,
   TextInput,
   TouchableOpacity,
@@ -36,6 +37,7 @@ import {
   get,
   getDatabase,
   onChildChanged,
+  onChildRemoved,
   onValue,
   ref,
 } from "firebase/database";
@@ -86,6 +88,14 @@ const SOrder = ({ received }) => {
         }
       }
     });
+
+    onChildRemoved(orderValueRef, (data) => {
+      dispatch(loadOrder())
+      // deleteComment(postElement, data.key);
+    });
+
+
+
   }
 
   const status = order && order.status;
@@ -196,15 +206,22 @@ const SOrder = ({ received }) => {
                   Đặt dịch vụ lúc{" "}
                   {order && formatTimeFromCreateAt(order.createAt)}
                 </Text>
+
                 <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
                   <Entypo name="location-pin" size={30} color="red" />
-                  <TouchableOpacity onPress={handleDirect}>
-                    <View style={styles.infoCustomer}>
-                      <Text style={styles.textInfoCustomerdiaChi}>
-                        {order && order.diaChi}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+
+                  <Pressable
+                    style={styles.infoCustomer}
+                    onPress={() =>
+                      Linking.openURL(
+                        `https://www.google.com/maps/dir/?api=1&destination=${order?.diaChi}`
+                      )
+                    }
+                  >
+                    <Text style={styles.textInfoCustomerdiaChi}>
+                      {order && order.diaChi}
+                    </Text>
+                  </Pressable>
                 </View>
                 <View style={[generalStyle.rowCenterV, generalStyle.mb2]}>
                   <Entypo name="warning" size={30} color="orange" />

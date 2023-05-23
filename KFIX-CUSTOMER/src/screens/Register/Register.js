@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { register } from "../../redux/actions/action";
 import { ActivityIndicator } from "react-native-paper";
 import { clearErrResponse } from "../../redux/slice/authSlice";
+import { registerAuth } from "../../redux/actions/authActions";
 
 const Register = () => {
   const { error, isRegister, isVerify, loading , user} = useSelector(
@@ -36,6 +37,8 @@ const Register = () => {
       confirmPassword,
     };
 
+    //  dispatch(registerAuth(data));
+    // server nodejs
     dispatch(register(data));
   };
   useEffect(() => {

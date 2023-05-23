@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getStorage} from "firebase/storage"
 import { getDatabase } from "firebase/database";
-import { getFirestore } from "firebase/firestore"
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,4 +24,7 @@ const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app)
 const storage = getStorage(app)
 const database = getDatabase(app)
-export {app , storage , database, firestore}
+const auth = getAuth(app)
+
+
+export {app , storage , database, firestore , auth}
